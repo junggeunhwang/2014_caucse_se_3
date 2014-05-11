@@ -1,0 +1,15 @@
+Titan is a GUI for DSM/Cluster viewing and editing.
+
+List of functionality:
+Viewing DSMs
+Applying Clusters
+Editing Clusters
+Creating Clusters
+Grouping Clusters
+Computing Propagation Cost
+Exporting as DSM
+Exporting as Excel Spreadsheet
+
+To run:
+ant;
+java -jar titan.jar;

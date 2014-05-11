@@ -1,0 +1,301 @@
+package view;
+
+import java.awt.EventQueue;
+import java.awt.FileDialog;
+import javax.swing.JFrame;
+import javax.swing.JToolBar;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JMenuBar;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.JSplitPane;
+import javax.swing.JTree;
+import javax.swing.JTable;
+import javax.swing.KeyStroke;
+import java.awt.event.KeyEvent;
+import java.awt.event.InputEvent;
+import java.awt.Color;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.DefaultMutableTreeNode;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
+
+public class main_view {
+
+	private JFrame frmTitan;
+	
+	private Icon OpenDSMICon = new ImageIcon("resource\\open-dsm.png");
+	private Icon RedrawIcon  = new ImageIcon("resource\\redraw.png");
+	private Icon NewClusteringIcon = new ImageIcon("resource\\new-clsx.png");
+	private Icon LoadClusteringIcon = new ImageIcon("resource\\open-clsx.png");
+	private Icon SaveClusteringIcon = new ImageIcon("resource\\save-clsx.png");
+	private Icon SaveClusteringAsIcon = new ImageIcon("resource\\save-clsx-as.png");
+	private Icon ExpandAllIcon = new ImageIcon("resource\\expand.png");
+	private Icon CollapsAllIcon = new ImageIcon("resource\\collapse.png");
+	private Icon GroupIcon = new ImageIcon("resource\\group.png");
+	private Icon UnGroupIcon = new ImageIcon("resource\\ungroup.png");
+	private Icon MoveUpIcon = new ImageIcon("resource\\up.png");
+	private Icon MoveDownIcon = new ImageIcon("resource\\down.png");
+	private Icon DeleteIcon = new ImageIcon("resource\\delete.png");
+	
+	private JTable table;
+	
+	private JMenuBar menuBar;
+	private JMenu mnFile;
+	private JMenuItem mntmOpenDsm;
+	private JMenuItem mntmNewMenuItem;
+	private JMenuItem mntmLoadClustering;
+	private JMenuItem mntmSaveClustering;
+	private JMenuItem mntmSaveClusteringAs;
+	private JMenu mnExportAs;
+	private JMenuItem mntmDsm;
+	/*
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					main_view window = new main_view();
+					window.frmTitan.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the application.
+	 */
+	public main_view() {
+		initialize();
+	}
+
+	/**
+	 * Initialize the contents of the frame.
+	 */
+	private void initialize() {
+		frmTitan = new JFrame();
+		frmTitan.setTitle("Titan");
+		frmTitan.setBounds(100, 100, 800, 500);
+		frmTitan.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		initialize_Menu();		
+		initialize_HorizontalSplitPane();
+		initialize_TopToolBar();
+	}
+
+	private void initialize_Menu()
+	{
+		menuBar = new JMenuBar();
+		frmTitan.setJMenuBar(menuBar);
+		
+		mnFile = new JMenu("File");
+		menuBar.add(mnFile);
+		
+		mntmOpenDsm = new JMenuItem("Open DSM...");
+				
+		mntmOpenDsm.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				FileDialog fldg = new FileDialog(frmTitan,"file open",FileDialog.LOAD);
+				fldg.setVisible(true);		
+			}
+		});
+		mntmOpenDsm.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_MASK));
+		mnFile.add(mntmOpenDsm);
+		
+		mntmNewMenuItem = new JMenuItem("New Clustering");
+		mnFile.add(mntmNewMenuItem);
+		
+		mntmLoadClustering = new JMenuItem("Load Clustering");
+		mntmLoadClustering.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_MASK | InputEvent.SHIFT_MASK));
+		mnFile.add(mntmLoadClustering);
+		
+		mntmSaveClustering = new JMenuItem("Save Clustering");
+		mntmSaveClustering.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK | InputEvent.SHIFT_MASK));
+		mnFile.add(mntmSaveClustering);
+		
+		mntmSaveClusteringAs = new JMenuItem("Save Clustering as...");
+		mnFile.add(mntmSaveClusteringAs);
+		
+		mnExportAs = new JMenu("Export As");
+		mnFile.add(mnExportAs);
+		
+		mntmDsm = new JMenuItem("DSM");
+		mnExportAs.add(mntmDsm);
+		
+		JMenuItem mntmExcel = new JMenuItem("Excel");
+		mnExportAs.add(mntmExcel);
+		
+		JMenuItem mntmExit = new JMenuItem("Exit");
+		mnFile.add(mntmExit);
+		
+		JMenu mnMetrics = new JMenu("Metrics");
+		menuBar.add(mnMetrics);
+		
+		JMenuItem mntmPropagationCost = new JMenuItem("Propagation Cost");
+		mnMetrics.add(mntmPropagationCost);
+		
+		JMenu mnView = new JMenu("View");
+		menuBar.add(mnView);
+		
+		JMenuItem mntmRedraw = new JMenuItem("Redraw");
+		mntmRedraw.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0));
+		mnView.add(mntmRedraw);
+		
+		JMenuItem mntmFind = new JMenuItem("Find");
+		mntmFind.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F, InputEvent.CTRL_MASK));
+		mnView.add(mntmFind);
+		
+		JMenuItem mntmNewMenuItem_1 = new JMenuItem("Show Row Labels");
+		mnView.add(mntmNewMenuItem_1);
+		
+		JMenuItem mntmNewMenuItem_2 = new JMenuItem("Show Dependency Strength");
+		mnView.add(mntmNewMenuItem_2);
+		
+		JMenu mnHelp = new JMenu("Help");
+		menuBar.add(mnHelp);
+		
+		JMenuItem mntmAbout = new JMenuItem("About...");
+		mntmAbout.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				about about_frme = new about();
+				about_frme.setVisible(true);
+			}
+		});
+		mnHelp.add(mntmAbout);
+		frmTitan.getContentPane().setLayout(null);
+	}	
+	private void initialize_TopToolBar(){
+		JToolBar toolBar = new JToolBar();
+		toolBar.setBackground(Color.WHITE);
+		toolBar.setBounds(0, -3, 784, 26);
+		frmTitan.getContentPane().add(toolBar);
+		
+
+		
+		JButton btnOpenDsm = new JButton("");
+		btnOpenDsm.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				FileDialog fldg = new FileDialog(frmTitan,"file open",FileDialog.LOAD);
+				fldg.setVisible(true);		
+			}
+		});
+		btnOpenDsm.setToolTipText("Open DSM");
+		btnOpenDsm.setIcon(OpenDSMICon);
+		toolBar.add(btnOpenDsm);
+		
+				
+		JButton btnRedraw = new JButton("");
+		btnRedraw.setToolTipText("Redraw");
+		btnRedraw.setIcon(RedrawIcon);
+		toolBar.add(btnRedraw);
+		
+		JButton btnNewClustering = new JButton("");
+		btnNewClustering.setToolTipText("New Clustering");
+		btnNewClustering.setIcon(NewClusteringIcon);
+		toolBar.add(btnNewClustering);
+		
+		JButton btnLoadClustering = new JButton("");
+		btnLoadClustering.setToolTipText("Load Clustering");
+		btnLoadClustering.setIcon(LoadClusteringIcon);
+		toolBar.add(btnLoadClustering);
+		
+		JButton btnSaveClustering = new JButton("");
+		btnSaveClustering.setToolTipText("Save Clustering");
+		btnSaveClustering.setIcon(SaveClusteringIcon);
+		toolBar.add(btnSaveClustering);
+		
+		JButton btnSaveClusteringAs = new JButton("");
+		btnSaveClusteringAs.setToolTipText("Save Clustering As");
+		btnSaveClusteringAs.setIcon(SaveClusteringAsIcon);
+		toolBar.add(btnSaveClusteringAs);
+	}
+	private void initialize_HorizontalSplitPane(){
+		JSplitPane splitPane = new JSplitPane();
+		splitPane.setBackground(Color.LIGHT_GRAY);
+		splitPane.setResizeWeight(0.01);		//splitPane 좌우 비율 지정
+		splitPane.setBounds(0, 29, 784, 412);   //splitPane 크기 지정
+		splitPane.setDividerSize(12);			//splitPane 경계선 크기 지정
+		splitPane.setContinuousLayout(true);	//경계 이동시 그림자 이동 해제
+		splitPane.setOneTouchExpandable(true);	//벽에 붙이기 기능 활성화
+		frmTitan.getContentPane().add(splitPane);
+		
+		table = new JTable();
+		splitPane.setRightComponent(table);
+		
+		JSplitPane splitPane_1 = new JSplitPane();
+		splitPane_1.setEnabled(false);
+		splitPane_1.setContinuousLayout(true);
+		splitPane_1.setResizeWeight(0.01);
+		splitPane_1.setOrientation(JSplitPane.VERTICAL_SPLIT);
+		splitPane.setLeftComponent(splitPane_1);
+		
+		JTree tree = new JTree();
+		tree.setModel(new DefaultTreeModel(
+			new DefaultMutableTreeNode("$root") {
+				/**
+				 * 
+				 */
+				private static final long serialVersionUID = 1L;
+
+				{
+					add(new DefaultMutableTreeNode("A"));
+					add(new DefaultMutableTreeNode("B"));
+					add(new DefaultMutableTreeNode("C"));
+					add(new DefaultMutableTreeNode("D"));
+					add(new DefaultMutableTreeNode("E"));
+					add(new DefaultMutableTreeNode("F"));
+					add(new DefaultMutableTreeNode("G"));
+				}
+			}
+		));
+		splitPane_1.setRightComponent(tree);
+		
+		JToolBar treeToolBar = new JToolBar();
+		treeToolBar.setEnabled(false);
+		treeToolBar.setFloatable(false);
+		splitPane_1.setLeftComponent(treeToolBar);
+		
+		JButton btnExpandAll = new JButton("");
+		btnExpandAll.setToolTipText("Expand All");
+		btnExpandAll.setIcon(ExpandAllIcon);
+		treeToolBar.add(btnExpandAll);
+		
+		JButton btnCollapsAll = new JButton("");
+		btnCollapsAll.setToolTipText("Collaps All");
+		btnCollapsAll.setIcon(CollapsAllIcon);
+		treeToolBar.add(btnCollapsAll);
+		
+		JButton btnGroup = new JButton("");
+		btnGroup.setToolTipText("Group");
+		btnGroup.setIcon(GroupIcon);
+		treeToolBar.add(btnGroup);
+		
+		JButton btnUngroup = new JButton("");
+		btnUngroup.setToolTipText("Ungroup");
+		btnUngroup.setIcon(UnGroupIcon);
+		treeToolBar.add(btnUngroup);
+		
+		JButton btnMoveUp = new JButton("");
+		btnMoveUp.setToolTipText("Move Up");
+		btnMoveUp.setIcon(MoveUpIcon);
+		treeToolBar.add(btnMoveUp);
+		
+		JButton btnMoveDown = new JButton("");
+		btnMoveDown.setToolTipText("Move Down");
+		btnMoveDown.setIcon(MoveDownIcon);
+		treeToolBar.add(btnMoveDown);
+		
+		JButton btnDelete = new JButton("");
+		btnDelete.setToolTipText("Delete");
+		btnDelete.setIcon(DeleteIcon);
+		treeToolBar.add(btnDelete);	
+	}
+
+	
+}

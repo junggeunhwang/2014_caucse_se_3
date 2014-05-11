@@ -1,0 +1,25 @@
+<cluster>
+<group name="$root">
+<item name="m1" />
+<item name="m4" />
+<item name="m2" />
+<group name="g1">
+<item name="m10" />
+<item name="m8" />
+</group>
+<group name="g2">
+<group name="gg1">
+<item name="m5" />
+<item name="m3" />
+</group>
+<group name="gg2">
+<item name="m13" />
+<item name="m11" />
+<item name="m7" />
+</group>
+</group>
+<item name="m9" />
+<item name="m12" />
+<item name="m6" />
+</group>
+</cluster>
