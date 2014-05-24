@@ -1,0 +1,49 @@
+package controller;
+
+import javax.swing.JTree;
+import model.TreeNode;
+import model.DsmModel;
+import java.util.Vector;
+import javax.swing.tree.MutableTreeNode;
+import javax.swing.tree.DefaultMutableTreeNode;
+
+public class TreeAction {
+
+	JTree jtree = new JTree();
+	DefaultMutableTreeNode root;
+	int groupSize;
+	
+	TreeNode depthSearch(TreeNode N)
+	{
+		for(int i=0; i<N.childs.size();  i++)
+		{
+			if(N.childs.get(i).isGroup()==false)
+
+		}
+	}
+	
+	public TreeAction(JTree jt, DsmModel m)
+	{
+		Vector<DefaultMutableTreeNode> nodes = new Vector();
+		groupSize =0;
+		int size = m.getRootNode().childs.size();
+		for(int i=0; i<size; i++)
+		{
+			depthSearch(m.getRootNode().childs.get(i));
+		}
+	}
+	
+	
+	public void collapseAll()
+	{
+		
+	}
+	public void expandAll()
+	{
+		
+	}
+	
+	
+	
+	
+}

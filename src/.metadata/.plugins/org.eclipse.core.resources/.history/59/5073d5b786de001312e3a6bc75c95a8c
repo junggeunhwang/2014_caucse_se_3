@@ -1,0 +1,131 @@
+package model;
+
+
+import java.util.Vector;
+
+public class TreeNode {
+	
+	
+	public String key;
+	public TreeNode parent;
+	public Vector<TreeNode> childs;
+	
+	void TreeNode()
+	{
+		this.key = "$root";
+		this.parent = null;
+		this.childs = new Vector<TreeNode>();
+	}
+	
+	void setKey(String keyName)
+	{
+		this.key = keyName;
+		this.parent = null;
+		this.childs = new Vector<TreeNode>();
+	}
+
+	void TreeNode(String keyName, TreeNode parentNode)
+	{
+		this.key = keyName;
+		this.parent = parentNode;
+		this.childs = new Vector<TreeNode>();
+	}
+	
+	
+	void setChild(TreeNode childNode)
+	{
+		childs.add(childNode);
+		childNode.parent = this;
+	}
+	
+	public TreeNode getNode(String nodeName)
+	{
+		TreeNode retNode = new TreeNode();
+		for(int i=0; i<childs.size(); i++)
+		{
+			if(childs.get(i).key==nodeName)
+				return childs.get(i);
+		}
+		for(int i=0; i<childs.size(); i++)
+		{
+			if(childs.get(i).getNode(nodeName).key!="$root")
+				retNode = childs.get(i).getNode(nodeName);
+		}
+		return retNode;
+	}
+	
+	// input T는 group을 나타내는 node, members는 group으로 만들 node들
+	void insertNode(TreeNode groupNode, TreeNode[] members)
+	{
+		int insertPosition=0;
+		TreeNode parentNode = new TreeNode();
+		parentNode = members[0].parent;
+		
+		for(int i=0; i<parentNode.childs.size(); i++)
+			if(parentNode.childs.get(i)==members[0])
+				insertPosition = i;
+		parentNode.childs.insertElementAt(groupNode, insertPosition);
+		
+		for(int i=0; i<members.length; i++)
+			groupNode.setChild(members[i]);
+	}
+	
+	void removeNode(TreeNode deleteNode)
+	{
+		TreeNode parentNode = new TreeNode();
+		parentNode = deleteNode.parent;
+		
+		int deletePosition=0;
+		int size = parentNode.childs.size();
+		for(int i=0; i<size; i++)
+		{
+			if(parentNode.childs.get(i)==deleteNode)
+			{	
+				parentNode.childs.remove(i);
+				deletePosition = i;
+			}
+		}
+		for(int i=0; i<deleteNode.childs.size(); i++)
+		{
+			parentNode.childs.insertElementAt(deleteNode.childs.get(i), deletePosition);
+			deletePosition++;
+		}
+	}
+	
+	void reorderChild(TreeNode moveNode, int dir)
+	{
+		TreeNode parentNode = new TreeNode();
+		TreeNode tempNode = new TreeNode();
+		parentNode = moveNode.parent;
+		
+		for(int i=0; i<parentNode.childs.size(); i++)
+			if(parentNode.childs.get(i)==moveNode)
+			{
+				if( 0<=(i+dir) && (i+dir)<parentNode.childs.size())
+				{
+					tempNode = parentNode.childs.get(i+dir);
+					parentNode.childs.remove(i);
+					parentNode.childs.remove(i+dir);
+					parentNode.childs.insertElementAt(tempNode,i);
+					parentNode.childs.insertElementAt(moveNode,i+dir);
+				}
+			}
+	}
+	
+	Vector<TreeNode> getLeafNode(Vector<TreeNode> leafNode)
+	{
+		int size = childs.size();
+		if(size==0)
+		{
+			leafNode.add(this);
+			return leadNode;
+		}
+		for(int i=0; i<size; i++)
+		{
+			childs.
+		}
+	}
+	
+	
+}
+

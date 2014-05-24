@@ -1,0 +1,62 @@
+
+
+import java.util.Vector;
+
+public class TreeNode {
+	
+	
+	public String key;
+	public TreeNode parent;
+	public Vector childs;
+	
+	void TreeNode()
+	{
+		this.key = "$root";
+		this.parent = null;
+		this.childs = new Vector();
+	}
+	
+	void TreeNode(String keyName)
+	{
+		this.key = keyName;
+		this.parent = null;
+		this.childs = new Vector();
+	}
+
+	void TreeNode(String keyName, TreeNode parentNode)
+	{
+		this.key = keyName;
+		this.parent = parentNode;
+		this.childs = new Vector();
+	}
+	
+	
+	void setChild(TreeNode childNode)
+	{
+		childs.add(childNode);
+		childNode.parent = this;
+	}
+	
+	public TreeNode searchNode(String nodeName)
+	{
+		
+	}
+	// input T는 group을 나타내는 node, members는 group으로 만들 node들
+	void insertNode(TreeNode groupNode, TreeNode[] members)
+	{
+		int insertPoint=0;
+		members[0].parent.setChild(groupNode);
+		for(int i=0; i<members.length; i++)
+			groupNode.setChild(members[i]);
+	}
+	
+	void removeNode(TreeNode deleteNode)
+	{
+		int size = deleteNode.parent.childs.size();
+		for(int i=0; i<size; i++)
+			if(deleteNode.parent.childs[i]==)
+	}
+	
+	
+}
+

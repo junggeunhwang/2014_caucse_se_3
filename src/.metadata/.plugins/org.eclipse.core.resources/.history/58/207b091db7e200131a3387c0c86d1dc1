@@ -1,0 +1,38 @@
+package controller;
+
+import javax.swing.JTree;
+import model.TreeNode;
+import model.DsmModel;
+import java.util.Vector;
+import javax.swing.tree.MutableTreeNode;
+import javax.swing.tree.DefaultMutableTreeNode;
+
+public class TreeAction {
+
+	JTree jtree = new JTree();
+	DefaultMutableTreeNode root;
+	
+	public TreeAction(JTree jt, DsmModel m)
+	{
+		DefaultMutableTreeNode root = new DefaultMutableTreeNode(m.getRootNode().key);
+		int size = m.getModules().size();
+		for(int i=0; i<size; i++)
+		{
+			root.add
+		}
+	}
+	
+	
+	public void collapseAll()
+	{
+		
+	}
+	public void expandAll()
+	{
+		
+	}
+	
+	
+	
+	
+}

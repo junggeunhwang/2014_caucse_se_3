@@ -1,0 +1,31 @@
+package controller;
+
+import javax.swing.JTree;
+import model.TreeNode;
+
+public class TreeAction {
+
+	JTree jtree = new JTree();
+	TreeNode tree = new TreeNode();
+	
+	
+	public TreeAction(JTree jt, TreeNode t)
+	{
+		JTree = jt;
+		tree = t;
+	}
+	
+	
+	public void collapseAll()
+	{
+		
+	}
+	public void expandAll()
+	{
+		
+	}
+	
+	
+	
+	
+}

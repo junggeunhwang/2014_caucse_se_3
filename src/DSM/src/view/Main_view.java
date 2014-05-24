@@ -7,6 +7,7 @@ import java.awt.Graphics;
 import java.awt.Insets;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JToolBar;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -60,6 +61,7 @@ public class Main_view {
 	private Icon DeleteIcon = new ImageIcon("resource\\delete.png");
 	
 	private JTable table;
+	private String filePath;
 		
 	/* Menu Item */
 	private JMenuItem mntmOpenDsm;
@@ -105,31 +107,33 @@ public class Main_view {
 	/*
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
 					instance = new Main_view();
-					//instance.setLookAndFeel();
+				//	instance.setLookAndFeel();
 					instance.frmTitan.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
 		});
-	}
+	}*/
 
 	/**
 	 * Create the application.
 	 */
-	private Main_view() {
+	public Main_view() {
 		initialize();
+		
+		frmTitan.setVisible(true);
 	}
 
 	/**
 	 * Initialize the contents of the frame.
 	 */
-	private void initialize() {
+	public void initialize() {
 		frmTitan = new JFrame();
 		frmTitan.getContentPane().setBackground(SystemColor.menu);
 		frmTitan.setTitle("Titan");
@@ -142,7 +146,7 @@ public class Main_view {
 		
 	}
 
-	private void initialize_Menu()
+ 	private void initialize_Menu()
 	{
 		JMenuBar menuBar = new JMenuBar();
 		frmTitan.setJMenuBar(menuBar);
@@ -284,12 +288,12 @@ public class Main_view {
 				
 		btnOpenDsm = new JButton("");
 		btnOpenDsm.setBackground(SystemColor.menu);
-		btnOpenDsm.addActionListener(new ActionListener() {
+		/*btnOpenDsm.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				FileDialog fldg = new FileDialog(frmTitan,"file open",FileDialog.LOAD);
-				fldg.setVisible(true);		
+				getFilepath();
+				System.out.print(filePath);
 			}
-		});
+		});*/
 		btnOpenDsm.setToolTipText("Open DSM");
 		btnOpenDsm.setIcon(OpenDSMICon);
 		toolBar.add(btnOpenDsm);
@@ -353,8 +357,8 @@ public class Main_view {
 				/**
 				 * 
 				 */
-				private static final long serialVersionUID = 1L;
-
+				/*private static final long serialVersionUID = 1L;
+				
 				{
 					add(new DefaultMutableTreeNode("A"));
 					add(new DefaultMutableTreeNode("B"));
@@ -363,7 +367,7 @@ public class Main_view {
 					add(new DefaultMutableTreeNode("E"));
 					add(new DefaultMutableTreeNode("F"));
 					add(new DefaultMutableTreeNode("G"));
-				}
+				}*/
 			}
 		));
 		splitPane_vertical.setRightComponent(classtree);
@@ -435,6 +439,31 @@ public class Main_view {
 	
 	public static Main_view getInstance() {
 		return instance;
+	}
+	
+	public void setJTree(JTree tree)
+	{
+		this.classtree = tree;
+	}
+	
+	public String setFilepath()
+	{
+		FileDialog fldg = new FileDialog(frmTitan,"file open",FileDialog.LOAD);
+		fldg.setVisible(true);	
+		String directoryName = new String();
+		directoryName = fldg.getDirectory() + fldg.getFile();
+		filePath = directoryName;
+		return filePath;
+	}
+	
+	public JFrame getfrmTitan()
+	{
+		return frmTitan;
+	}
+	
+	public String getFilePath()
+	{
+		return filePath;
 	}
 	
 	public JTable getTable() {

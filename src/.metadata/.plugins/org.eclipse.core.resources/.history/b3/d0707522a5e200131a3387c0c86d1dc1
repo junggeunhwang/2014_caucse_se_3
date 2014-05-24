@@ -1,0 +1,22 @@
+
+
+import model.*;
+import controller.*;
+import view.*;
+
+
+public class main {
+
+	public static void main(String[] args) {
+		
+		
+		ClusterModel m = new ClusterModel();
+		Main_view v = new Main_view();
+		ModuleController c = new ModuleController(m,v); 
+		
+		
+		
+	}
+	
+	
+}

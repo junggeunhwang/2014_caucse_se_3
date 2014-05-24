@@ -1,0 +1,64 @@
+
+
+import java.util.Vector;
+
+public class TreeNode {
+	
+	
+	public String key;
+	public Vector child;
+	
+	void TreeNode()
+	{}
+
+	void TreeNode(String keyName)
+	{
+		this.key = keyName;
+		this.child = new Vector();
+	}
+	
+	void TreeNode(String[] moduleOrder)
+	{
+		for(int i=0; i<moduleOrder.length; i++)
+		{
+			TreeNode T = new TreeNode();
+			T.TreeNode(moduleOrder[i]);
+			child.add(T);
+		}
+	}
+	
+	TreeNode searchNode(TreeNode T)
+	{
+		for(int i=0; i<child.size(); i++)
+		{
+			if(child.get(i)==T)
+				return;
+		}
+	}
+	
+	// input T는 group을 나타내는 node, members는 group으로 만들 node들
+	void insertNode(TreeNode T, TreeNode[] members)
+	{
+		int insertPoint=0;
+		for(int i=child.size()-1; i>=0; i--)  // group을 inset하고자 하는 root노드에서 그룹멤버들을 child node에서 제거한다.
+		{
+			for(int j=0; j<members.length; j++)
+				if(child.get(i)==members[j])
+				{
+					child.remove(i);
+					insertPoint = i;
+				}
+		}
+		child.insertElementAt(T.key,insertPoint);
+		T.TreeNode(members);
+	}
+	
+	void removeNode(TreeNode T)
+	{
+		if(child.isEmpty() == true)
+			
+	}
+	
+	
+}
+

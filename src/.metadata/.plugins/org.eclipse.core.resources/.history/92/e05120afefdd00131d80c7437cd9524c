@@ -1,0 +1,77 @@
+
+
+import java.util.Vector;
+
+public class TreeNode {
+	
+	
+	public String key;
+	public Vector childs;
+	
+	void TreeNode()
+	{
+		this.key = "$root";
+		this.childs = new Vector();
+	}
+
+	void TreeNode(String keyName)
+	{
+		this.key = keyName;
+		this.childs = new Vector();
+	}
+	
+	void setChild(TreeNode childNode)
+	{
+		childs.add(childNode);
+	}
+	
+
+	public TreeNode searchNode(TreeNode rootNode, TreeNode T)  //root부터 시작해서 T를 child Node로 가지고 있는 parent Node를 찾는다.
+	{
+		TreeNode retNode = new TreeNode();
+		//retNode = rootNode;
+		for(int i=0; i<childs.size(); i++)
+		{
+			if(childs.get(i)==T)
+			{
+				return rootNode;
+			}
+		}
+		for(int i=0; i<childs.size(); i++)
+		{
+			retNode = searchNode(rootNode,T);
+		}
+		return retNode;
+	}
+	
+	// input T는 group을 나타내는 node, members는 group으로 만들 node들
+	void insertNode(TreeNode groupNode, TreeNode[] members)
+	{
+		int insertPoint=0;
+		for(int i=0; i<members.length; i++)
+		{
+			members[i].setParent(groupNode);
+		}
+		groupNode.setParent(root);
+		for(int i=members.size()-1; i>=0; i--)  // group을 inset하고자 하는 root노드에서 그룹멤버들을 child node에서 제거한다.
+		{
+			for(int j=0; j<members.length; j++)
+				if(child.get(i)==members[j])
+				{
+					child.remove(i);
+					insertPoint = i;
+				}
+		}
+		child.insertElementAt(T.key,insertPoint);
+		T.TreeNode(members);
+	}
+	
+	void removeNode(TreeNode T)
+	{
+		if(child.isEmpty() == true)
+			
+	}
+	
+	
+}
+

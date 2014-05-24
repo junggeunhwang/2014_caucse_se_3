@@ -1,7 +1,0 @@
-package model;
-
-public class readCluster {
-	
-	public void readCluster(String filePath)
-
-}
