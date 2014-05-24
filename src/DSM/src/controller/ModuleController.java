@@ -1,119 +1,105 @@
 package controller;
-import java.util.ArrayList;
 
 import model.*;
 import view.*;
-
-import java.awt.*;
-
-import javax.swing.*; 
-import javax.swing.tree.DefaultMutableTreeNode;
-
 import java.awt.event.*;
 
 public class ModuleController  implements ActionListener{
 
-	private ClusterModel Cmodel;
-	private Main_view Mview;
-	private JTree tree;
+	private static ModuleController instance;
 	
-	public ModuleController( ClusterModel cmodel, Main_view mview)
-	{
-		this.Cmodel = cmodel;
-		this.Mview = mview;
-		eventUp();
+	private ModuleController(){}
+	
+	public static ModuleController getInstance(){
+		
+		if(instance==null){
+			instance=new ModuleController();
+		}
+		return instance;
 	}
+	
 	private void eventUp()
 	{
-		Mview.getBtnCollapsAll().addActionListener(this);
-		Mview.getBtnDelete().addActionListener(this);
-		Mview.getBtnExpandAll().addActionListener(this);
-		Mview.getBtnGroup().addActionListener(this);
-		Mview.getBtnLoadClustering().addActionListener(this);
-		Mview.getBtnMoveDown().addActionListener(this);
-		Mview.getBtnMoveUp().addActionListener(this);
-		Mview.getBtnNewClustering().addActionListener(this);
-		Mview.getBtnOpenDsm().addActionListener(this);
-		Mview.getBtnRedraw().addActionListener(this);
-		Mview.getBtnSaveClustering().addActionListener(this);
-		Mview.getBtnSaveClusteringAs().addActionListener(this);
-		Mview.getBtnUngroup().addActionListener(this);
-		//Mview();
+		Main_view.getInstance().getBtnCollapsAll().addActionListener(this);
+		Main_view.getInstance().getBtnDelete().addActionListener(this);
+		Main_view.getInstance().getBtnExpandAll().addActionListener(this);
+		Main_view.getInstance().getBtnGroup().addActionListener(this);
+		Main_view.getInstance().getBtnLoadClustering().addActionListener(this);
+		Main_view.getInstance().getBtnMoveDown().addActionListener(this);
+		Main_view.getInstance().getBtnMoveUp().addActionListener(this);
+		Main_view.getInstance().getBtnNewClustering().addActionListener(this);
+		Main_view.getInstance().getBtnOpenDsm().addActionListener(this);
+		Main_view.getInstance().getBtnRedraw().addActionListener(this);
+		Main_view.getInstance().getBtnSaveClustering().addActionListener(this);
+		Main_view.getInstance().getBtnSaveClusteringAs().addActionListener(this);
+		Main_view.getInstance().getBtnUngroup().addActionListener(this);
+		//
 	}
 	
 	@Override
  	public void actionPerformed(ActionEvent e)
 	{
  		
- 		/*Mview.getBtnOpenDsm().addActionListener(new ActionListener(){
+ 		/*Main_view.getInstance().getBtnOpenDsm().addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
-				Mview.setFilepath();
-				System.out.print(Mview.getFilePath());
+				Main_view.getInstance().setFilepath();
+				System.out.print(Main_view.getInstance().getFilePath());
 			}
 		});*/
- 		
-		if(e.getSource()==Mview.getBtnCollapsAll())
+ 				
+		if(e.getSource()==Main_view.getInstance().getBtnCollapsAll())
 		{
 			
 		}
-		if(e.getSource()==Mview.getBtnExpandAll())
+		if(e.getSource()==Main_view.getInstance().getBtnExpandAll())
 		{
 			
 		}
-		if(e.getSource()==Mview.getBtnDelete())
+		if(e.getSource()==Main_view.getInstance().getBtnDelete())
 		{
 			
 		}
-		if(e.getSource()==Mview.getBtnGroup())
+		if(e.getSource()==Main_view.getInstance().getBtnGroup())
 		{
 			
 		}
-		if(e.getSource()==Mview.getBtnLoadClustering())
+		if(e.getSource()==Main_view.getInstance().getBtnLoadClustering())
 		{
 			
 		}
-		if(e.getSource()==Mview.getBtnMoveDown())
+		if(e.getSource()==Main_view.getInstance().getBtnMoveDown())
 		{
 			
 		}
-		if(e.getSource()==Mview.getBtnMoveUp())
+		if(e.getSource()==Main_view.getInstance().getBtnMoveUp())
 		{
 			
 		}
-		if(e.getSource()==Mview.getBtnNewClustering())
+		if(e.getSource()==Main_view.getInstance().getBtnNewClustering())
 		{
 			
 		}
-		if(e.getSource()==Mview.getBtnOpenDsm())
+		if(e.getSource()==Main_view.getInstance().getBtnOpenDsm())
 		{
 			String newFilePath = new String();
-			newFilePath = Mview.setFilepath();
-			System.out.print(Mview.getFilePath()+"\n");
-			Cmodel.readDsm(newFilePath);
-			TreeAction ta = new TreeAction();
-			ta.treeSetting(Cmodel);
-			Mview.setJTree(ta.jtree);
-			//DefaultMutableTreeNode treeModel = new DefaultMutableTreeNode(ta.root.getUserObject());
-			//Mview.getClasstree().setModel(treeModel);
-			//Mview.getfrmTitan().setVisible(true);
-		//	Mview.getClasstree().get
-			//eventUp();
-			//Mview.setFilepath();
-			//
+			newFilePath = Main_view.getInstance().setFilepath();
+			System.out.print(Main_view.getInstance().getFilePath()+"\n");
+			DsmModel.getInstance().readDsm(newFilePath);
+			Main_view.getInstance().setJTree(TreeAction.getInstance().makeTree());
 		}
-		if(e.getSource()==Mview.getBtnRedraw())
+		if(e.getSource()==Main_view.getInstance().getBtnRedraw())
 		{
 			
 		}
-		if(e.getSource()==Mview.getBtnSaveClustering())
+		if(e.getSource()==Main_view.getInstance().getBtnSaveClustering())
 		{
 			
 		}
-		if(e.getSource()==Mview.getBtnSaveClusteringAs())
+		if(e.getSource()==Main_view.getInstance().getBtnSaveClusteringAs())
 		{
 			
 		}
-		if(e.getSource()==Mview.getBtnUngroup())
+		if(e.getSource()==Main_view.getInstance().getBtnUngroup())
 		{
 			
 		}
@@ -121,10 +107,7 @@ public class ModuleController  implements ActionListener{
 	
 	public static void main(String[] args)
 	{
-		//DsmModel d = new DsmModel();
-		ClusterModel c = new ClusterModel();
-		Main_view v = new Main_view();
-		new ModuleController(c,v);
+		ModuleController.getInstance().eventUp();
 	}
 	
 }

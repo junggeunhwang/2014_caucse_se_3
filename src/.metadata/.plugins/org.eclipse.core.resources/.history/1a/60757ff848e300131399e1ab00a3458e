@@ -1,0 +1,19 @@
+package controller;
+
+import java.util.ArrayList;
+import java.util.Vector;
+
+import model.TreeNode;
+
+public class ModelInfo {
+	protected ArrayList<int[]> dependData;
+	protected Vector<TreeNode> modules;
+	protected TreeNode root;
+	
+	ModelInfo(){
+		dependData = new ArrayList<int[]>();
+		modules = new Vector<TreeNode>();
+		root = new TreeNode();
+		root.setKey("$root");
+	}
+}

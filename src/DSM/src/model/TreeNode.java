@@ -9,14 +9,14 @@ public class TreeNode{
 	public TreeNode parent;
 	public Vector<TreeNode> childs;
 	
-	public void TreeNode()
+	public TreeNode()
 	{
 		this.key = "$root";
 		this.parent = null;
 		this.childs = new Vector<TreeNode>();
 	}
 
-	public void TreeNode(String keyName, TreeNode parentNode)
+	public TreeNode(String keyName, TreeNode parentNode)
 	{
 		this.key = keyName;
 		this.parent = parentNode;

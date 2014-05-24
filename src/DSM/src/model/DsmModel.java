@@ -5,45 +5,24 @@ import java.io.*;
 import model.TreeNode;
 
 import java.util.Vector;
-import java.util.ArrayList;;
+
 public class DsmModel {
 	
-	protected ArrayList<int[]> dependData;
-	protected Vector<TreeNode> modules;
-	protected TreeNode root;
+	private static DsmModel instance;
 	
-	public DsmModel()
+	
+	private DsmModel()
 	{
-		dependData = new ArrayList<int[]>();
-		modules = new Vector<TreeNode>();
-		root = new TreeNode();
-		root.setKey("$root");
 	}
 	
-	public TreeNode getRootNode()
-	{
-		return root;
+	public static DsmModel getInstance(){
+		
+		if(instance==null){
+			instance = new DsmModel();
+		}
+		return instance;
 	}
-	public ArrayList<int[]> getDependData()
-	{
-		return dependData;
-	}
-	public Vector<TreeNode> getModules()
-	{
-		return modules;
-	}
-	public void setDependData(ArrayList<int[]> newDepend)
-	{
-		dependData = newDepend;
-	}
-	public void setRoot(TreeNode newRoot)
-	{
-		root = newRoot;
-	}
-	public void setModules(Vector<TreeNode> newModules)
-	{
-		modules = newModules;
-	}
+		
 	
 	public void readDsm(String filePath)
  	{
@@ -77,16 +56,17 @@ public class DsmModel {
 					    index++;
 				}
 				for(int i=0; i<pivot; i++)
-					dependData.add(dependency[i]);
+					ModelInfo.getInstance().getDependData().add(dependency[i]);
 				
-				String[] data = new String[2];
 				for(int i=0; i<pivot; i++)
 				{
 					TreeNode newNode = new TreeNode();
 					newNode.setKey(module[i]);
-					root.setChild(newNode);
+					ModelInfo.getInstance().getRoot().setChild(newNode);
 				}
-				modules = root.getLeafNode(modules);
+				ModelInfo.getInstance()
+				.setModules(ModelInfo.getInstance().getRoot()
+				.getLeafNode(ModelInfo.getInstance().getModules()));
 			}catch(FileNotFoundException fnfe)
 			{
 				System.out.println("파일을 찾을 수 없습니다.");
@@ -103,23 +83,23 @@ public class DsmModel {
 			BufferedWriter buff_writer = new BufferedWriter(osw);
 			PrintWriter print_writer = new PrintWriter(buff_writer,true);
 			String printStr = "";
-			printStr = Integer.toString(modules.size());
+			printStr = Integer.toString(ModelInfo.getInstance().getModules().size());
 			print_writer.println(new String(printStr.getBytes("UTF-8"),"UTF-8"));
 			Vector<String> printList = new Vector<String>();
-			int dependSize = dependData.size();
+			int dependSize = ModelInfo.getInstance().getDependData().size();
 			for(int i=0; i<dependSize; i++)
 			{
 				for(int j=0; j<dependSize; j++)
 				{
-					int dependent = dependData.get(i)[j];
+					int dependent = ModelInfo.getInstance().getDependData().get(i)[j];
 					printStr = Integer.toString(dependent)+" ";
 					print_writer.print(new String(printStr.getBytes("UTF-8"),"UTF-8"));
 				}
 				print_writer.println(new String("".getBytes("UTF-8"),"UTF-8"));
 			}
-			for(int i=0; i<modules.size(); i++)
+			for(int i=0; i<ModelInfo.getInstance().getModules().size(); i++)
 			{
-				print_writer.println(new String(modules.get(i).key.getBytes("UTF-8"),"UTF-8"));
+				print_writer.println(new String(ModelInfo.getInstance().getModules().get(i).key.getBytes("UTF-8"),"UTF-8"));
 			}
 			osw.close();
 			buff_writer.close();

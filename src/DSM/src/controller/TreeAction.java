@@ -1,17 +1,28 @@
 package controller;
 
 import javax.swing.JTree;
+
+import model.ModelInfo;
 import model.TreeNode;
-import model.DsmModel;
+
 import java.util.Vector;
-import javax.swing.tree.MutableTreeNode;
+
 import javax.swing.tree.DefaultMutableTreeNode;
 
 public class TreeAction {
 
-	JTree jtree = new JTree();
-	DefaultMutableTreeNode root;
-	int groupIndex;
+	private static TreeAction instance;
+	
+	private int groupIndex;
+	
+	private TreeAction(){}
+	
+	public static TreeAction getInstance(){
+		if(instance==null){
+			instance = new TreeAction();
+		}
+		return instance;
+	}
 	
 	Vector<DefaultMutableTreeNode> depthSearch(Vector<DefaultMutableTreeNode> nodes, TreeNode N)
 	{
@@ -37,25 +48,21 @@ public class TreeAction {
 		return nodes;
 	}
 	
-	public void treeSetting( DsmModel m)
+	public JTree makeTree()
 	{
-		Vector<DefaultMutableTreeNode> nodes = new Vector();
-		Vector<DefaultMutableTreeNode> tempNodes = new Vector();
+		Vector<DefaultMutableTreeNode> nodes = new Vector<DefaultMutableTreeNode>();
+		
 		groupIndex =0;
-		int size = m.getRootNode().childs.size();
-		DefaultMutableTreeNode tr = new DefaultMutableTreeNode(m.getRootNode().key);
+		int size = ModelInfo.getInstance().getRoot().childs.size();
+		DefaultMutableTreeNode tr = new DefaultMutableTreeNode(ModelInfo.getInstance().getRoot().key);
 		nodes.add(tr);
 		for(int i=0; i<size; i++)
 		{
-			nodes = depthSearch(nodes, m.getRootNode().childs.get(i));
+			nodes = depthSearch(nodes, ModelInfo.getInstance().getRoot().childs.get(i));
 		}
 		//System.out.print(nodes.get(0).getChildCount()+"  ");
-		JTree newTree = new JTree(nodes.get(0));
-		jtree = newTree;
+		JTree newTree = new JTree(nodes.get(0)); 
+		return newTree;
 	}
-	
-	
-	
-	
 	
 }

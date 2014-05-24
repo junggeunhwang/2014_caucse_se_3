@@ -5,26 +5,37 @@ import java.io.*;
 import java.util.Stack;
 import java.util.ArrayList;
 
-public class ClusterModel extends DsmModel {
+public class ClusterModel {
 	
+	static private ClusterModel instance;
+	
+	private ClusterModel(){}
+
+	public static ClusterModel getInstance(){
+		
+		if(instance==null){
+			instance = new ClusterModel();
+		}
+		return instance;
+	}
 	
 	public void newModule(String newModule, int[] newToExist, int[] existToNew)
 	{
 		TreeNode newNode = new TreeNode();
 		newNode.setKey(newModule);
-		newNode.parent = root;
-		int insertPoint=root.childs.size();
-		for(int i=0; i<root.childs.size(); i++)
+		newNode.parent = ModelInfo.getInstance().getRoot();
+		int insertPoint=ModelInfo.getInstance().getRoot().childs.size();
+		for(int i=0; i<ModelInfo.getInstance().getRoot().childs.size(); i++)
 		{
-			if(root.childs.get(i).childs.size()!=0)
+			if(ModelInfo.getInstance().getRoot().childs.get(i).childs.size()!=0)
 			{
 				insertPoint = i;
 				break;
 			}
 		}
-		root.childs.insertElementAt(newNode, insertPoint);
+		ModelInfo.getInstance().getRoot().childs.insertElementAt(newNode, insertPoint);
 		ArrayList<int[]> tempDepend = new ArrayList<int[]>();
-		int newSize = getDependData().size()+1;
+		int newSize = ModelInfo.getInstance().getDependData().size()+1;
 		
 		for(int i=0; i<newSize; i++)
 		{
@@ -34,11 +45,11 @@ public class ClusterModel extends DsmModel {
 				for(int j=0; j<newSize; j++)
 				{
 					if(j<insertPoint)
-						tempRow[j] =  getDependData().get(i)[j];
+						tempRow[j] =  ModelInfo.getInstance().getDependData().get(i)[j];
 					else if(j==insertPoint)
 						tempRow[j] = existToNew[i];
 					else
-						tempRow[j] =  getDependData().get(i)[j-1];
+						tempRow[j] =  ModelInfo.getInstance().getDependData().get(i)[j-1];
 				}
 				tempDepend.add(tempRow);
 			}
@@ -60,16 +71,17 @@ public class ClusterModel extends DsmModel {
 				for(int j=0; j<newSize; j++)
 				{
 					if(j<insertPoint)
-						tempRow[j] =  getDependData().get(i-1)[j];
+						tempRow[j] =  ModelInfo.getInstance().getDependData().get(i-1)[j];
 					else if(j==insertPoint)
 						tempRow[j] = existToNew[i-1];
 					else
-						tempRow[j] =  getDependData().get(i-1)[j-1];
+						tempRow[j] =  ModelInfo.getInstance().getDependData().get(i-1)[j-1];
 				}
 				tempDepend.add(tempRow);
 			}
 		}
-		this. setDependData(tempDepend);
+		ModelInfo.getInstance().setDependData(tempDepend);
+		
 	}
 
 	public void grouping(String groupName, String[] members)
@@ -80,37 +92,37 @@ public class ClusterModel extends DsmModel {
 		TreeNode[] membersNode = new TreeNode[memberSize];
 		for(int i=0; i<members.length; i++)
 		{
-			membersNode[i] = root.getNode(members[i]);
+			membersNode[i] = ModelInfo.getInstance().getRoot().getNode(members[i]);
 		}
-		root.insertNode(groupNode, membersNode);
+		ModelInfo.getInstance().getRoot().insertNode(groupNode, membersNode);
 		Vector<TreeNode> tempModules = new Vector<TreeNode>();
 		Vector<TreeNode> tempModules2 = new Vector<TreeNode>();
-		tempModules = root.getLeafNode(tempModules2);
+		tempModules = ModelInfo.getInstance().getRoot().getLeafNode(tempModules2);
 		this.updateDepend(tempModules);
-		this.setModules(tempModules);
+		ModelInfo.getInstance().setModules(tempModules);
 	}
 
 	public void moveModule(String module, int dir)
 	{
 		TreeNode moduleNode = new TreeNode();
-		moduleNode = root.getNode(module);
-		root.reorderChild(moduleNode, dir);
+		moduleNode = ModelInfo.getInstance().getRoot().getNode(module);
+		ModelInfo.getInstance().getRoot().reorderChild(moduleNode, dir);
 		Vector<TreeNode> tempModules = new Vector<TreeNode>();
 		Vector<TreeNode> tempModules2 = new Vector<TreeNode>();
-		tempModules = root.getLeafNode(tempModules2);
+		tempModules = ModelInfo.getInstance().getRoot().getLeafNode(tempModules2);
 		this.updateDepend(tempModules);
-		this.setModules(tempModules);
+		ModelInfo.getInstance().setModules(tempModules);
 	}
 	
 	public void updateDepend(Vector<TreeNode> afterModules)
 	{
-		int dependSize = getDependData().size(); 
+		int dependSize = ModelInfo.getInstance().getDependData().size(); 
 		ArrayList<int[]> tempDepend = new ArrayList<int[]>(); //최신화 된 getDependData를 임시로 저장할 공간
-		int[] afterOrderNo = new int[getModules().size()];
+		int[] afterOrderNo = new int[ModelInfo.getInstance().getModules().size()];
 		for(int i=0; i<dependSize; i++)
 		{
 			for(int j=0; j<dependSize; j++)
-				if(getModules().get(i).key.compareTo(afterModules.get(j).key)==0)
+				if(ModelInfo.getInstance().getModules().get(i).key.compareTo(afterModules.get(j).key)==0)
 				{
 					afterOrderNo[j] = i;
 					break;
@@ -120,10 +132,10 @@ public class ClusterModel extends DsmModel {
 		{
 			int[] row = new int[dependSize];
 			for(int j=0; j<dependSize; j++)
-				row[j] = getDependData().get(afterOrderNo[i])[afterOrderNo[j]];
+				row[j] = ModelInfo.getInstance().getDependData().get(afterOrderNo[i])[afterOrderNo[j]];
 			tempDepend.add(row);
 		}
-		setDependData(tempDepend);
+		ModelInfo.getInstance().setDependData(tempDepend);
 	}
 	
 	public void readCluster(String filePath, int pivot)
@@ -174,8 +186,8 @@ public class ClusterModel extends DsmModel {
 			Vector<TreeNode> tempModules2 = new Vector<TreeNode>();
 			tempModules = newRoot.getLeafNode(tempModules2);
 			updateDepend(tempModules);
-			this.setModules(tempModules);
-			this.setRoot(newRoot);
+			ModelInfo.getInstance().setModules(tempModules);
+			ModelInfo.getInstance().setRoot(newRoot);
 		 }
 		 catch(FileNotFoundException fnfe){
 			 System.out.println("파일을 찾을 수 없습니다.");
@@ -184,7 +196,6 @@ public class ClusterModel extends DsmModel {
 
 	public Vector<String> makeStr(Vector<String> printList, TreeNode T)
 	{
-		String addStr="";
 		String groupOpen = "<group name=\"";
 		String groupClose = "</group>";
 		String itemOpen = "<item name=\"";
@@ -213,10 +224,9 @@ public class ClusterModel extends DsmModel {
 			PrintWriter print_writer = new PrintWriter(buff_writer,true);
 			String clusterOpen = "<cluster>";
 			String clusterClose = "</cluster>";
-			String printStr = "";
 			print_writer.println(new String(clusterOpen.getBytes("UTF-8"),"UTF-8"));
 			Vector<String> printList = new Vector<String>();
-			printList = makeStr(printList,root);
+			printList = makeStr(printList,ModelInfo.getInstance().getRoot());
 			for(int i=0; i<printList.size(); i++)
 				print_writer.println(new String(printList.get(i).getBytes("UTF-8"),"UTF-8"));
 			print_writer.println(new String(clusterClose.getBytes("UTF-8"),"UTF-8"));

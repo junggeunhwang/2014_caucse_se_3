@@ -37,6 +37,7 @@ import javax.swing.JSeparator;
 
 import java.awt.Button;
 import java.awt.Font;
+import javax.swing.JScrollPane;
 
 
 public class Main_view {
@@ -103,7 +104,9 @@ public class Main_view {
 	private JSeparator separator_5;
 
 
-	
+	private JScrollPane scrollPane;
+	private	JSplitPane splitPane_horizontal;
+	private	JSplitPane splitPane_vertical;
 	/*
 	 * Launch the application.
 	 */
@@ -124,7 +127,7 @@ public class Main_view {
 	/**
 	 * Create the application.
 	 */
-	public Main_view() {
+	private Main_view() {
 		initialize();
 		
 		frmTitan.setVisible(true);
@@ -330,7 +333,7 @@ public class Main_view {
 		toolBar.add(btnSaveClusteringAs);
 	}
 	private void initialize_HorizontalSplitPane(){
-		JSplitPane splitPane_horizontal = new JSplitPane();
+		splitPane_horizontal = new JSplitPane();
 		splitPane_horizontal.setBackground(SystemColor.menu);
 		splitPane_horizontal.setResizeWeight(0.01);		//splitPane 좌우 비율 지정
 		splitPane_horizontal.setBounds(0, 30, 784, 412);   //splitPane 크기 지정
@@ -343,7 +346,7 @@ public class Main_view {
 		table.setBackground(SystemColor.menu);
 		splitPane_horizontal.setRightComponent(table);
 		
-		JSplitPane splitPane_vertical = new JSplitPane();
+		splitPane_vertical = new JSplitPane();
 		splitPane_vertical.setBackground(SystemColor.menu);
 		splitPane_vertical.setEnabled(false);
 		splitPane_vertical.setContinuousLayout(true);
@@ -370,7 +373,8 @@ public class Main_view {
 				}*/
 			}
 		));
-		splitPane_vertical.setRightComponent(classtree);
+		scrollPane = new JScrollPane(classtree);
+		splitPane_vertical.setRightComponent(scrollPane);
 		
 		JToolBar treeToolBar = new JToolBar();
 		treeToolBar.setBackground(SystemColor.menu);
@@ -413,37 +417,21 @@ public class Main_view {
 		btnDelete.setIcon(DeleteIcon);
 		treeToolBar.add(btnDelete);	
 	}
-	
-	private void setLookAndFeel(){
-		   try
-		    {
-		      UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
-		    }
-		    catch (Exception localException)
-		    {
-		      setAuxilaryLookAndFeel();
-		    }
-		    finally
-		    {
-		      JFrame.setDefaultLookAndFeelDecorated(true);
-		    }
-	}
-	private void setAuxilaryLookAndFeel(){
-		 try{
-		    UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-		 }
-		 catch (Exception localException)
-		 {
-		 }
-	}
+
 	
 	public static Main_view getInstance() {
+		if(instance==null){
+			instance = new Main_view();			
+		}
 		return instance;
 	}
 	
 	public void setJTree(JTree tree)
 	{
+		this.splitPane_vertical.remove(this.scrollPane);
 		this.classtree = tree;
+		JScrollPane newSp = new JScrollPane(this.classtree);
+		this.splitPane_vertical.add(newSp);
 	}
 	
 	public String setFilepath()
@@ -580,5 +568,13 @@ public class Main_view {
 
 	public JButton getBtnDelete() {
 		return btnDelete;
+	}
+
+	public JSplitPane getSplitPane_horizontal() {
+		return splitPane_horizontal;
+	}
+
+	public JSplitPane getSplitPane_vertical() {
+		return splitPane_vertical;
 	}
 }
