@@ -116,7 +116,9 @@ public class ClusterModel {
 	
 	public void updateDepend(Vector<TreeNode> afterModules)
 	{
-		int dependSize = ModelInfo.getInstance().getDependData().size(); 
+		int parameter = 0;
+		int dependSize;
+		dependSize = ModelInfo.getInstance().getRoot().getLeafNodeSize(parameter);
 		ArrayList<int[]> tempDepend = new ArrayList<int[]>(); //최신화 된 getDependData를 임시로 저장할 공간
 		int[] afterOrderNo = new int[ModelInfo.getInstance().getModules().size()];
 		for(int i=0; i<dependSize; i++)
@@ -136,6 +138,38 @@ public class ClusterModel {
 			tempDepend.add(row);
 		}
 		ModelInfo.getInstance().setDependData(tempDepend);
+		
+	}
+	
+	public void removeModule(String nodeName)
+	{
+		int isGroup=0;
+		if(ModelInfo.getInstance().getRoot().getNode(nodeName).childs.size()==0)
+			isGroup=1;
+		ModelInfo.getInstance().getRoot().removeNode(nodeName);
+		
+		Vector<TreeNode> tempModules = new Vector<TreeNode>();
+		Vector<TreeNode> tempModules2 = new Vector<TreeNode>();
+		tempModules = ModelInfo.getInstance().getRoot().getLeafNode(tempModules2);
+		if(isGroup==0)
+		{
+			this.updateDepend(tempModules);
+			ModelInfo.getInstance().setModules(tempModules);
+		}
+		else
+		{
+			int deletePoint=0;
+			for(int i=0; i<ModelInfo.getInstance().getModules().size(); i++)
+			{
+				if(nodeName.compareTo(ModelInfo.getInstance().getModules().get(i).key)==0)
+				{	
+					deletePoint = i;
+					break;
+				}
+			}
+			ModelInfo.getInstance().removeDependElement(deletePoint);
+			ModelInfo.getInstance().setModules(tempModules);
+		}
 	}
 	
 	public void readCluster(String filePath, int pivot)
@@ -143,7 +177,7 @@ public class ClusterModel {
 		String cluster[][] = new String [2][pivot];
 		try
 		 {
-			File file = new File("after_partitioning_simple.clsx");
+			File file = new File(filePath);
 			FileInputStream fis = new FileInputStream(file);
 			InputStreamReader isr = new InputStreamReader(fis, "UTF-8"); 
 			BufferedReader br = new BufferedReader(isr);

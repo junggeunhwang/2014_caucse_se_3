@@ -4,6 +4,7 @@ import java.io.*;
 
 import model.TreeNode;
 
+import java.util.ArrayList;
 import java.util.Vector;
 
 public class DsmModel {
@@ -32,7 +33,6 @@ public class DsmModel {
 				FileInputStream fis = new FileInputStream(file);
 				InputStreamReader isr =  new InputStreamReader(fis, "UTF-8"); 
 				BufferedReader br  = new BufferedReader(isr);
-				
 				String temp = "";
 				temp = br.readLine();
 				int pivot = Integer.parseInt(temp);
@@ -64,6 +64,7 @@ public class DsmModel {
 					newNode.setKey(module[i]);
 					ModelInfo.getInstance().getRoot().setChild(newNode);
 				}
+				
 				ModelInfo.getInstance()
 				.setModules(ModelInfo.getInstance().getRoot()
 				.getLeafNode(ModelInfo.getInstance().getModules()));

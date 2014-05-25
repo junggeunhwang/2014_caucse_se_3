@@ -11,7 +11,7 @@ public class ModelInfo {
 	private Vector<TreeNode> modules;
 	private TreeNode root;
 	
-	ModelInfo(){
+	public ModelInfo(){
 		dependData = new ArrayList<int[]>();
 		modules = new Vector<TreeNode>();
 		root = new TreeNode();
@@ -38,6 +38,11 @@ public class ModelInfo {
 		return root;
 	}
 
+	public void setInstance(ModelInfo input)
+	{
+		this.instance = input;
+	}
+	
 	public void setDependData(ArrayList<int[]> dependData) {
 		this.dependData = dependData;
 	}
@@ -50,4 +55,22 @@ public class ModelInfo {
 		this.root = root;
 	}
 	
+	public void removeDependElement(int index)
+	{
+		dependData.remove(index);
+		for(int i=0; i<dependData.size(); i++)
+		{
+			int[] newData = new int[dependData.size()];
+			int newIndex=0;
+			for(int j=0; j<dependData.get(i).length; j++)
+			{
+				if(j!=index)
+				{
+					newData[newIndex] = dependData.get(i)[j];
+					newIndex++;
+				}
+			}
+			dependData.set(i, newData);
+		}
+	}
 }

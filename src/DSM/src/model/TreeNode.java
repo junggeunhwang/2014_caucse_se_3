@@ -38,21 +38,20 @@ public class TreeNode{
 	
 	public TreeNode getNode(String nodeName)
 	{
-		TreeNode retNode = new TreeNode();
+		TreeNode tempNode = new TreeNode();
 		int size = childs.size();
 		if(this.key.compareTo(nodeName)==0)
 			return this;
 		for(int i=0; i<childs.size(); i++)
 		{
-			if(childs.get(i).key.compareTo(nodeName)==0)
-				return childs.get(i);
-		}
-		for(int i=0; i<childs.size(); i++)
-		{
-			if(childs.get(i).getNode(nodeName).key!=null)
+			TreeNode retNode = new TreeNode();
+			if(childs.get(i).getNode(nodeName).key.compareTo("$root")!=0)
+			{
 				retNode = childs.get(i).getNode(nodeName);
+				return retNode;
+			}
 		}
-		return retNode;
+		return tempNode;
 	}
 	
 	// input T는 group을 나타내는 node, members는 group으로 만들 node들
@@ -99,7 +98,7 @@ public class TreeNode{
 		deleteNode = getNode(deleteName);
 		parentNode = deleteNode.parent;
 	
-		int deletePosition=0;
+		//int deletePosition=0;
 		int size = parentNode.childs.size();
 		
 		for(int i=0; i<size; i++)
@@ -107,7 +106,7 @@ public class TreeNode{
 			if(parentNode.childs.get(i)==deleteNode) // parentNode에서 groupNode 제거
 			{	
 				parentNode.childs.remove(i);
-				deletePosition = i;
+				//deletePosition = i;
 				break;
 			}
 		}
@@ -117,35 +116,29 @@ public class TreeNode{
 			return;
 		}
 		
-		for(int i=0; i<deleteNode.childs.size(); i++)
+		/*for(int i=0; i<deleteNode.childs.size(); i++)
 		{
-			parentNode.childs.insertElementAt(deleteNode.childs.get(i), deletePosition);
-			deleteNode.childs.get(i).parent = parentNode;
-			deletePosition++;
-		}
+			//parentNode.childs.insertElementAt(deleteNode.childs.get(i), deletePosition);
+			//deleteNode.childs.get(i).parent = parentNode;
+			//deletePosition++;
+		}*/
 		deleteNode = null;
+		
 	}
 	
 	public void reorderChild(TreeNode moveNode, int dir)
 	{
-		TreeNode parentNode = new TreeNode();
-		TreeNode tempNode = new TreeNode();
-		parentNode = moveNode.parent;
-		
-		for(int i=0; i<parentNode.childs.size(); i++){
-			if(parentNode.childs.get(i)==moveNode)
+		for(int i=0; i<moveNode.parent.childs.size(); i++){
+			if(moveNode.parent.childs.get(i)==moveNode)
 			{
-				if( 0<=(i+dir) && (i+dir)<parentNode.childs.size())
+				if( 0<=(i+dir) && (i+dir)<moveNode.parent.childs.size())
 				{
-					tempNode = parentNode.childs.get(i+dir);
-					parentNode.childs.remove(i);
-					parentNode.childs.remove(i+dir);
-					parentNode.childs.insertElementAt(tempNode,i);
-					parentNode.childs.insertElementAt(moveNode,i+dir);
+					moveNode.parent.childs.setElementAt(moveNode.parent.childs.get(dir+i), i);
+					moveNode.parent.childs.setElementAt(moveNode, i+dir);
 					break;
 				}
 			}
-		}
+		}		
 	}
 	
 	public boolean isGroup()
@@ -180,7 +173,20 @@ public class TreeNode{
 		}
 		return leafNodes;
 	}
-	
+	public int getLeafNodeSize(int retSize)
+	{
+		int size = childs.size();
+		if(size==0)// leaf노드면 추가
+		{
+			retSize = retSize+1;
+		}
+		else
+		{
+			for(int i=0; i<size; i++)
+				retSize = this.childs.get(i).getLeafNodeSize(retSize);
+		}
+		return retSize;
+	}
 	
 }
 

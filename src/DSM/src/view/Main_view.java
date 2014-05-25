@@ -20,12 +20,14 @@ import javax.swing.JTree;
 import javax.swing.JTable;
 import javax.swing.KeyStroke;
 import javax.swing.UIManager;
+import javax.swing.JPanel;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.InputEvent;
 import java.awt.Color;
 
 import javax.swing.border.Border;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 
@@ -37,7 +39,11 @@ import javax.swing.JSeparator;
 
 import java.awt.Button;
 import java.awt.Font;
+import java.util.Vector;
+
 import javax.swing.JScrollPane;
+
+import model.ModelInfo;
 
 
 public class Main_view {
@@ -103,33 +109,18 @@ public class Main_view {
 	private JSeparator separator_4;
 	private JSeparator separator_5;
 
-
+	private JPanel matrixTool;
+	private JScrollPane matrix;
+	private JOptionPane inputDlg;
 	private JScrollPane scrollPane;
 	private	JSplitPane splitPane_horizontal;
 	private	JSplitPane splitPane_vertical;
-	/*
-	 * Launch the application.
-	 */
-	/*public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					instance = new Main_view();
-				//	instance.setLookAndFeel();
-					instance.frmTitan.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}*/
 
 	/**
 	 * Create the application.
 	 */
 	private Main_view() {
 		initialize();
-		
 		frmTitan.setVisible(true);
 	}
 
@@ -291,12 +282,6 @@ public class Main_view {
 				
 		btnOpenDsm = new JButton("");
 		btnOpenDsm.setBackground(SystemColor.menu);
-		/*btnOpenDsm.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				getFilepath();
-				System.out.print(filePath);
-			}
-		});*/
 		btnOpenDsm.setToolTipText("Open DSM");
 		btnOpenDsm.setIcon(OpenDSMICon);
 		toolBar.add(btnOpenDsm);
@@ -332,6 +317,7 @@ public class Main_view {
 		btnSaveClusteringAs.setIcon(SaveClusteringAsIcon);
 		toolBar.add(btnSaveClusteringAs);
 	}
+	
 	private void initialize_HorizontalSplitPane(){
 		splitPane_horizontal = new JSplitPane();
 		splitPane_horizontal.setBackground(SystemColor.menu);
@@ -344,7 +330,10 @@ public class Main_view {
 		
 		table = new JTable();
 		table.setBackground(SystemColor.menu);
-		splitPane_horizontal.setRightComponent(table);
+		matrix = new JScrollPane(table);
+		matrixTool = new JPanel();
+		matrixTool.add(matrix);
+		splitPane_horizontal.setRightComponent(matrixTool);
 		
 		splitPane_vertical = new JSplitPane();
 		splitPane_vertical.setBackground(SystemColor.menu);
@@ -356,22 +345,7 @@ public class Main_view {
 		
 		classtree = new JTree();
 		classtree.setModel(new DefaultTreeModel(
-			new DefaultMutableTreeNode("$root") {
-				/**
-				 * 
-				 */
-				/*private static final long serialVersionUID = 1L;
-				
-				{
-					add(new DefaultMutableTreeNode("A"));
-					add(new DefaultMutableTreeNode("B"));
-					add(new DefaultMutableTreeNode("C"));
-					add(new DefaultMutableTreeNode("D"));
-					add(new DefaultMutableTreeNode("E"));
-					add(new DefaultMutableTreeNode("F"));
-					add(new DefaultMutableTreeNode("G"));
-				}*/
-			}
+			new DefaultMutableTreeNode("$root") {}
 		));
 		scrollPane = new JScrollPane(classtree);
 		splitPane_vertical.setRightComponent(scrollPane);
@@ -426,22 +400,107 @@ public class Main_view {
 		return instance;
 	}
 	
-	public void setJTree(JTree tree)
+	public String setGroupName()
 	{
-		this.splitPane_vertical.remove(this.scrollPane);
-		this.classtree = tree;
-		JScrollPane newSp = new JScrollPane(this.classtree);
-		this.splitPane_vertical.add(newSp);
+		inputDlg = new JOptionPane();
+		String groupName = new String();
+		groupName = inputDlg.showInputDialog("Group Name");
+		return groupName;
 	}
 	
-	public String setFilepath()
+	public void setTable()
+	{
+		int dependSize = ModelInfo.getInstance().getDependData().size();
+		int moduleSize = ModelInfo.getInstance().getModules().size();
+		Object data[][] = new Object[dependSize][dependSize+1];
+
+		for(int i=0; i<dependSize; i++)
+		{
+			for(int j=1; j<=dependSize; j++)
+			{
+				
+				if(i==j-1)
+					data[i][j] = "·";
+				else
+				{
+					if(ModelInfo.getInstance().getDependData().get(i)[j-1]==1)
+						data[i][j] = 'x';
+					else
+						data[i][j] = ' ';
+				}
+			}
+		}
+		Object col[] = new Object[moduleSize+1];
+		for(int i=0; i<moduleSize; i++)
+		{
+			data[i][0] = ModelInfo.getInstance().getModules().get(i).key;
+		}
+		col[0] = "";
+		for(int i=1; i<=moduleSize; i++)
+			col[i] = ModelInfo.getInstance().getModules().get(i-1).key;
+		
+		
+		DefaultTableModel model=new DefaultTableModel(data,col);
+	   
+		matrix.removeAll();
+	    table = new JTable();
+	    splitPane_horizontal.remove(matrixTool);
+	    
+	    JTable t = new JTable(model);
+	    JScrollPane m = new JScrollPane(t);
+	    JPanel mt = new JPanel();
+	    mt.add(m);
+		splitPane_horizontal.add(mt);
+		
+		table = t;
+		matrix = m;
+		matrixTool = mt;
+	}
+	
+	public void setJTree(JTree tree)
+	{
+		scrollPane.removeAll();  // scrollPane의 초기화
+		classtree = new JTree(); // JTree의 초기화
+		this.splitPane_vertical.remove(scrollPane);
+		JScrollPane newSp = new JScrollPane(tree);
+		this.splitPane_vertical.add(newSp);
+		scrollPane = newSp;
+		classtree = tree;
+	}
+	
+	public String setFilepath_load()
 	{
 		FileDialog fldg = new FileDialog(frmTitan,"file open",FileDialog.LOAD);
 		fldg.setVisible(true);	
 		String directoryName = new String();
 		directoryName = fldg.getDirectory() + fldg.getFile();
+		filePath = new String();
 		filePath = directoryName;
 		return filePath;
+	}
+	
+	public String[] setFilepath_save()
+	{
+		FileDialog fldg = new FileDialog(frmTitan,"file open",FileDialog.SAVE);
+		fldg.setVisible(true);	
+		String[] fileInfo = new String[2];
+		fileInfo[0] = fldg.getDirectory();
+		fileInfo[1] = fldg.getFile();
+		return fileInfo;
+	}
+	
+	public void setTreeView(int how)
+	{
+		if(how==0)
+		{	
+			for(int i=0; i<classtree.getRowCount(); i++)
+				classtree.expandRow(i);
+		}
+		else
+		{	
+			for(int i=0; i<classtree.getRowCount(); i++)
+				classtree.collapseRow(i);
+		}
 	}
 	
 	public JFrame getfrmTitan()
