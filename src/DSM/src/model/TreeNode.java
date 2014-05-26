@@ -98,7 +98,7 @@ public class TreeNode{
 		deleteNode = getNode(deleteName);
 		parentNode = deleteNode.parent;
 	
-		//int deletePosition=0;
+		int deletePosition=0;
 		int size = parentNode.childs.size();
 		
 		for(int i=0; i<size; i++)
@@ -106,7 +106,7 @@ public class TreeNode{
 			if(parentNode.childs.get(i)==deleteNode) // parentNode에서 groupNode 제거
 			{	
 				parentNode.childs.remove(i);
-				//deletePosition = i;
+				deletePosition = i;
 				break;
 			}
 		}
@@ -116,12 +116,12 @@ public class TreeNode{
 			return;
 		}
 		
-		/*for(int i=0; i<deleteNode.childs.size(); i++)
+		for(int i=0; i<deleteNode.childs.size(); i++)
 		{
-			//parentNode.childs.insertElementAt(deleteNode.childs.get(i), deletePosition);
-			//deleteNode.childs.get(i).parent = parentNode;
-			//deletePosition++;
-		}*/
+			parentNode.childs.insertElementAt(deleteNode.childs.get(i), deletePosition);
+			deleteNode.childs.get(i).parent = parentNode;
+			deletePosition++;
+		}
 		deleteNode = null;
 		
 	}

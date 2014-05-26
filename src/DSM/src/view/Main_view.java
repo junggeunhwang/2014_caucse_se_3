@@ -433,11 +433,11 @@ public class Main_view {
 		Object col[] = new Object[moduleSize+1];
 		for(int i=0; i<moduleSize; i++)
 		{
-			data[i][0] = ModelInfo.getInstance().getModules().get(i).key;
+			data[i][0] =String.valueOf(i+1)+"  "+ ModelInfo.getInstance().getModules().get(i).key;
 		}
 		col[0] = "";
 		for(int i=1; i<=moduleSize; i++)
-			col[i] = ModelInfo.getInstance().getModules().get(i-1).key;
+			col[i] = i;
 		
 		
 		DefaultTableModel model=new DefaultTableModel(data,col);

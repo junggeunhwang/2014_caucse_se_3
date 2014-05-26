@@ -317,6 +317,7 @@ public class Main_view {
 		btnSaveClusteringAs.setIcon(SaveClusteringAsIcon);
 		toolBar.add(btnSaveClusteringAs);
 	}
+	
 	private void initialize_HorizontalSplitPane(){
 		splitPane_horizontal = new JSplitPane();
 		splitPane_horizontal.setBackground(SystemColor.menu);
@@ -330,7 +331,9 @@ public class Main_view {
 		table = new JTable();
 		table.setBackground(SystemColor.menu);
 		matrix = new JScrollPane(table);
-		splitPane_horizontal.setRightComponent(matrix);
+		matrixTool = new JPanel();
+		matrixTool.add(matrix);
+		splitPane_horizontal.setRightComponent(matrixTool);
 		
 		splitPane_vertical = new JSplitPane();
 		splitPane_vertical.setBackground(SystemColor.menu);
@@ -407,20 +410,51 @@ public class Main_view {
 	
 	public void setTable()
 	{
-		//Vector<String> modules = new Vector<String>();
-		//DefaultTableModel model;
-		Object data[][] =  {{'1','0','0','1','1'},{'1','1','0','1','0'},{'1','1','0','1','0'}};
-	      Object col[]={"AAA","BBB","CCC","DDD","EEE"};
-	    DefaultTableModel model=new DefaultTableModel(data,col);
+		int dependSize = ModelInfo.getInstance().getDependData().size();
+		int moduleSize = ModelInfo.getInstance().getModules().size();
+		Object data[][] = new Object[dependSize][dependSize+1];
+
+		for(int i=0; i<dependSize; i++)
+		{
+			for(int j=1; j<=dependSize; j++)
+			{
+				
+				if(i==j-1)
+					data[i][j] = "¡¤";
+				else
+				{
+					if(ModelInfo.getInstance().getDependData().get(i)[j-1]==1)
+						data[i][j] = 'x';
+					else
+						data[i][j] = ' ';
+				}
+			}
+		}
+		Object col[] = new Object[moduleSize+1];
+		for(int i=0; i<moduleSize; i++)
+		{
+			data[i][0] =String.valueOf(i)+" "+ ModelInfo.getInstance().getModules().get(i).key;
+		}
+		col[0] = "";
+		for(int i=1; i<=moduleSize; i++)
+			col[i] = i;
+		
+		
+		DefaultTableModel model=new DefaultTableModel(data,col);
+	   
 		matrix.removeAll();
 	    table = new JTable();
-	    this.splitPane_horizontal.remove(scrollPane);
+	    splitPane_horizontal.remove(matrixTool);
 	    
-		table = new JTable(model);
-		System.out.print(table.getColumnName(0));
-		JScrollPane pan = new JScrollPane(table);
-		splitPane_horizontal.add(pan);
-		splitPane_horizontal.setVisible(true);
+	    JTable t = new JTable(model);
+	    JScrollPane m = new JScrollPane(t);
+	    JPanel mt = new JPanel();
+	    mt.add(m);
+		splitPane_horizontal.add(mt);
+		
+		table = t;
+		matrix = m;
+		matrixTool = mt;
 	}
 	
 	public void setJTree(JTree tree)
