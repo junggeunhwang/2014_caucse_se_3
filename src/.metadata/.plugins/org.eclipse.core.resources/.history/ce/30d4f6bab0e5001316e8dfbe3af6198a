@@ -42,42 +42,12 @@ public class ModuleController  implements ActionListener{
 		Main_view.getInstance().getBtnSaveClustering().addActionListener(this);
 		Main_view.getInstance().getBtnSaveClusteringAs().addActionListener(this);
 		Main_view.getInstance().getBtnUngroup().addActionListener(this);
-		
-		Main_view.getInstance().getMntmDsm().addActionListener(this);
-		
-		Main_view.getInstance().getMntmAbout().addActionListener(this);//
-		Main_view.getInstance().getMntmExit().addActionListener(this);//
-		Main_view.getInstance().getMntmShow_Row_Labels().addActionListener(this);//
-		Main_view.getInstance().getMntmNewMenuItem().addActionListener(this);
-		Main_view.getInstance().getMntmOpenDsm().addActionListener(this);//
-		Main_view.getInstance().getMntmRedraw().addActionListener(this);//
-		Main_view.getInstance().getMntmSaveClustering().addActionListener(this);//
-		Main_view.getInstance().getMntmSaveClusteringAs().addActionListener(this);//
-		Main_view.getInstance().getMntmLoadClustering().addActionListener(this);//
-		
-		
 		//
 	}
 	
 	@Override
  	public void actionPerformed(ActionEvent e)
 	{	
-		if(e.getSource()==Main_view.getInstance().getMntmDsm())
-		{
-			System.out.println("mntmdsm");
-		}
-		if(e.getSource()==Main_view.getInstance().getMntmExit())
-		{
-			System.exit(0);
-		}
-		if(e.getSource()==Main_view.getInstance().getMntmShow_Row_Labels())
-		{
-			if(Main_view.getInstance().getShowRowLabel()==1)
-				Main_view.getInstance().setShowRowLabel(0);
-			else
-				Main_view.getInstance().setShowRowLabel(1);
-		}
-		
 		if(e.getSource()==Main_view.getInstance().getBtnCollapsAll())
 		{
 			Main_view.getInstance().setTreeView(1);
@@ -101,7 +71,7 @@ public class ModuleController  implements ActionListener{
 			TreeAction.getInstance().removeAction();
 			Main_view.getInstance().setJTree(TreeAction.getInstance().makeTree());
 		}
-		if(e.getSource()==Main_view.getInstance().getBtnLoadClustering() || e.getSource()==Main_view.getInstance().getMntmLoadClustering())
+		if(e.getSource()==Main_view.getInstance().getBtnLoadClustering())
 		{
 			String[] newFilePath = new String[2];
 			newFilePath = Main_view.getInstance().setFilepath_load();
@@ -119,43 +89,48 @@ public class ModuleController  implements ActionListener{
 			TreeAction.getInstance().moveAction(-1);
 			Main_view.getInstance().setJTree(TreeAction.getInstance().makeTree());
 		}
-		if(e.getSource()==Main_view.getInstance().getBtnNewClustering() || e.getSource()==Main_view.getInstance().getMntmNewMenuItem())
+		if(e.getSource()==Main_view.getInstance().getBtnNewClustering())
 		{
 			ModelInfo.getInstance().setInstance(null);
 			DsmModel.getInstance().readDsm(backUPfilePath);
 			Main_view.getInstance().setJTree(TreeAction.getInstance().makeTree());
 		}
-		if(e.getSource()==Main_view.getInstance().getBtnOpenDsm() || e.getSource()==Main_view.getInstance().getMntmOpenDsm())
+		if(e.getSource()==Main_view.getInstance().getBtnOpenDsm())
 		{
 			ModelInfo.getInstance().setInstance(null);
-			String[] newFilePath = new String[2];
+			String newFilePath = new String();
 			newFilePath = Main_view.getInstance().setFilepath_load();
 			this.currentClusterInfo = new String[2];
 			this.currentClusterInfo = null;
 			this.backUPfilePath = new String();
-			this.backUPfilePath = newFilePath[0]+newFilePath[1];
-			DsmModel.getInstance().readDsm(newFilePath[0]+newFilePath[1]);
+			this.backUPfilePath = newFilePath;
+			DsmModel.getInstance().readDsm(newFilePath);
 			Main_view.getInstance().setJTree(TreeAction.getInstance().makeTree());
 		}
-		if(e.getSource()==Main_view.getInstance().getBtnRedraw() || e.getSource()==Main_view.getInstance().getMntmRedraw())
+		if(e.getSource()==Main_view.getInstance().getBtnRedraw())
 		{
 			Vector<String> printElement = new Vector<String>();
 			printElement = TreeAction.getInstance().getTreeState();
 			Main_view.getInstance().drawTable(printElement);
 		}
-		if(e.getSource()==Main_view.getInstance().getBtnSaveClustering() || e.getSource()==Main_view.getInstance().getMntmSaveClustering())
+		if(e.getSource()==Main_view.getInstance().getBtnSaveClustering())
 		{
 			if(this.currentClusterInfo==null)
 			{
+				System.out.print("null----!!");
 				String[] newFileInfo = new String[2];
 				newFileInfo = Main_view.getInstance().setFilepath_save();
+				System.out.println(newFileInfo[0]+newFileInfo[1]);
 				this.currentClusterInfo = newFileInfo;
 				ClusterModel.getInstance().writeCluster(newFileInfo[0], newFileInfo[1]);
 			}
 			else
+			{
+				System.out.println("NOT null"+this.currentClusterInfo[0]+this.currentClusterInfo[1]);
 				ClusterModel.getInstance().writeCluster(this.currentClusterInfo[0], this.currentClusterInfo[1]);
+			}
 		}
-		if(e.getSource()==Main_view.getInstance().getBtnSaveClusteringAs() || e.getSource()==Main_view.getInstance().getMntmSaveClusteringAs())
+		if(e.getSource()==Main_view.getInstance().getBtnSaveClusteringAs())
 		{
 			String[] newFileInfo = new String[2];
 			newFileInfo = Main_view.getInstance().setFilepath_save();

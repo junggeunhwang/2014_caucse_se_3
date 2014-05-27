@@ -45,6 +45,7 @@ public class ModuleController  implements ActionListener{
 		
 		Main_view.getInstance().getMntmDsm().addActionListener(this);
 		
+		
 		Main_view.getInstance().getMntmAbout().addActionListener(this);//
 		Main_view.getInstance().getMntmExit().addActionListener(this);//
 		Main_view.getInstance().getMntmShow_Row_Labels().addActionListener(this);//

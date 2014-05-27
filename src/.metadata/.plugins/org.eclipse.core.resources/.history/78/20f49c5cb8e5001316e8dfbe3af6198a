@@ -44,17 +44,17 @@ public class ModuleController  implements ActionListener{
 		Main_view.getInstance().getBtnUngroup().addActionListener(this);
 		
 		Main_view.getInstance().getMntmDsm().addActionListener(this);
+		Main_view.getInstance().getMntmNewMenuItem().addActionListener(this);
 		
 		Main_view.getInstance().getMntmAbout().addActionListener(this);//
 		Main_view.getInstance().getMntmExit().addActionListener(this);//
 		Main_view.getInstance().getMntmShow_Row_Labels().addActionListener(this);//
-		Main_view.getInstance().getMntmNewMenuItem().addActionListener(this);
+
 		Main_view.getInstance().getMntmOpenDsm().addActionListener(this);//
 		Main_view.getInstance().getMntmRedraw().addActionListener(this);//
 		Main_view.getInstance().getMntmSaveClustering().addActionListener(this);//
 		Main_view.getInstance().getMntmSaveClusteringAs().addActionListener(this);//
 		Main_view.getInstance().getMntmLoadClustering().addActionListener(this);//
-		
 		
 		//
 	}
@@ -62,13 +62,13 @@ public class ModuleController  implements ActionListener{
 	@Override
  	public void actionPerformed(ActionEvent e)
 	{	
-		if(e.getSource()==Main_view.getInstance().getMntmDsm())
+		if(e.getSource()==Main_view.getInstance().getMntmShow_Row_Labels())
 		{
-			System.out.println("mntmdsm");
+			
 		}
 		if(e.getSource()==Main_view.getInstance().getMntmExit())
 		{
-			System.exit(0);
+			
 		}
 		if(e.getSource()==Main_view.getInstance().getMntmShow_Row_Labels())
 		{
@@ -119,7 +119,7 @@ public class ModuleController  implements ActionListener{
 			TreeAction.getInstance().moveAction(-1);
 			Main_view.getInstance().setJTree(TreeAction.getInstance().makeTree());
 		}
-		if(e.getSource()==Main_view.getInstance().getBtnNewClustering() || e.getSource()==Main_view.getInstance().getMntmNewMenuItem())
+		if(e.getSource()==Main_view.getInstance().getBtnNewClustering())
 		{
 			ModelInfo.getInstance().setInstance(null);
 			DsmModel.getInstance().readDsm(backUPfilePath);

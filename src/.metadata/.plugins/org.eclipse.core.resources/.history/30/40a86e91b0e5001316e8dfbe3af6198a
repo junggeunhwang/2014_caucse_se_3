@@ -156,7 +156,12 @@ public class Main_view {
 		mntmOpenDsm.setMnemonic('O');
 		mntmOpenDsm.setFont(new Font("¸¼Àº °íµñ", Font.PLAIN, 12));
 				
-		
+		mntmOpenDsm.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				FileDialog fldg = new FileDialog(frmTitan,"file open",FileDialog.LOAD);
+				fldg.setVisible(true);		
+			}
+		});
 		mntmOpenDsm.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_MASK));
 		mnFile.add(mntmOpenDsm);
 		
@@ -549,16 +554,15 @@ public class Main_view {
 		classtree = tree;
 	}
 	
-	public String[] setFilepath_load()
+	public String setFilepath_load()
 	{
 		FileDialog fldg = new FileDialog(frmTitan,"file open",FileDialog.LOAD);
 		fldg.setVisible(true);	
-		String[] pathName = new String[2];
-		pathName[0] = fldg.getDirectory();
-		pathName[1] = fldg.getFile();
+		String directoryName = new String();
+		directoryName = fldg.getDirectory() + fldg.getFile();
 		filePath = new String();
-		filePath = pathName[0]+pathName[1];
-		return pathName;
+		filePath = directoryName;
+		return filePath;
 	}
 	
 	public String[] setFilepath_save()
@@ -583,16 +587,6 @@ public class Main_view {
 			for(int i=0; i<classtree.getRowCount(); i++)
 				classtree.collapseRow(i);
 		}
-	}
-	
-	public void setShowRowLabel(int setting)
-	{
-		this.showRowLabel = setting;
-	}
-	
-	public int getShowRowLabel()
-	{
-		return showRowLabel;
 	}
 	
 	public JFrame getfrmTitan()

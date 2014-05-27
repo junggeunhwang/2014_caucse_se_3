@@ -156,7 +156,12 @@ public class Main_view {
 		mntmOpenDsm.setMnemonic('O');
 		mntmOpenDsm.setFont(new Font("¸¼Àº °íµñ", Font.PLAIN, 12));
 				
-		
+		mntmOpenDsm.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				FileDialog fldg = new FileDialog(frmTitan,"file open",FileDialog.LOAD);
+				fldg.setVisible(true);		
+			}
+		});
 		mntmOpenDsm.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_MASK));
 		mnFile.add(mntmOpenDsm);
 		
@@ -408,23 +413,20 @@ public class Main_view {
 	public void drawTable(Vector<String> printElement)
 	{
 		int matrixSize = printElement.size();
-		Object data[][];
-		Object col[];
 		if(matrixSize==0)
 		{
-			data = new Object[1][2];
-			col = new Object[2];
+			Object data[][] = new Object[1][2];
+			Object col[] = new Object[2];
 			if(showRowLabel==1)
 				data[0][0] = String.valueOf(1) + " $root";
 			else
 				data[0][0] = String.valueOf(1);
 			data[0][1] = "¡¤";
-			col[0] = "";
 			col[1] = String.valueOf(1);
 		}
 		else
 		{
-			data = new Object[matrixSize][matrixSize+1];
+			Object data[][] = new Object[matrixSize][matrixSize+1];
 			for(int i=0; i<matrixSize; i++)
 			{
 					for(int j=1; j<=matrixSize; j++)
@@ -511,7 +513,7 @@ public class Main_view {
 					}
 			}
 		
-			col = new Object[matrixSize+1];
+			Object col[] = new Object[matrixSize+1];
 			if(showRowLabel==1)
 				for(int i=0; i<matrixSize; i++)
 					data[i][0] =String.valueOf(i+1)+"  "+ printElement.get(i);
@@ -522,7 +524,8 @@ public class Main_view {
 			for(int i=1; i<=matrixSize; i++)
 				col[i] = i;
 		}
-		DefaultTableModel model=new DefaultTableModel(data,col);
+		//DefaultTableModel model=new DefaultTableModel(data,col);
+	   
 		matrix.removeAll();
 	    table = new JTable();
 	    splitPane_horizontal.remove(matrixTool);
@@ -549,16 +552,15 @@ public class Main_view {
 		classtree = tree;
 	}
 	
-	public String[] setFilepath_load()
+	public String setFilepath_load()
 	{
 		FileDialog fldg = new FileDialog(frmTitan,"file open",FileDialog.LOAD);
 		fldg.setVisible(true);	
-		String[] pathName = new String[2];
-		pathName[0] = fldg.getDirectory();
-		pathName[1] = fldg.getFile();
+		String directoryName = new String();
+		directoryName = fldg.getDirectory() + fldg.getFile();
 		filePath = new String();
-		filePath = pathName[0]+pathName[1];
-		return pathName;
+		filePath = directoryName;
+		return filePath;
 	}
 	
 	public String[] setFilepath_save()
@@ -583,16 +585,6 @@ public class Main_view {
 			for(int i=0; i<classtree.getRowCount(); i++)
 				classtree.collapseRow(i);
 		}
-	}
-	
-	public void setShowRowLabel(int setting)
-	{
-		this.showRowLabel = setting;
-	}
-	
-	public int getShowRowLabel()
-	{
-		return showRowLabel;
 	}
 	
 	public JFrame getfrmTitan()

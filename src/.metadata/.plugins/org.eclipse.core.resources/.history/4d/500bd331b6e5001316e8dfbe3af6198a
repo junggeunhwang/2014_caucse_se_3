@@ -156,7 +156,12 @@ public class Main_view {
 		mntmOpenDsm.setMnemonic('O');
 		mntmOpenDsm.setFont(new Font("¸¼Àº °íµñ", Font.PLAIN, 12));
 				
-		
+		mntmOpenDsm.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				FileDialog fldg = new FileDialog(frmTitan,"file open",FileDialog.LOAD);
+				fldg.setVisible(true);		
+			}
+		});
 		mntmOpenDsm.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_MASK));
 		mnFile.add(mntmOpenDsm);
 		
@@ -583,16 +588,6 @@ public class Main_view {
 			for(int i=0; i<classtree.getRowCount(); i++)
 				classtree.collapseRow(i);
 		}
-	}
-	
-	public void setShowRowLabel(int setting)
-	{
-		this.showRowLabel = setting;
-	}
-	
-	public int getShowRowLabel()
-	{
-		return showRowLabel;
 	}
 	
 	public JFrame getfrmTitan()
