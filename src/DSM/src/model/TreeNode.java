@@ -57,18 +57,28 @@ public class TreeNode{
 	// input T는 group을 나타내는 node, members는 group으로 만들 node들
 	public void insertNode(TreeNode groupNode, TreeNode[] members)
 	{
+		for(int i=1; i<members.length; i++)
+		{
+			if(members[i].parent.key.compareTo(members[0].parent.key)!=0)
+				return;
+		}
 		int insertPosition=0;
 		TreeNode parentNode = new TreeNode();
 		parentNode = members[0].parent;
-		
+		//System.out.println("==="+parentNode.key);
 		for(int i=0; i<parentNode.childs.size(); i++)
 		{
 			if(parentNode.childs.get(i)==members[0])
 				insertPosition = i;
 			for(int j=0; j<members.length; j++)   // parent노드의 자식에서 member에 속하는 노드 제거
 			{
-				if(parentNode.childs.get(i)==members[j])
+				//System.out.println("i : "+i+"  j : "+j);
+				if(parentNode.childs.get(i).key.compareTo(members[j].key)==0)
+				{
+					//System.out.println("==>"+parentNode.childs.get(i).key+"  : "+members[j].key);
 					parentNode.childs.remove(i);
+					i=0;
+				}
 			}
 		}
 		parentNode.childs.insertElementAt(groupNode, parentNode.childs.size());// member들의 parent에 group노드 추가
@@ -173,18 +183,21 @@ public class TreeNode{
 		}
 		return leafNodes;
 	}
-	public int getLeafNodeSize(int retSize)
+	
+	public int getLeafNodeSize()
 	{
 		int size = childs.size();
+		int retSize=0;
 		if(size==0)// leaf노드면 추가
 		{
-			retSize = retSize+1;
+			return retSize+1;
 		}
 		else
 		{
 			for(int i=0; i<size; i++)
-				retSize = this.childs.get(i).getLeafNodeSize(retSize);
+				retSize += this.childs.get(i).getLeafNodeSize();
 		}
+		//System.out.println(retSize);
 		return retSize;
 	}
 	

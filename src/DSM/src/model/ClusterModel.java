@@ -117,10 +117,12 @@ public class ClusterModel {
 	public void updateDepend(Vector<TreeNode> afterModules)
 	{
 		int parameter = 0;
-		int dependSize;
-		dependSize = ModelInfo.getInstance().getRoot().getLeafNodeSize(parameter);
+		int dependSize = ModelInfo.getInstance().getRoot().getLeafNodeSize();
+		//System.out.println(ModelInfo.getInstance().getRoot().getLeafNodeSize(parameter));
+		//dependSize = 
 		ArrayList<int[]> tempDepend = new ArrayList<int[]>(); //최신화 된 getDependData를 임시로 저장할 공간
 		int[] afterOrderNo = new int[ModelInfo.getInstance().getModules().size()];
+		//System.out.println(dependSize);
 		for(int i=0; i<dependSize; i++)
 		{
 			for(int j=0; j<dependSize; j++)

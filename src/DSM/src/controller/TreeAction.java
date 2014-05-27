@@ -6,6 +6,7 @@ import model.ClusterModel;
 import model.ModelInfo;
 import model.TreeNode;
 
+import java.util.Enumeration;
 import java.util.Vector;
 
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -103,6 +104,9 @@ public class TreeAction {
 		}
 		String groupName = new String();
 		groupName = Main_view.getInstance().setGroupName();
+	//	for(int i=0; i<members.length; i++)
+	//		System.out.print(members[i]+" ");
+//		System.out.println(members.length);
 		ClusterModel.getInstance().grouping(groupName, members);
 	}
 	
@@ -120,6 +124,73 @@ public class TreeAction {
 		String groupName = new String();
 		groupName = Main_view.getInstance().setGroupName();
 		ClusterModel.getInstance().grouping(groupName, members);
+	}
+	
+	public Vector<String> getTreeState()
+	{
+		//DefaultTreeModel model = (DefaultTreeModel)Main_view.getInstance().getClasstree().getModel();
+		//TreePath root = new TreePath(Main_view.getInstance().getClasstree().getPathForRow(0));
+		
+		//Enumeration<TreePath> expandedPaths = Main_view.getInstance().getClasstree().getExpandedDescendants(root);
+		//TreePath selectedPath =  Main_view.getInstance().getClasstree().getSelectionPath();
+		
+		//DefaultTreeModel model = (DefaultTreeModel)Main_view.getInstance().getClasstree().getModel();
+	//	DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode)Main_view.getInstance().getClasstree().getLastSelectedPathComponent();
+		//System.out.print(selectedNode.getPath().toString());
+	/*	System.out.println(Main_view.getInstance().getClasstree().getRowCount());
+		for(int i=0; i<Main_view.getInstance().getClasstree().getRowCount(); i++)
+		{
+			System.out.print(Main_view.getInstance().getClasstree().isExpanded(i)+"  ");
+		}
+		System.out.print("\n");
+		for(int i=0; i<Main_view.getInstance().getClasstree().getRowCount(); i++)
+		{
+			System.out.print(Main_view.getInstance().getClasstree().getRowBounds(i).height+"  ");
+		}
+		System.out.print("\n");
+		for(int i=0; i<Main_view.getInstance().getClasstree().getRowCount(); i++)
+		{
+			TreePath tp = Main_view.getInstance().getClasstree().getPathForRow(i);
+			String str = new String();
+			str = tp.getPathComponent(tp.getPathCount()-1).toString();
+			System.out.print(str+" ");
+		}
+		System.out.print("\n");*/
+		
+		Vector<String> printElement = new Vector<String>();
+		for(int i=1; i<Main_view.getInstance().getClasstree().getRowCount(); i++)
+		{
+			boolean print = Main_view.getInstance().getClasstree().isExpanded(i);
+			int height = Main_view.getInstance().getClasstree().getRowBounds(i).height;
+			if(print==false)
+			{
+				TreePath tp = Main_view.getInstance().getClasstree().getPathForRow(i);
+				String str = new String();
+				str = tp.getPathComponent(tp.getPathCount()-1).toString();
+				printElement.add(str);
+			}
+		}
+		return printElement;
+		
+		//System.out.println(Main_view.getInstance().getClasstree().isExpanded(0));
+		//System.out.println(Main_view.getInstance().getClasstree().isExpanded(1));
+	//	System.out.println(Main_view.getInstance().getClasstree().isExpanded(2));
+		
+		/*if(selectedNode.getPath()[selectedNode.getLevel()].)
+			System.out.print("yes");
+		else
+			System.out.print("no");
+		*//*while (expandedPaths != null && expandedPaths.hasMoreElements())
+		{
+		    TreePath path = expandedPaths.nextElement();
+		    if (isPathValid(path))
+		    {
+		    	Main_view.getInstance().getClasstree().expandPath(path);
+		    }
+		}*/
+	//	System.out.println();
+
+
 	}
 	
 	

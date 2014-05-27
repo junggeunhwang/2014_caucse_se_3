@@ -108,7 +108,9 @@ public class ModuleController  implements ActionListener{
 		}
 		if(e.getSource()==Main_view.getInstance().getBtnRedraw())
 		{
-			Main_view.getInstance().setTable();
+			Vector<String> printElement = new Vector<String>();
+			printElement = TreeAction.getInstance().getTreeState();
+			Main_view.getInstance().drawTable(printElement);
 		}
 		if(e.getSource()==Main_view.getInstance().getBtnSaveClustering())
 		{

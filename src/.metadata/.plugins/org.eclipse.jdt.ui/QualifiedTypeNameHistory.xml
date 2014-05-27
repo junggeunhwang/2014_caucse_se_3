@@ -22,4 +22,5 @@
 <fullyQualifiedTypeName name="javax.swing.table.DefaultTableModel"/>
 <fullyQualifiedTypeName name="javax.swing.JPanel"/>
 <fullyQualifiedTypeName name="model.ModelInfo"/>
+<fullyQualifiedTypeName name="java.util.Enumeration"/>
 </qualifiedTypeNameHistroy>
