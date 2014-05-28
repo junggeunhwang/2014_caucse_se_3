@@ -1,57 +1,71 @@
 package view;
 
-import java.awt.Component;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.FileDialog;
-import java.awt.Graphics;
-import java.awt.Insets;
 
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.JToolBar;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JMenuBar;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import javax.swing.JSplitPane;
-import javax.swing.JTree;
-import javax.swing.JTable;
-import javax.swing.KeyStroke;
-import javax.swing.UIManager;
 import javax.swing.JPanel;
-
-import java.awt.event.KeyEvent;
-import java.awt.event.InputEvent;
-import java.awt.Color;
-
-import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.tree.DefaultTreeModel;
+import javax.swing.table.TableColumnModel;
+import javax.swing.text.StyleConstants;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.JSplitPane;
+import javax.swing.JToolBar;
 
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 import java.awt.SystemColor;
 
-import javax.swing.JSeparator;
+import javax.swing.JButton;
 
-import java.awt.Button;
-import java.awt.Font;
-import java.util.Vector;
+import java.awt.Color;
 
 import javax.swing.JScrollPane;
 
+import java.awt.Component;
+
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.JTextPane;
+import javax.swing.JTree;
+import javax.swing.BoxLayout;
+import javax.swing.JMenuBar;
+import javax.swing.JMenu;
+import javax.swing.KeyStroke;
+import javax.swing.SwingConstants;
+
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
+import java.util.Vector;
+
+import javax.swing.JMenuItem;
+import javax.swing.JSeparator;
+import javax.swing.JCheckBoxMenuItem;
+
 import model.ModelInfo;
 
+public class Main_view extends JFrame {
 
-public class Main_view {
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
-	static private Main_view instance;
+	private JPanel contentPane;
 	
 	private JFrame frmTitan;
-	
+	private static Main_view instance;
+
 	/* Icon */
 	private Icon OpenDSMICon = new ImageIcon("resource\\open-dsm.png");
 	private Icon RedrawIcon  = new ImageIcon("resource\\redraw.png");
@@ -66,8 +80,9 @@ public class Main_view {
 	private Icon MoveUpIcon = new ImageIcon("resource\\up.png");
 	private Icon MoveDownIcon = new ImageIcon("resource\\down.png");
 	private Icon DeleteIcon = new ImageIcon("resource\\delete.png");
+	private Icon NewDsmIcon = new ImageIcon("resource\\newDsmRow.png");
+	private Icon RenameIcon = new ImageIcon("resource\\rename.png");
 	
-	private JTable table;
 	private String filePath;
 	private int showRowLabel; // if 0, do not show rowLabel / else if 1, show rowLabel
 		
@@ -83,9 +98,11 @@ public class Main_view {
 	private JMenuItem mntmPropagationCost;
 	private JMenuItem mntmRedraw;
 	private JMenuItem mntmFind;
-	private JMenuItem mntmShow_Row_Labels;
-	private JMenuItem mntmShow_Dependency_Strength;
 	private JMenuItem mntmAbout;
+	private JMenuItem mntmNewDsm;
+	
+	private JCheckBoxMenuItem mntmShow_Row_Labels;
+	private JCheckBoxMenuItem mntmShow_Dependency_Strength;
 	
 	/* Button */
 	private JButton btnOpenDsm;
@@ -101,6 +118,8 @@ public class Main_view {
 	private JButton btnMoveUp;
 	private JButton btnMoveDown;
 	private JButton btnDelete;
+	private JButton btnNewDsmRow;
+	private JButton btnRename;
 	
 	private JTree classtree;
 	private JSeparator separator;
@@ -111,52 +130,63 @@ public class Main_view {
 	private JSeparator separator_5;
 
 	private JPanel matrixTool;
-	private JScrollPane matrix;
+	private JScrollPane dependency_matrix_scrollPane;
 	private JOptionPane inputDlg;
 	private JScrollPane scrollPane;
 	private	JSplitPane splitPane_horizontal;
 	private	JSplitPane splitPane_vertical;
+	private JSplitPane splitPane_top_main;
+	private JTable dependency_table;
+
 
 	/**
-	 * Create the application.
+	 * Create the frame.
 	 */
-	private Main_view() {
+	public Main_view() {
+		instance = this;
+		frmTitan = this;
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 826, 600);
 		initialize();
-		frmTitan.setVisible(true);
+		this.setVisible(true);
 	}
-
-	/**
-	 * Initialize the contents of the frame.
-	 */
-	public void initialize() {
-		frmTitan = new JFrame();
-		frmTitan.getContentPane().setBackground(SystemColor.menu);
-		frmTitan.setTitle("Titan");
-		frmTitan.setBounds(100, 100, 800, 500);
-		frmTitan.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		showRowLabel=1;
+	
+	private void initialize()
+	{
+		initialize_Menu();
 		
-		initialize_Menu();		
-		initialize_HorizontalSplitPane();
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+		contentPane.setLayout(new BorderLayout(0, 0));
+		
+		splitPane_top_main = new JSplitPane();
+		splitPane_top_main.setOrientation(JSplitPane.VERTICAL_SPLIT);
+		contentPane.add(splitPane_top_main, BorderLayout.CENTER);
+		
 		initialize_TopToolBar();
-		
+		initialize_HorizontalSplitPane();
+		showRowLabel=1;
 	}
-
+	
  	private void initialize_Menu()
 	{
 		JMenuBar menuBar = new JMenuBar();
-		frmTitan.setJMenuBar(menuBar);
+		this.setJMenuBar(menuBar);
 		
 		JMenu mnFile = new JMenu("File");
 		mnFile.setMnemonic('F');
 		mnFile.setFont(new Font("Malgun Gothic", Font.PLAIN, 12));
 		menuBar.add(mnFile);
+		mntmNewDsm = new JMenuItem("New DSM...");
+		mntmNewDsm.setFont(new Font("Malgun Gothic", Font.PLAIN, 12));
+		mntmNewDsm.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_MASK));
+		mnFile.add(mntmNewDsm);
 		
 		mntmOpenDsm = new JMenuItem("Open DSM...");
 		mntmOpenDsm.setMnemonic('O');
 		mntmOpenDsm.setFont(new Font("맑은 고딕", Font.PLAIN, 12));
 				
-		
 		mntmOpenDsm.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_MASK));
 		mnFile.add(mntmOpenDsm);
 		
@@ -243,12 +273,14 @@ public class Main_view {
 		separator_5 = new JSeparator();
 		mnView.add(separator_5);
 		
-		mntmShow_Row_Labels = new JMenuItem("Show Row Labels");
+		mntmShow_Row_Labels = new JCheckBoxMenuItem("Show Row Labels");
+		
 		mntmShow_Row_Labels.setFont(new Font("맑은 고딕", Font.PLAIN, 12));
 		mntmShow_Row_Labels.setMnemonic('L');
 		mnView.add(mntmShow_Row_Labels);
 		
-		mntmShow_Dependency_Strength = new JMenuItem("Show Dependency Strength");
+		
+		mntmShow_Dependency_Strength = new JCheckBoxMenuItem("Show Dependency Strength");
 		mntmShow_Dependency_Strength.setFont(new Font("맑은 고딕", Font.PLAIN, 12));
 		mntmShow_Dependency_Strength.setMnemonic('D');
 		mnView.add(mntmShow_Dependency_Strength);
@@ -268,14 +300,13 @@ public class Main_view {
 			}
 		});
 		mnHelp.add(mntmAbout);
-		frmTitan.getContentPane().setLayout(null);
+		this.getContentPane().setLayout(null);
 	}	
-	
-	private void initialize_TopToolBar(){
+
+ 	private void initialize_TopToolBar(){
 		JToolBar toolBar = new JToolBar();
 		toolBar.setBackground(SystemColor.menu);
-		toolBar.setBounds(0, 0, 784, 30);
-		frmTitan.getContentPane().add(toolBar);
+		splitPane_top_main.setLeftComponent(toolBar);
 				
 		btnOpenDsm = new JButton("");
 		btnOpenDsm.setBackground(SystemColor.menu);
@@ -314,25 +345,39 @@ public class Main_view {
 		btnSaveClusteringAs.setIcon(SaveClusteringAsIcon);
 		toolBar.add(btnSaveClusteringAs);
 	}
-	
-	private void initialize_HorizontalSplitPane(){
+
+ 	private void initialize_HorizontalSplitPane(){
 		splitPane_horizontal = new JSplitPane();
+		splitPane_horizontal.setForeground(Color.WHITE);
 		splitPane_horizontal.setBackground(SystemColor.menu);
 		splitPane_horizontal.setResizeWeight(0.01);		//splitPane 좌우 비율 지정
 		splitPane_horizontal.setBounds(0, 30, 784, 412);   //splitPane 크기 지정
 		splitPane_horizontal.setDividerSize(12);			//splitPane 경계선 크기 지정
 		splitPane_horizontal.setContinuousLayout(true);	//경계 이동시 그림자 이동 해제
 		splitPane_horizontal.setOneTouchExpandable(true);	//벽에 붙이기 기능 활성화
-		frmTitan.getContentPane().add(splitPane_horizontal);
+		splitPane_top_main.setRightComponent(splitPane_horizontal);
 		
-		table = new JTable();
-		table.setBackground(SystemColor.menu);
-		matrix = new JScrollPane(table);
+		
+		
+		dependency_table = new JTable();
+		dependency_table.setRowSelectionAllowed(false);
+		dependency_table.setEnabled(false);
+		dependency_table.setBackground(SystemColor.white);
+		
+		
+		dependency_matrix_scrollPane = new JScrollPane(dependency_table);
+		dependency_matrix_scrollPane.setEnabled(false);
+		dependency_matrix_scrollPane.setViewportView(dependency_table);
+		
 		matrixTool = new JPanel();
-		matrixTool.add(matrix);
+		matrixTool.setForeground(Color.WHITE);
+		matrixTool.setLayout(new BorderLayout(0, 0));
+		matrixTool.add(dependency_matrix_scrollPane);
+				
 		splitPane_horizontal.setRightComponent(matrixTool);
 		
 		splitPane_vertical = new JSplitPane();
+		splitPane_vertical.setForeground(Color.WHITE);
 		splitPane_vertical.setBackground(SystemColor.menu);
 		splitPane_vertical.setEnabled(false);
 		splitPane_vertical.setContinuousLayout(true);
@@ -387,10 +432,19 @@ public class Main_view {
 		btnDelete.setToolTipText("Delete");
 		btnDelete.setIcon(DeleteIcon);
 		treeToolBar.add(btnDelete);	
+		
+		btnNewDsmRow = new JButton("");
+		btnNewDsmRow.setToolTipText("NewDsmRow");
+		btnNewDsmRow.setIcon(NewDsmIcon);
+		treeToolBar.add(btnNewDsmRow);
+		
+		btnRename = new JButton("");
+		btnRename.setToolTipText("Rename");
+		btnRename.setIcon(RenameIcon);
+		treeToolBar.add(btnRename);
 	}
 
-	
-	public static Main_view getInstance() {
+ 	public static Main_view getInstance() {
 		if(instance==null){
 			instance = new Main_view();			
 		}
@@ -404,12 +458,13 @@ public class Main_view {
 		groupName = inputDlg.showInputDialog("Group Name");
 		return groupName;
 	}
-	
+
 	public void drawTable(Vector<String> printElement)
 	{
 		int matrixSize = printElement.size();
 		Object data[][];
 		Object col[];
+		
 		if(matrixSize==0)
 		{
 			data = new Object[1][2];
@@ -522,20 +577,142 @@ public class Main_view {
 			for(int i=1; i<=matrixSize; i++)
 				col[i] = i;
 		}
-		DefaultTableModel model=new DefaultTableModel(data,col);
-		matrix.removeAll();
-	    table = new JTable();
-	    splitPane_horizontal.remove(matrixTool);
-	    
-	    JTable t = new JTable(model);
-	    JScrollPane m = new JScrollPane(t);
-	    JPanel mt = new JPanel();
-	    mt.add(m);
-		splitPane_horizontal.add(mt);
 		
-		table = t;
-		matrix = m;
-		matrixTool = mt;
+		
+		DefaultTableModel model=new DefaultTableModel(data,col);
+		dependency_table = new JTable(model);
+		dependency_table.setRowSelectionAllowed(false);
+		dependency_table.setEnabled(false);
+		dependency_table.setBackground(SystemColor.white);
+		dependency_table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF); //자동 리사이즈 해제
+		
+		
+		TableColumnModel col_model = dependency_table.getColumnModel();
+		
+		//
+		DefaultTableCellRenderer tableCell = new DefaultTableCellRenderer();
+		tableCell.setHorizontalAlignment(SwingConstants.CENTER);
+//		tableCell.setBackground(Color.red);
+		for(int i=1; i<col_model.getColumnCount(); i++)
+		{
+			col_model.getColumn(i).setCellRenderer(tableCell);
+			col_model.getColumn(i).setPreferredWidth(10);
+		}
+		
+		int max_length=0;
+		if(printElement.size()==0)
+			max_length=8;
+		else
+		{
+			for(int i=0; i<matrixSize; i++)
+			{
+				data[i][0] = String.valueOf(i+1)+"  "+ printElement.get(i);
+				if(max_length < (String.valueOf(i+1)+"  "+ printElement.get(i)).length());
+					max_length = (String.valueOf(i+1)+"  "+ printElement.get(i)).length();
+			}
+		}	
+		col_model.getColumn(0).setPreferredWidth(max_length*6+2);
+		
+		tableCell = new DefaultTableCellRenderer();
+		tableCell.setHorizontalAlignment(SwingConstants.LEFT);
+		
+		col_model.getColumn(0).setCellRenderer(tableCell);
+		
+		col_model.setColumnSelectionAllowed(false);
+		
+		
+		dependency_matrix_scrollPane = new JScrollPane(dependency_table);
+		dependency_matrix_scrollPane.setEnabled(false);
+		dependency_matrix_scrollPane.setViewportView(dependency_table);
+				
+		matrixTool = new JPanel();
+		matrixTool.setForeground(Color.WHITE);
+		matrixTool.setLayout(new BorderLayout(0, 0));
+		matrixTool.add(dependency_matrix_scrollPane, BorderLayout.CENTER);
+				
+		splitPane_horizontal.setRightComponent(matrixTool);
+	}
+	
+	public void setTable()
+	{
+		int dependSize = ModelInfo.getInstance().getDependData().size();
+		int moduleSize = ModelInfo.getInstance().getModules().size();
+		Object data[][] = new Object[dependSize][dependSize+1];
+
+		for(int i=0; i<dependSize; i++)
+		{
+			for(int j=1; j<=dependSize; j++)
+			{
+				
+				if(i==j-1)
+					data[i][j] = ".";
+					
+				else
+				{
+					if(ModelInfo.getInstance().getDependData().get(i)[j-1]==1)
+						data[i][j] = "x";	
+					else
+						data[i][j] = " ";						
+				}
+			}
+		}
+		Object col[] = new Object[moduleSize+1];
+		int max_length=0;
+		for(int i=0; i<moduleSize; i++)
+		{
+			data[i][0] = String.valueOf(i+1)+"  "+ ModelInfo.getInstance().getModules().get(i).key;
+			if(max_length < (String.valueOf(i+1)+"  "+ ModelInfo.getInstance().getModules().get(i).key).length())
+				max_length = (String.valueOf(i+1)+"  "+ ModelInfo.getInstance().getModules().get(i).key).length();
+		}
+		
+		col[0] = "";
+		
+		for(int i=1; i<=moduleSize; i++)
+			col[i] = String.valueOf(i);
+
+		DefaultTableModel model=new DefaultTableModel(data,col);
+						
+		dependency_table = new JTable(model);
+		dependency_table.setRowSelectionAllowed(false);
+		dependency_table.setEnabled(false);
+		dependency_table.setBackground(SystemColor.white);
+		dependency_table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF); //자동 리사이즈 해제
+		
+		
+		TableColumnModel col_model = dependency_table.getColumnModel();
+		
+		//
+		DefaultTableCellRenderer tableCell = new DefaultTableCellRenderer();
+		tableCell.setHorizontalAlignment(SwingConstants.CENTER);
+//		tableCell.setBackground(Color.red);
+		for(int i=1; i<col_model.getColumnCount(); i++)
+		{
+			col_model.getColumn(i).setCellRenderer(tableCell);
+			col_model.getColumn(i).setPreferredWidth(10);
+		}
+		
+			
+		col_model.getColumn(0).setPreferredWidth(max_length*6);
+		
+		tableCell = new DefaultTableCellRenderer();
+		tableCell.setHorizontalAlignment(SwingConstants.LEFT);
+		
+		col_model.getColumn(0).setCellRenderer(tableCell);
+		
+		col_model.setColumnSelectionAllowed(false);
+		
+		
+		dependency_matrix_scrollPane = new JScrollPane(dependency_table);
+		dependency_matrix_scrollPane.setEnabled(false);
+		dependency_matrix_scrollPane.setViewportView(dependency_table);
+				
+		matrixTool = new JPanel();
+		matrixTool.setForeground(Color.WHITE);
+		matrixTool.setLayout(new BorderLayout(0, 0));
+		matrixTool.add(dependency_matrix_scrollPane, BorderLayout.CENTER);
+				
+		splitPane_horizontal.setRightComponent(matrixTool);
+		
 	}
 	
 	public void setJTree(JTree tree)
@@ -597,7 +774,7 @@ public class Main_view {
 	
 	public JFrame getfrmTitan()
 	{
-		return frmTitan;
+		return this;
 	}
 	
 	public String getFilePath()
@@ -606,7 +783,7 @@ public class Main_view {
 	}
 	
 	public JTable getTable() {
-		return table;
+		return dependency_table;
 	}
 
 	public JMenuItem getMntmOpenDsm() {
@@ -728,4 +905,5 @@ public class Main_view {
 	public JSplitPane getSplitPane_vertical() {
 		return splitPane_vertical;
 	}
+
 }

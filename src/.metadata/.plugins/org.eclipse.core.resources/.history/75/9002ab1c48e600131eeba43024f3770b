@@ -156,12 +156,7 @@ public class Main_view {
 		mntmOpenDsm.setMnemonic('O');
 		mntmOpenDsm.setFont(new Font("¸¼Àº °íµñ", Font.PLAIN, 12));
 				
-		mntmOpenDsm.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				FileDialog fldg = new FileDialog(frmTitan,"file open",FileDialog.LOAD);
-				fldg.setVisible(true);		
-			}
-		});
+		
 		mntmOpenDsm.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_MASK));
 		mnFile.add(mntmOpenDsm);
 		
@@ -413,48 +408,121 @@ public class Main_view {
 	public void drawTable(Vector<String> printElement)
 	{
 		int matrixSize = printElement.size();
-		Object data[][] = new Object[matrixSize][matrixSize+1];
-		System.out.println("==>"+matrixSize);
-		for(int i=0; i<matrixSize; i++)
-			System.out.print(printElement.get(i)+"  ");
-		System.out.print("\n");
-		for(int i=0; i<matrixSize; i++)
+		Object data[][];
+		Object col[];
+		if(matrixSize==0)
 		{
-			for(int j=1; j<=matrixSize; j++)
-			{
-				System.out.println("i : "+i+"  j : "+j);
-				if(ModelInfo.getInstance().getRoot().getNode(printElement.get(i)).childs.size()!=0)
-					data[i][j] = "¡¤";
-				
-				else if(i==j-1)
-					data[i][j] = "¡¤";
-				else
-				{
-					int index=0;
-					for(int k=0; k< ModelInfo.getInstance().getModules().size(); i++)
-						if(ModelInfo.getInstance().getRoot().getNode(printElement.get(i)).key.compareTo(ModelInfo.getInstance().getModules().get(k).key)==0)
-							index = k;
-					if(ModelInfo.getInstance().getDependData().get(i)[j-1]==1)
-						data[index][j] = 'x';
-					else
-						data[index][j] = ' ';
-				}
-			}
+			data = new Object[1][2];
+			col = new Object[2];
+			if(showRowLabel==1)
+				data[0][0] = String.valueOf(1) + " $root";
+			else
+				data[0][0] = String.valueOf(1);
+			data[0][1] = "¡¤";
+			col[0] = "";
+			col[1] = String.valueOf(1);
 		}
-		Object col[] = new Object[matrixSize+1];
-		if(showRowLabel==1)
-			for(int i=0; i<matrixSize; i++)
-				data[i][0] =String.valueOf(i+1)+"  "+ ModelInfo.getInstance().getModules().get(i).key;
 		else
+		{
+			data = new Object[matrixSize][matrixSize+1];
 			for(int i=0; i<matrixSize; i++)
-				data[i][0] =String.valueOf(i+1);
-		col[0] = "";
-		for(int i=1; i<=matrixSize; i++)
-			col[i] = i;
+			{
+					for(int j=1; j<=matrixSize; j++)
+					{
+						if(i==j-1)
+						{
+							if(ModelInfo.getInstance().getRoot().getNode(printElement.get(i)).childs.size()!=0)
+								data[i][j] = "group";
+							else data[i][j] = "¡¤";
+						}
+						else
+						{
+							int dp=0;
+							boolean from = ModelInfo.getInstance().getRoot().getNode(printElement.get(i)).isGroup(); //groupÀÌ¸é true
+							boolean to = ModelInfo.getInstance().getRoot().getNode(printElement.get(j-1)).isGroup();
+							
+							if(from==true && to==false) //group To element
+							{
+								int indexFrom=0;
+								int indexTo=0;
+								for(int k=0; k< ModelInfo.getInstance().getModules().size(); k++)
+									if(ModelInfo.getInstance().getRoot().getNode(printElement.get(j-1)).key.compareTo(ModelInfo.getInstance().getModules().get(k).key)==0)
+										indexTo = k;
+								for(int l=0; l<ModelInfo.getInstance().getRoot().getNode(printElement.get(i)).childs.size(); l++)
+								{
+									for(int k=0; k< ModelInfo.getInstance().getModules().size(); k++)
+										if(ModelInfo.getInstance().getRoot().getNode(printElement.get(i)).childs.get(l).key.compareTo(ModelInfo.getInstance().getModules().get(k).key)==0)
+											indexFrom = k;
+									if(ModelInfo.getInstance().getDependData().get(indexFrom)[indexTo]==1)
+										dp = 1;
+								}	
+							}
+							else if(from==false && to==true)  //element To group
+							{
+								int indexFrom=0;
+								int indexTo=0;
+								for(int k=0; k< ModelInfo.getInstance().getModules().size(); k++)
+									if(ModelInfo.getInstance().getRoot().getNode(printElement.get(i)).key.compareTo(ModelInfo.getInstance().getModules().get(k).key)==0)
+										indexFrom = k;
+								for(int l=0; l<ModelInfo.getInstance().getRoot().getNode(printElement.get(j-1)).childs.size(); l++)
+								{
+									for(int k=0; k< ModelInfo.getInstance().getModules().size(); k++)
+										if(ModelInfo.getInstance().getRoot().getNode(printElement.get(j-1)).childs.get(l).key.compareTo(ModelInfo.getInstance().getModules().get(k).key)==0)
+											indexTo = k; //index = childÀÇ ¿ø·¡ ÁÂÇ¥
+									if(ModelInfo.getInstance().getDependData().get(indexFrom)[indexTo]==1)
+										dp = 1;
+								}
+							}
+							else if(from==true && to==true)
+							{
+								int indexFrom=0;
+								int indexTo=0;
+								for(int l=0; l<ModelInfo.getInstance().getRoot().getNode(printElement.get(i)).childs.size(); l++)
+								{
+									for(int k=0; k< ModelInfo.getInstance().getModules().size(); k++)
+										if(ModelInfo.getInstance().getRoot().getNode(printElement.get(i)).childs.get(l).key.compareTo(ModelInfo.getInstance().getModules().get(k).key)==0)
+											indexFrom = k;
+									for(int m=0; m<ModelInfo.getInstance().getRoot().getNode(printElement.get(j-1)).childs.size(); m++)
+										for(int k=0; k< ModelInfo.getInstance().getModules().size(); k++)
+											if(ModelInfo.getInstance().getRoot().getNode(printElement.get(j-1)).childs.get(m).key.compareTo(ModelInfo.getInstance().getModules().get(k).key)==0)
+												indexTo = k; //index = childÀÇ ¿ø·¡ ÁÂÇ¥
+									if(ModelInfo.getInstance().getDependData().get(indexFrom)[indexTo]==1)
+										dp = 1;
+								}
+							}
+							else
+							{
+								int indexFrom=0;
+								int indexTo=0;
+								for(int k=0; k< ModelInfo.getInstance().getModules().size(); k++)
+									if(ModelInfo.getInstance().getRoot().getNode(printElement.get(i)).key.compareTo(ModelInfo.getInstance().getModules().get(k).key)==0)
+										indexFrom = k;
+								for(int k=0; k< ModelInfo.getInstance().getModules().size(); k++)
+									if(ModelInfo.getInstance().getRoot().getNode(printElement.get(j-1)).key.compareTo(ModelInfo.getInstance().getModules().get(k).key)==0)
+										indexTo = k;
+								if(ModelInfo.getInstance().getDependData().get(indexFrom)[indexTo]==1)
+									dp = 1;
+							}						
+							if(dp==1)
+								data[i][j] = 'x';
+							else
+								data[i][j] = ' ';
+						}
+					}
+			}
 		
-		
+			col = new Object[matrixSize+1];
+			if(showRowLabel==1)
+				for(int i=0; i<matrixSize; i++)
+					data[i][0] =String.valueOf(i+1)+"  "+ printElement.get(i);
+			else
+				for(int i=0; i<matrixSize; i++)
+					data[i][0] =String.valueOf(i+1);
+			col[0] = "";
+			for(int i=1; i<=matrixSize; i++)
+				col[i] = i;
+		}
 		DefaultTableModel model=new DefaultTableModel(data,col);
-	   
 		matrix.removeAll();
 	    table = new JTable();
 	    splitPane_horizontal.remove(matrixTool);
@@ -481,15 +549,16 @@ public class Main_view {
 		classtree = tree;
 	}
 	
-	public String setFilepath_load()
+	public String[] setFilepath_load()
 	{
 		FileDialog fldg = new FileDialog(frmTitan,"file open",FileDialog.LOAD);
 		fldg.setVisible(true);	
-		String directoryName = new String();
-		directoryName = fldg.getDirectory() + fldg.getFile();
+		String[] pathName = new String[2];
+		pathName[0] = fldg.getDirectory();
+		pathName[1] = fldg.getFile();
 		filePath = new String();
-		filePath = directoryName;
-		return filePath;
+		filePath = pathName[0]+pathName[1];
+		return pathName;
 	}
 	
 	public String[] setFilepath_save()
@@ -514,6 +583,16 @@ public class Main_view {
 			for(int i=0; i<classtree.getRowCount(); i++)
 				classtree.collapseRow(i);
 		}
+	}
+	
+	public void setShowRowLabel(int setting)
+	{
+		this.showRowLabel = setting;
+	}
+	
+	public int getShowRowLabel()
+	{
+		return showRowLabel;
 	}
 	
 	public JFrame getfrmTitan()

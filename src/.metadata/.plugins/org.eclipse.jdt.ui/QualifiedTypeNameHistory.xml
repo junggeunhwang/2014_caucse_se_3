@@ -18,9 +18,9 @@
 <fullyQualifiedTypeName name="javax.swing.tree.DefaultTreeModel"/>
 <fullyQualifiedTypeName name="javax.swing.tree.TreePath"/>
 <fullyQualifiedTypeName name="model.ClusterModel"/>
-<fullyQualifiedTypeName name="java.util.Vector"/>
 <fullyQualifiedTypeName name="javax.swing.table.DefaultTableModel"/>
 <fullyQualifiedTypeName name="javax.swing.JPanel"/>
 <fullyQualifiedTypeName name="model.ModelInfo"/>
 <fullyQualifiedTypeName name="java.util.Enumeration"/>
+<fullyQualifiedTypeName name="java.util.Vector"/>
 </qualifiedTypeNameHistroy>
