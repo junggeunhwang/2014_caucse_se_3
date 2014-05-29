@@ -1,0 +1,19 @@
+package view;
+
+import javax.swing.JTable;
+
+public class CustomJTable extends JTable {
+
+	CustomTableCellRenderer cellRenderer[][];
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	public CustomJTable(DefaultTableModel model) {
+		// TODO Auto-generated constructor stub
+	}
+	
+
+}

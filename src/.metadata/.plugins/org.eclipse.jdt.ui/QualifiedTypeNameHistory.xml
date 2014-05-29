@@ -18,9 +18,16 @@
 <fullyQualifiedTypeName name="javax.swing.tree.DefaultTreeModel"/>
 <fullyQualifiedTypeName name="javax.swing.tree.TreePath"/>
 <fullyQualifiedTypeName name="model.ClusterModel"/>
-<fullyQualifiedTypeName name="javax.swing.table.DefaultTableModel"/>
 <fullyQualifiedTypeName name="javax.swing.JPanel"/>
 <fullyQualifiedTypeName name="model.ModelInfo"/>
 <fullyQualifiedTypeName name="java.util.Enumeration"/>
 <fullyQualifiedTypeName name="java.util.Vector"/>
+<fullyQualifiedTypeName name="javax.swing.table.DefaultTableModel"/>
+<fullyQualifiedTypeName name="java.awt.Color"/>
+<fullyQualifiedTypeName name="view.CustomJTable"/>
+<fullyQualifiedTypeName name="java.util.Map"/>
+<fullyQualifiedTypeName name="javax.swing.SwingConstants"/>
+<fullyQualifiedTypeName name="view.CustomTableCellRenderer"/>
+<fullyQualifiedTypeName name="view.customtable.CustomJTable"/>
+<fullyQualifiedTypeName name="view.customtable.CustomTableCellRenderer"/>
 </qualifiedTypeNameHistroy>

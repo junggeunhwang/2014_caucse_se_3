@@ -1,0 +1,38 @@
+package view;
+
+import java.awt.Color;
+
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+
+public class CustomJTable extends JTable {
+
+		
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	CustomTableCellRenderer cellRenderer[][];
+	
+	public CustomJTable(DefaultTableModel model) {
+		super(model);
+		cellRenderer = new CustomTableCellRenderer[model.getRowCount()][model.getColumnCount()];
+		for(int i = 0 ; i < model.getRowCount();i++){
+			for(int j = 0 ; j < model.getColumnCount();j++){
+				cellRenderer[i][j] = new CustomTableCellRenderer();
+			}
+		}
+	}
+	
+	public void setAlignment(int row,int coloumn,int align){
+		
+	}
+	
+	public void setColor(int row,int coloumn,Color color){
+		cellRenderer[row][coloumn].setBkColor(color);
+		super.setDefaultRenderer(Object.class,cellRenderer[row][coloumn]);
+	}
+	
+
+}
