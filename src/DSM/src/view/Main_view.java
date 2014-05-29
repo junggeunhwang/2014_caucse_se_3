@@ -95,16 +95,12 @@ public class Main_view extends JFrame {
 	private JMenuItem mntmSaveClustering;
 	private JMenuItem mntmSaveClusteringAs;
 	private JMenuItem mntmDsm;
-	private JMenuItem mntmExcel;
 	private JMenuItem mntmExit;
-	private JMenuItem mntmPropagationCost;
 	private JMenuItem mntmRedraw;
-	private JMenuItem mntmFind;
 	private JMenuItem mntmAbout;
-	private JMenuItem mntmNewDsm;
+	private JMenuItem mntmNewDsm;//
 	
 	private JCheckBoxMenuItem mntmShow_Row_Labels;
-	private JCheckBoxMenuItem mntmShow_Dependency_Strength;
 	
 	/* Button */
 	private JButton btnOpenDsm;
@@ -129,7 +125,7 @@ public class Main_view extends JFrame {
 	private JSeparator separator_2;
 	private JSeparator separator_3;
 	private JSeparator separator_4;
-	private JSeparator separator_5;
+
 
 	private JPanel matrixTool;
 	private JScrollPane dependency_matrix_scrollPane;
@@ -229,10 +225,11 @@ public class Main_view extends JFrame {
 		mnFile.add(mnExportAs);
 		
 		mntmDsm = new JMenuItem("DSM");
+		mntmDsm.setFont(new Font("Malgun Gothic", Font.PLAIN, 12));
 		mnExportAs.add(mntmDsm);
 		
-		mntmExcel = new JMenuItem("Excel");
-		mnExportAs.add(mntmExcel);
+//		mntmExcel = new JMenuItem("Excel");
+//		mnExportAs.add(mntmExcel);
 		
 		separator_3 = new JSeparator();
 		mnFile.add(separator_3);
@@ -241,16 +238,6 @@ public class Main_view extends JFrame {
 		mntmExit.setFont(new Font("¸¼Àº °íµñ", Font.PLAIN, 12));
 		mntmExit.setMnemonic('x');
 		mnFile.add(mntmExit);
-		
-		JMenu mnMetrics = new JMenu("Metrics");
-		mnMetrics.setMnemonic('M');
-		mnMetrics.setFont(new Font("¸¼Àº °íµñ", Font.PLAIN, 12));
-		menuBar.add(mnMetrics);
-		
-		mntmPropagationCost = new JMenuItem("Propagation Cost");
-		mntmPropagationCost.setFont(new Font("¸¼Àº °íµñ", Font.PLAIN, 12));
-		mntmPropagationCost.setMnemonic('P');
-		mnMetrics.add(mntmPropagationCost);
 		
 		JMenu mnView = new JMenu("View");
 		mnView.setMnemonic('V');
@@ -266,26 +253,11 @@ public class Main_view extends JFrame {
 		separator_4 = new JSeparator();
 		mnView.add(separator_4);
 		
-		mntmFind = new JMenuItem("Find");
-		mntmFind.setFont(new Font("¸¼Àº °íµñ", Font.PLAIN, 12));
-		mntmFind.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F, InputEvent.CTRL_MASK));
-		mntmFind.setMnemonic('F');
-		mnView.add(mntmFind);
-		
-		separator_5 = new JSeparator();
-		mnView.add(separator_5);
-		
 		mntmShow_Row_Labels = new JCheckBoxMenuItem("Show Row Labels");
 		
 		mntmShow_Row_Labels.setFont(new Font("¸¼Àº °íµñ", Font.PLAIN, 12));
 		mntmShow_Row_Labels.setMnemonic('L');
 		mnView.add(mntmShow_Row_Labels);
-		
-		
-		mntmShow_Dependency_Strength = new JCheckBoxMenuItem("Show Dependency Strength");
-		mntmShow_Dependency_Strength.setFont(new Font("¸¼Àº °íµñ", Font.PLAIN, 12));
-		mntmShow_Dependency_Strength.setMnemonic('D');
-		mnView.add(mntmShow_Dependency_Strength);
 		
 		JMenu mnHelp = new JMenu("Help");
 		mnHelp.setMnemonic('H');
@@ -767,20 +739,6 @@ public class Main_view extends JFrame {
 	{
 		return showRowLabel;
 	}
-	
-	public JFrame getfrmTitan()
-	{
-		return this;
-	}
-	
-	public String getFilePath()
-	{
-		return filePath;
-	}
-	
-	public JTable getTable() {
-		return dependency_table;
-	}
 
 	public JMenuItem getMntmOpenDsm() {
 		return mntmOpenDsm;
@@ -806,32 +764,16 @@ public class Main_view extends JFrame {
 		return mntmDsm;
 	}
 
-	public JMenuItem getMntmExcel() {
-		return mntmExcel;
-	}
-
 	public JMenuItem getMntmExit() {
 		return mntmExit;
-	}
-
-	public JMenuItem getMntmPropagationCost() {
-		return mntmPropagationCost;
 	}
 
 	public JMenuItem getMntmRedraw() {
 		return mntmRedraw;
 	}
 
-	public JMenuItem getMntmFind() {
-		return mntmFind;
-	}
-
 	public JMenuItem getMntmShow_Row_Labels() {
 		return mntmShow_Row_Labels;
-	}
-
-	public JMenuItem getMntmShow_Dependency_Strength() {
-		return mntmShow_Dependency_Strength;
 	}
 
 	public JMenuItem getMntmAbout() {
@@ -893,13 +835,8 @@ public class Main_view extends JFrame {
 	public JButton getBtnDelete() {
 		return btnDelete;
 	}
-
-	public JSplitPane getSplitPane_horizontal() {
-		return splitPane_horizontal;
+ 
+	public JMenuItem getMntmNewDsm() {
+		return mntmNewDsm;
 	}
-
-	public JSplitPane getSplitPane_vertical() {
-		return splitPane_vertical;
-	}
-
 }
