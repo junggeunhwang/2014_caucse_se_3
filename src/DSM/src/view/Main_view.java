@@ -94,11 +94,13 @@ public class Main_view extends JFrame {
 	private JMenuItem mntmLoadClustering;
 	private JMenuItem mntmSaveClustering;
 	private JMenuItem mntmSaveClusteringAs;
-	private JMenuItem mntmDsm;
+	//private JMenuItem mntmDsm;
 	private JMenuItem mntmExit;
 	private JMenuItem mntmRedraw;
 	private JMenuItem mntmAbout;
-	private JMenuItem mntmNewDsm;//
+	private JMenuItem mntmNewDsm;
+	private JMenuItem mntmSaveDsm;
+	private JMenuItem mntmSaveAsDsm;//
 	
 	private JCheckBoxMenuItem mntmShow_Row_Labels;
 	
@@ -165,6 +167,7 @@ public class Main_view extends JFrame {
 		initialize_TopToolBar();
 		initialize_HorizontalSplitPane();
 		showRowLabel=1;
+		setEnableButton(false);
 	}
 	
  	private void initialize_Menu()
@@ -218,16 +221,12 @@ public class Main_view extends JFrame {
 		
 		separator_2 = new JSeparator();
 		mnFile.add(separator_2);
-		
-		JMenu mnExportAs = new JMenu("Export As");
-		mnExportAs.setFont(new Font("맑은 고딕", Font.PLAIN, 12));
-		mnExportAs.setMnemonic('E');
-		mnFile.add(mnExportAs);
-		
-		mntmDsm = new JMenuItem("DSM");
-		mntmDsm.setFont(new Font("Malgun Gothic", Font.PLAIN, 12));
-		mnExportAs.add(mntmDsm);
-		
+		mntmSaveDsm = new JMenuItem("Save DSM");
+		mntmSaveDsm.setFont(new Font("Malgun Gothic", Font.PLAIN, 12));
+		mnFile.add(mntmSaveDsm);
+		mntmSaveAsDsm = new JMenuItem("Save DSM as..");
+		mntmSaveAsDsm.setFont(new Font("Malgun Gothic", Font.PLAIN, 12));
+		mnFile.add(mntmSaveAsDsm);
 //		mntmExcel = new JMenuItem("Excel");
 //		mnExportAs.add(mntmExcel);
 		
@@ -257,6 +256,7 @@ public class Main_view extends JFrame {
 		
 		mntmShow_Row_Labels.setFont(new Font("맑은 고딕", Font.PLAIN, 12));
 		mntmShow_Row_Labels.setMnemonic('L');
+		mntmShow_Row_Labels.setSelected(true);
 		mnView.add(mntmShow_Row_Labels);
 		
 		JMenu mnHelp = new JMenu("Help");
@@ -432,15 +432,32 @@ public class Main_view extends JFrame {
 		groupName = inputDlg.showInputDialog("Group Name");
 		return groupName;
 	}
+	
+	public String setNewName()
+	{
+		inputDlg = new JOptionPane();
+		String groupName = new String();
+		groupName = inputDlg.showInputDialog("New Module Name");
+		return groupName;
+	}
 
+	public int[][] setNewModule()
+	{
+		int[][] newDepend = new int[2][ModelInfo.getInstance().getModules().size()];
+		
+		return newDepend;
+	}
+	
 	public void drawTable(Vector<String> printElement)
 	{
 		int matrixSize = printElement.size();
 		Object data[][];
 		Object col[];
-		
+		Vector<int[]> colored;
 		if(matrixSize==0)
 		{
+			colored = new Vector<int[]>();
+			colored = null;
 			data = new Object[1][2];
 			col = new Object[2];
 			if(showRowLabel==1)
@@ -453,15 +470,22 @@ public class Main_view extends JFrame {
 		}
 		else
 		{
+			colored = new Vector<int[]>();
 			data = new Object[matrixSize][matrixSize+1];
 			for(int i=0; i<matrixSize; i++)
 			{
 					for(int j=1; j<=matrixSize; j++)
 					{
+						int[] groupPoint = new int[2];
 						if(i==j-1)
 						{
 							if(ModelInfo.getInstance().getRoot().getNode(printElement.get(i)).childs.size()!=0)
-								data[i][j] = "group";
+							{
+								data[i][j] = 1;
+								groupPoint[0] = i;
+								groupPoint[1] = j;
+								colored.add(groupPoint);
+							}
 							else data[i][j] = "·";
 						}
 						else
@@ -536,7 +560,18 @@ public class Main_view extends JFrame {
 								data[i][j] = 'x';
 							else
 								data[i][j] = ' ';
+							
+							
 						}
+						String parentName = new String();
+						parentName = ModelInfo.getInstance().getRoot().getNode(printElement.get(i)).parent.key;
+						if(parentName.compareTo("$root")!=0
+								&& ModelInfo.getInstance().getRoot().getNode(printElement.get(j-1)).parent.key.compareTo(parentName)==0)
+							{
+								groupPoint[0] = i;
+								groupPoint[1] = j;
+								colored.add(groupPoint);
+							}
 					}
 			}
 		
@@ -566,7 +601,12 @@ public class Main_view extends JFrame {
 				else dependency_table.setAlignment(i, j, CustomTableCellRenderer.center_alignment);
 			}
 		}
-		dependency_table.setColor(2, 2, Color.red);
+		
+		for(int i=0; i<colored.size(); i++)
+			dependency_table.setColor(colored.get(i)[0], colored.get(i)[1], Color.green);
+		
+	
+		//dependency_table.setColor(2, 2, Color.red);
 		
 		TableColumnModel col_model = dependency_table.getColumnModel();
 		
@@ -587,7 +627,7 @@ public class Main_view extends JFrame {
 					max_length = (String.valueOf(i+1)+"  "+ printElement.get(i)).length();
 			}
 		}	
-		col_model.getColumn(0).setPreferredWidth(max_length*6+2);		
+		col_model.getColumn(0).setPreferredWidth(max_length*7+3);		
 		col_model.setColumnSelectionAllowed(false);
 		
 		
@@ -603,84 +643,38 @@ public class Main_view extends JFrame {
 		splitPane_horizontal.setRightComponent(matrixTool);
 	}
 	
-	public void setTable()
+	public void showMsg(String msg)
 	{
-		int dependSize = ModelInfo.getInstance().getDependData().size();
-		int moduleSize = ModelInfo.getInstance().getModules().size();
-		Object data[][] = new Object[dependSize][dependSize+1];
-
-		for(int i=0; i<dependSize; i++)
-		{
-			for(int j=1; j<=dependSize; j++)
-			{
-				
-				if(i==j-1)
-					data[i][j] = ".";
-					
-				else
-				{
-					if(ModelInfo.getInstance().getDependData().get(i)[j-1]==1)
-						data[i][j] = "x";	
-					else
-						data[i][j] = " ";						
-				}
-			}
-		}
-		Object col[] = new Object[moduleSize+1];
-		int max_length=0;
-		for(int i=0; i<moduleSize; i++)
-		{
-			data[i][0] = String.valueOf(i+1)+"  "+ ModelInfo.getInstance().getModules().get(i).key;
-			if(max_length < (String.valueOf(i+1)+"  "+ ModelInfo.getInstance().getModules().get(i).key).length())
-				max_length = (String.valueOf(i+1)+"  "+ ModelInfo.getInstance().getModules().get(i).key).length();
-		}
-		
-		col[0] = "";
-		
-		for(int i=1; i<=moduleSize; i++)
-			col[i] = String.valueOf(i);
-
-		DefaultTableModel model=new DefaultTableModel(data,col);
-						
-		dependency_table = new CustomJTable(model);
-		dependency_table.setRowSelectionAllowed(false);
-		dependency_table.setEnabled(false);
-		dependency_table.setBackground(SystemColor.white);
-		dependency_table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF); //자동 리사이즈 해제
-		
-		for(int i = 0 ; i < model.getColumnCount();i++){
-			for(int j = 0;j<model.getRowCount();j++){
-				if(i==0) dependency_table.setAlignment(i, j, CustomTableCellRenderer.left_alignment);
-				else dependency_table.setAlignment(i, j, CustomTableCellRenderer.center_alignment);
-			}
-		}
-		
-		// dependency_table.setColor(2, 2, Color.red); 이런식으로 셀 별 색상 사용
-		// dependency_table.setAlignment(1, 1, CustomTableCellRenderer.center_alignment); 이런식으로 셀 별 정렬 사용
-				
-		TableColumnModel col_model = dependency_table.getColumnModel();
-		
-		for(int i=1; i<col_model.getColumnCount(); i++)
-		{
-			col_model.getColumn(i).setPreferredWidth(10);
-		}
-		
-			
-		col_model.getColumn(0).setPreferredWidth(max_length*6);		
-		col_model.setColumnSelectionAllowed(false);
-		
-		
-		dependency_matrix_scrollPane = new JScrollPane(dependency_table);
-		dependency_matrix_scrollPane.setEnabled(false);
-		dependency_matrix_scrollPane.setViewportView(dependency_table);
-				
-		matrixTool = new JPanel();
-		matrixTool.setForeground(Color.WHITE);
-		matrixTool.setLayout(new BorderLayout(0, 0));
-		matrixTool.add(dependency_matrix_scrollPane, BorderLayout.CENTER);
-				
-		splitPane_horizontal.setRightComponent(matrixTool);
-		
+		JOptionPane newMsg = new JOptionPane();
+		newMsg.showMessageDialog(this,msg);
+	}
+	
+	public void setEnableButton(boolean set)
+	{
+		mntmNewMenuItem.setEnabled(set);
+		mntmLoadClustering.setEnabled(set);
+		mntmSaveClustering.setEnabled(set);
+		mntmSaveClusteringAs.setEnabled(set);
+		mntmExit.setEnabled(set);
+		mntmRedraw.setEnabled(set);
+		mntmAbout.setEnabled(set);
+		mntmNewDsm.setEnabled(set);
+		mntmSaveDsm.setEnabled(set);
+		mntmSaveAsDsm.setEnabled(set);
+		btnRedraw.setEnabled(set);
+		btnNewClustering.setEnabled(set);
+		btnLoadClustering.setEnabled(set);
+		btnSaveClustering.setEnabled(set);
+		btnSaveClusteringAs.setEnabled(set);
+		btnExpandAll.setEnabled(set);
+		btnCollapsAll.setEnabled(set);
+		btnGroup.setEnabled(set);
+		btnUngroup.setEnabled(set);
+		btnMoveUp.setEnabled(set);
+		btnMoveDown.setEnabled(set);
+		btnDelete.setEnabled(set);
+		btnNewDsmRow.setEnabled(set);
+		btnRename.setEnabled(set);
 	}
 	
 	public void setJTree(JTree tree)
@@ -698,22 +692,32 @@ public class Main_view extends JFrame {
 	{
 		FileDialog fldg = new FileDialog(frmTitan,"file open",FileDialog.LOAD);
 		fldg.setVisible(true);	
-		String[] pathName = new String[2];
-		pathName[0] = fldg.getDirectory();
-		pathName[1] = fldg.getFile();
-		filePath = new String();
-		filePath = pathName[0]+pathName[1];
-		return pathName;
+		try{
+			String[] pathName = new String[2];
+			pathName[0] = fldg.getDirectory();
+			pathName[1] = fldg.getFile();
+			filePath = new String();
+			filePath = pathName[0]+pathName[1];
+			return pathName;
+		}catch(Exception e)
+		{
+			return null;
+		}
 	}
 	
 	public String[] setFilepath_save()
 	{
 		FileDialog fldg = new FileDialog(frmTitan,"file open",FileDialog.SAVE);
 		fldg.setVisible(true);	
-		String[] fileInfo = new String[2];
-		fileInfo[0] = fldg.getDirectory();
-		fileInfo[1] = fldg.getFile();
-		return fileInfo;
+		try{
+			String[] fileInfo = new String[2];
+			fileInfo[0] = fldg.getDirectory();
+			fileInfo[1] = fldg.getFile();
+			return fileInfo;
+		}catch(Exception e)
+		{
+			return null;
+		}
 	}
 	
 	public void setTreeView(int how)
@@ -760,10 +764,14 @@ public class Main_view extends JFrame {
 		return mntmSaveClusteringAs;
 	}
 
-	public JMenuItem getMntmDsm() {
-		return mntmDsm;
+	public JMenuItem getMntmSaveDsm() {
+		return mntmSaveDsm;
 	}
 
+	public JMenuItem getMntmSaveAsDsm() {
+		return mntmSaveAsDsm;
+	}
+	
 	public JMenuItem getMntmExit() {
 		return mntmExit;
 	}
@@ -836,6 +844,15 @@ public class Main_view extends JFrame {
 		return btnDelete;
 	}
  
+	public JButton getBtnNewDsmRow()
+	{
+		return btnNewDsmRow;
+	}
+	public JButton getBtnRename()
+	{
+		return btnRename;
+	}
+	
 	public JMenuItem getMntmNewDsm() {
 		return mntmNewDsm;
 	}

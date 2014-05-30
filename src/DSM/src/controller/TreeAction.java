@@ -88,7 +88,7 @@ public class TreeAction {
 			return;
 		String nodeName = new String();
 		nodeName = (String) selectedNode.getUserObject();
-		ClusterModel.getInstance().removeModule(nodeName);
+		ClusterModel.getInstance().removeModule(nodeName,true);
 	}
 	
 	public void groupAction()
@@ -110,17 +110,14 @@ public class TreeAction {
 	public void unGroupAction()
 	{
 		DefaultTreeModel model = (DefaultTreeModel)Main_view.getInstance().getClasstree().getModel();
-		TreePath[] treepath = new TreePath[ModelInfo.getInstance().getModules().size()];
-		treepath = Main_view.getInstance().getClasstree().getSelectionPaths();
-		String[] members = new String[treepath.length];
-		for(int i=0; i<treepath.length; i++)
-		{
-			String nodeName = treepath[i].getPathComponent(treepath[i].getPathCount()-1).toString();
-			members[i] = nodeName;
-		}
-		String groupName = new String();
-		groupName = Main_view.getInstance().setGroupName();
-		ClusterModel.getInstance().grouping(groupName, members);
+		DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode)Main_view.getInstance().getClasstree().getLastSelectedPathComponent();
+		if(selectedNode==null)
+			return;
+		String nodeName = new String();
+		nodeName = (String) selectedNode.getUserObject();
+		System.out.println("ungroup[");
+		if(ModelInfo.getInstance().getRoot().getNode(nodeName).isGroup()==true)
+			ClusterModel.getInstance().removeModule(nodeName,false);
 	}
 	
 	public Vector<String> getTreeState()
@@ -139,6 +136,19 @@ public class TreeAction {
 			}
 		}
 		return printElement;
+	}
+	
+	public void reNameNode()
+	{
+		DefaultTreeModel model = (DefaultTreeModel)Main_view.getInstance().getClasstree().getModel();
+		DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode)Main_view.getInstance().getClasstree().getLastSelectedPathComponent();
+		if(selectedNode==null)
+			return;
+		String nodeName = new String();
+		nodeName = (String) selectedNode.getUserObject();
+		String newNodeName = new String();
+		newNodeName = Main_view.getInstance().setNewName();
+		ModelInfo.getInstance().getRoot().getNode(nodeName).key = newNodeName;
 	}
 	
 	

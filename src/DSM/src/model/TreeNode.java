@@ -101,7 +101,7 @@ public class TreeNode{
 		
 	}
 	
-	public void removeNode(String deleteName)
+	public void removeNode(String deleteName, boolean isDelete)
 	{
 		TreeNode parentNode = new TreeNode();
 		TreeNode deleteNode = new TreeNode();
@@ -125,14 +125,16 @@ public class TreeNode{
 			deleteNode = null;
 			return;
 		}
-		
-		for(int i=0; i<deleteNode.childs.size(); i++)
+		if(isDelete==false)
 		{
-			parentNode.childs.insertElementAt(deleteNode.childs.get(i), deletePosition);
-			deleteNode.childs.get(i).parent = parentNode;
-			deletePosition++;
+			for(int i=0; i<deleteNode.childs.size(); i++)
+			{
+				parentNode.childs.insertElementAt(deleteNode.childs.get(i), deletePosition);
+				deleteNode.childs.get(i).parent = parentNode;
+				deletePosition++;
+			}
+			deleteNode = null;
 		}
-		deleteNode = null;
 		
 	}
 	

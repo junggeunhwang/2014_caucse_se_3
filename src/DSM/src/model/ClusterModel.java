@@ -118,7 +118,7 @@ public class ClusterModel {
 	{
 		int parameter = 0;
 		int dependSize = ModelInfo.getInstance().getRoot().getLeafNodeSize();
-		//System.out.println(ModelInfo.getInstance().getRoot().getLeafNodeSize(parameter));
+		//System.out.println(ModelInfo.getInstance().getRoot().getLeafNodeSize());
 		//dependSize = 
 		ArrayList<int[]> tempDepend = new ArrayList<int[]>(); //최신화 된 getDependData를 임시로 저장할 공간
 		int[] afterOrderNo = new int[ModelInfo.getInstance().getModules().size()];
@@ -143,12 +143,12 @@ public class ClusterModel {
 		
 	}
 	
-	public void removeModule(String nodeName)
+	public void removeModule(String nodeName, boolean isDelete)
 	{
 		int isGroup=0;
 		if(ModelInfo.getInstance().getRoot().getNode(nodeName).childs.size()==0)
 			isGroup=1;
-		ModelInfo.getInstance().getRoot().removeNode(nodeName);
+		ModelInfo.getInstance().getRoot().removeNode(nodeName,isDelete);
 		
 		Vector<TreeNode> tempModules = new Vector<TreeNode>();
 		Vector<TreeNode> tempModules2 = new Vector<TreeNode>();

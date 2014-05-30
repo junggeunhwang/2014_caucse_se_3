@@ -12,7 +12,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 
 public class ModuleController  implements ActionListener{
 
-	private String backUPfilePath;
+	private String[] DsmfilePath;
 	private String[] currentClusterInfo;
 	
 	private static ModuleController instance;
@@ -42,9 +42,8 @@ public class ModuleController  implements ActionListener{
 		Main_view.getInstance().getBtnSaveClustering().addActionListener(this);
 		Main_view.getInstance().getBtnSaveClusteringAs().addActionListener(this);
 		Main_view.getInstance().getBtnUngroup().addActionListener(this);
-		
-		Main_view.getInstance().getMntmDsm().addActionListener(this);
-		
+		Main_view.getInstance().getMntmSaveDsm().addActionListener(this);
+		Main_view.getInstance().getMntmSaveAsDsm().addActionListener(this);
 		Main_view.getInstance().getMntmAbout().addActionListener(this);//
 		Main_view.getInstance().getMntmExit().addActionListener(this);//
 		Main_view.getInstance().getMntmShow_Row_Labels().addActionListener(this);//
@@ -54,18 +53,59 @@ public class ModuleController  implements ActionListener{
 		Main_view.getInstance().getMntmSaveClustering().addActionListener(this);//
 		Main_view.getInstance().getMntmSaveClusteringAs().addActionListener(this);//
 		Main_view.getInstance().getMntmLoadClustering().addActionListener(this);//
-		
-		
+		Main_view.getInstance().getBtnRename().addActionListener(this);//
+		DsmfilePath = new String[2];
+		DsmfilePath = null;
 		//
 	}
 	
 	@Override
  	public void actionPerformed(ActionEvent e)
 	{	
-		if(e.getSource()==Main_view.getInstance().getMntmDsm())
+		if(e.getSource()==Main_view.getInstance().getMntmNewDsm())
 		{
-			System.out.println("mntmdsm");
+			
 		}
+		if(e.getSource()==Main_view.getInstance().getMntmSaveDsm())  
+		{
+			if(this.DsmfilePath[0]!=null)
+				DsmModel.getInstance().saveDsm(DsmfilePath[0], DsmfilePath[1]);
+			else
+			{
+				String[] newDsmFileInfo = new String[2];
+				newDsmFileInfo = Main_view.getInstance().setFilepath_save();
+				if(newDsmFileInfo[0]!=null)
+				{
+					String newDsmfilePath = new String();
+					newDsmfilePath = newDsmFileInfo[0]+newDsmFileInfo[1];
+					DsmModel.getInstance().saveDsm(newDsmFileInfo[0], newDsmFileInfo[1]);
+				}
+			}
+		}
+		if(e.getSource()==Main_view.getInstance().getMntmSaveAsDsm()) 
+		{
+			String[] newDsmFileInfo = new String[2];
+			newDsmFileInfo = Main_view.getInstance().setFilepath_save();
+			if(newDsmFileInfo[0]!=null)
+			{
+				String newDsmfilePath = new String();
+				newDsmfilePath = newDsmFileInfo[0]+newDsmFileInfo[1];
+				DsmModel.getInstance().saveDsm(newDsmFileInfo[0], newDsmFileInfo[1]);
+				DsmfilePath[0] = newDsmFileInfo[0];
+				DsmfilePath[1] = newDsmFileInfo[1];
+			}
+			
+		}
+		if(e.getSource()==Main_view.getInstance().getBtnNewDsmRow())
+		{
+			
+		}
+		if(e.getSource()==Main_view.getInstance().getBtnRename())
+		{
+			TreeAction.getInstance().reNameNode();
+			Main_view.getInstance().setJTree(TreeAction.getInstance().makeTree());
+		}
+		
 		if(e.getSource()==Main_view.getInstance().getMntmExit())
 		{
 			System.exit(0);
@@ -98,16 +138,19 @@ public class ModuleController  implements ActionListener{
 		}
 		if(e.getSource()==Main_view.getInstance().getBtnUngroup())
 		{
-			TreeAction.getInstance().removeAction();
+			TreeAction.getInstance().unGroupAction();
 			Main_view.getInstance().setJTree(TreeAction.getInstance().makeTree());
 		}
 		if(e.getSource()==Main_view.getInstance().getBtnLoadClustering() || e.getSource()==Main_view.getInstance().getMntmLoadClustering())
 		{
 			String[] newFilePath = new String[2];
 			newFilePath = Main_view.getInstance().setFilepath_load();
-			this.currentClusterInfo = newFilePath;
-			ClusterModel.getInstance().readCluster(newFilePath[0]+newFilePath[1], ModelInfo.getInstance().getModules().size());
-			Main_view.getInstance().setJTree(TreeAction.getInstance().makeTree());
+			if(newFilePath[0]!=null)
+			{	
+				this.currentClusterInfo = newFilePath;
+				ClusterModel.getInstance().readCluster(newFilePath[0]+newFilePath[1], ModelInfo.getInstance().getModules().size());
+				Main_view.getInstance().setJTree(TreeAction.getInstance().makeTree());
+			}
 		}
 		if(e.getSource()==Main_view.getInstance().getBtnMoveDown()) //horizontal split
 		{
@@ -122,7 +165,7 @@ public class ModuleController  implements ActionListener{
 		if(e.getSource()==Main_view.getInstance().getBtnNewClustering() || e.getSource()==Main_view.getInstance().getMntmNewMenuItem())
 		{
 			ModelInfo.getInstance().setInstance(null);
-			DsmModel.getInstance().readDsm(backUPfilePath);
+			DsmModel.getInstance().readDsm(DsmfilePath[0]+DsmfilePath[1]);
 			Main_view.getInstance().setJTree(TreeAction.getInstance().makeTree());
 		}
 		if(e.getSource()==Main_view.getInstance().getBtnOpenDsm() || e.getSource()==Main_view.getInstance().getMntmOpenDsm())
@@ -130,18 +173,23 @@ public class ModuleController  implements ActionListener{
 			ModelInfo.getInstance().setInstance(null);
 			String[] newFilePath = new String[2];
 			newFilePath = Main_view.getInstance().setFilepath_load();
-			this.currentClusterInfo = new String[2];
-			this.currentClusterInfo = null;
-			this.backUPfilePath = new String();
-			this.backUPfilePath = newFilePath[0]+newFilePath[1];
-			DsmModel.getInstance().readDsm(newFilePath[0]+newFilePath[1]);
-			Main_view.getInstance().setJTree(TreeAction.getInstance().makeTree());
+			if(newFilePath[0]!=null)
+			{
+				this.currentClusterInfo = new String[2];
+				this.currentClusterInfo = null;
+				this.DsmfilePath = new String[2];
+				this.DsmfilePath[0] = newFilePath[0];
+				this.DsmfilePath[1] = newFilePath[1];
+				DsmModel.getInstance().readDsm(newFilePath[0]+newFilePath[1]);
+				Main_view.getInstance().setJTree(TreeAction.getInstance().makeTree());
+				Main_view.getInstance().setEnableButton(true);
+			}
 		}
 		if(e.getSource()==Main_view.getInstance().getBtnRedraw() || e.getSource()==Main_view.getInstance().getMntmRedraw())
 		{
-			Vector<String> printElement = new Vector<String>();
-			printElement = TreeAction.getInstance().getTreeState();
-			Main_view.getInstance().drawTable(printElement);
+				Vector<String> printElement = new Vector<String>();
+				printElement = TreeAction.getInstance().getTreeState();
+				Main_view.getInstance().drawTable(printElement);
 		}
 		if(e.getSource()==Main_view.getInstance().getBtnSaveClustering() || e.getSource()==Main_view.getInstance().getMntmSaveClustering())
 		{
@@ -149,8 +197,11 @@ public class ModuleController  implements ActionListener{
 			{
 				String[] newFileInfo = new String[2];
 				newFileInfo = Main_view.getInstance().setFilepath_save();
-				this.currentClusterInfo = newFileInfo;
-				ClusterModel.getInstance().writeCluster(newFileInfo[0], newFileInfo[1]);
+				if(newFileInfo[0]!=null)
+				{	
+					this.currentClusterInfo = newFileInfo;
+					ClusterModel.getInstance().writeCluster(newFileInfo[0], newFileInfo[1]);
+				}
 			}
 			else
 				ClusterModel.getInstance().writeCluster(this.currentClusterInfo[0], this.currentClusterInfo[1]);
@@ -159,8 +210,11 @@ public class ModuleController  implements ActionListener{
 		{
 			String[] newFileInfo = new String[2];
 			newFileInfo = Main_view.getInstance().setFilepath_save();
-			this.currentClusterInfo = newFileInfo;
-			ClusterModel.getInstance().writeCluster(newFileInfo[0], newFileInfo[1]);
+			if(newFileInfo[0]!=null)
+			{
+				this.currentClusterInfo = newFileInfo;
+				ClusterModel.getInstance().writeCluster(newFileInfo[0], newFileInfo[1]);
+			}
 		}
 	}
 	

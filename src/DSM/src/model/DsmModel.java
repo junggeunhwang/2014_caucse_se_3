@@ -12,9 +12,7 @@ public class DsmModel {
 	private static DsmModel instance;
 	
 	
-	private DsmModel()
-	{
-	}
+	private DsmModel(){}
 	
 	public static DsmModel getInstance(){
 		
