@@ -1,0 +1,29 @@
+package view.customtable;
+
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
+import javax.swing.JLabel;
+
+public class CustomJTableCell extends JLabel {
+	
+	final int x=0,y=0;
+	public CustomJTableCell(int x,int y) {
+		this.x = x;
+		this.y = y;
+		
+		this.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				System.out.println(String.valueOf(x) + "," + String.valueOf(y) + " Cicked");
+			}
+		});
+	}
+	
+	@Override
+	public String toString() {
+		return this.getText();
+	}
+	
+	
+}

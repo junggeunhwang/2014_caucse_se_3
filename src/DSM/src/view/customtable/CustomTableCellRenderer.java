@@ -19,8 +19,8 @@ public class CustomTableCellRenderer extends DefaultTableCellRenderer {
 	static public final int center_alignment = SwingConstants.CENTER;
 	static public final int right_alignment = SwingConstants.RIGHT;
 	
-	Color bkColor[][];
-	int alignment[][];
+	private Color bkColor[][];
+	private int alignment[][];
 	
 	public CustomTableCellRenderer(int rowSize,int colSize) {
 			bkColor = new Color[rowSize][colSize];

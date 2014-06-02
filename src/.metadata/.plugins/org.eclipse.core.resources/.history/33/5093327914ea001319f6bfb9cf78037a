@@ -1,0 +1,67 @@
+package view.customtable;
+
+import javax.swing.table.AbstractTableModel;
+
+public class CustomTableModel extends AbstractTableModel {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	private Object data[][];
+
+	private String[] columnNames = null;	//테이블의 각 열에 대한 이름들
+	@SuppressWarnings("rawtypes")
+	private Class[] columnClasses = null;//각 열의 값에 대한 클래스들
+	
+	public CustomTableModel() {
+		
+	}
+	
+	public void setColumnNames(String[] columnNames) {
+		this.columnNames = columnNames;
+	}
+
+	public void setColumnClasses(Class[] columnClasses) {
+		this.columnClasses = columnClasses;
+	}
+	
+	public void setData(Object[][] data) {
+		this.data = data;		
+	}
+	public Object[][] getData() {
+		return data;
+	}
+//	public void setEditable(int r,int c,boolean b){
+//		
+//	}
+	@Override
+	public void setValueAt(Object aValue, int r, int c) {
+		data[r][c] = aValue;
+	}
+	@Override
+	public Class<?> getColumnClass(int columnIndex) {
+		return columnClasses[columnIndex];
+	}
+	
+	@Override
+	public String getColumnName(int column) {
+		return columnNames[column];
+	}
+	@Override
+	public int getColumnCount() {
+		return data[0].length;
+	}
+
+	@Override
+	public int getRowCount() {
+		return data.length;
+	}
+
+	@Override
+	public Object getValueAt(int r, int c) {
+		return data[r][c];
+	}
+
+}

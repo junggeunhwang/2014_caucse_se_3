@@ -7,6 +7,7 @@ import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.Vector;
 
+import javax.swing.JDialog;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 
@@ -53,6 +54,7 @@ public class ModuleController  implements ActionListener{
 		Main_view.getInstance().getMntmSaveClustering().addActionListener(this);//
 		Main_view.getInstance().getMntmSaveClusteringAs().addActionListener(this);//
 		Main_view.getInstance().getMntmLoadClustering().addActionListener(this);//
+		Main_view.getInstance().getMntmNewDsm().addActionListener(this);
 		Main_view.getInstance().getBtnRename().addActionListener(this);//
 		DsmfilePath = new String[2];
 		DsmfilePath = null;
@@ -64,7 +66,15 @@ public class ModuleController  implements ActionListener{
 	{	
 		if(e.getSource()==Main_view.getInstance().getMntmNewDsm())
 		{
+			int rowcount = new NewDsmDialog(Main_view.getInstance(),true).getRow_count();//입력받은 줄 수
 			
+			Main_view.getInstance().getDependency_table().setEditable(true);
+			
+			/*작업*/
+			
+			// 수정된 데이터는 getModel 을 통해 CustomTableModel 로 받아 올 수 있음
+			
+			Main_view.getInstance().getDependency_table().setEditable(false);//작업 후  수정 잠금
 		}
 		if(e.getSource()==Main_view.getInstance().getMntmSaveDsm())  
 		{

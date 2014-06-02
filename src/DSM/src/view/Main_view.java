@@ -30,6 +30,7 @@ import java.awt.Component;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.JTextPane;
@@ -53,7 +54,11 @@ import javax.swing.JCheckBoxMenuItem;
 
 import view.customtable.CustomJTable;
 import view.customtable.CustomTableCellRenderer;
+import view.customtable.CustomTableModel;
 import model.ModelInfo;
+
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class Main_view extends JFrame {
 
@@ -168,6 +173,7 @@ public class Main_view extends JFrame {
 		initialize_HorizontalSplitPane();
 		showRowLabel=1;
 		setEnableButton(false);
+		
 	}
 	
  	private void initialize_Menu()
@@ -182,6 +188,7 @@ public class Main_view extends JFrame {
 		mntmNewDsm = new JMenuItem("New DSM...");
 		mntmNewDsm.setFont(new Font("Malgun Gothic", Font.PLAIN, 12));
 		mntmNewDsm.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_MASK));
+		
 		mnFile.add(mntmNewDsm);
 		
 		mntmOpenDsm = new JMenuItem("Open DSM...");
@@ -227,8 +234,6 @@ public class Main_view extends JFrame {
 		mntmSaveAsDsm = new JMenuItem("Save DSM as..");
 		mntmSaveAsDsm.setFont(new Font("Malgun Gothic", Font.PLAIN, 12));
 		mnFile.add(mntmSaveAsDsm);
-//		mntmExcel = new JMenuItem("Excel");
-//		mnExportAs.add(mntmExcel);
 		
 		separator_3 = new JSeparator();
 		mnFile.add(separator_3);
@@ -334,8 +339,9 @@ public class Main_view extends JFrame {
 		
 		
 		dependency_table = new CustomJTable();
+		dependency_table.setCellSelectionEnabled(true);
+		
 		dependency_table.setRowSelectionAllowed(false);
-		dependency_table.setEnabled(false);
 		dependency_table.setBackground(SystemColor.white);
 		
 		
@@ -452,26 +458,39 @@ public class Main_view extends JFrame {
 	{
 		int matrixSize = printElement.size();
 		Object data[][];
-		Object col[];
+		String col[];
+		Class col_class[];
+		
 		Vector<int[]> colored;
 		if(matrixSize==0)
 		{
 			colored = new Vector<int[]>();
 			colored = null;
 			data = new Object[1][2];
-			col = new Object[2];
+			col = new String[2];
+			col_class = new Class[2];
+			
+			
+						
+			col[0] = new String();
+			col[1] = new String();
+			col_class[0] = JLabel.class;
+			col_class[1] = JLabel.class;
+			
 			if(showRowLabel==1)
 				data[0][0] = String.valueOf(1) + " $root";
 			else
 				data[0][0] = String.valueOf(1);
 			data[0][1] = "·";
 			col[0] = "";
-			col[1] = String.valueOf(1);
+			
+			col[1] = "1";
 		}
 		else
 		{
 			colored = new Vector<int[]>();
 			data = new Object[matrixSize][matrixSize+1];
+			
 			for(int i=0; i<matrixSize; i++)
 			{
 					for(int j=1; j<=matrixSize; j++)
@@ -481,7 +500,7 @@ public class Main_view extends JFrame {
 						{
 							if(ModelInfo.getInstance().getRoot().getNode(printElement.get(i)).childs.size()!=0)
 							{
-								data[i][j] = 1;
+								data[i][j] = String.valueOf(1);
 								groupPoint[0] = i;
 								groupPoint[1] = j;
 								colored.add(groupPoint);
@@ -557,9 +576,9 @@ public class Main_view extends JFrame {
 									dp = 1;
 							}						
 							if(dp==1)
-								data[i][j] = 'x';
+								data[i][j] = "x";
 							else
-								data[i][j] = ' ';
+								data[i][j] = " ";
 							
 							
 						}
@@ -575,23 +594,34 @@ public class Main_view extends JFrame {
 					}
 			}
 		
-			col = new Object[matrixSize+1];
+			col = new String[matrixSize+1];
+			col_class = new Class[matrixSize+1];
+			
+			for(int i = 0 ; i < matrixSize+1;i++){
+				col[i] = new String();
+				col_class[i] = JLabel.class;
+			}
 			if(showRowLabel==1)
 				for(int i=0; i<matrixSize; i++)
-					data[i][0] =String.valueOf(i+1)+"  "+ printElement.get(i);
+					data[i][0] = String.valueOf(i+1)+"  "+ printElement.get(i);
 			else
 				for(int i=0; i<matrixSize; i++)
-					data[i][0] =String.valueOf(i+1);
-			col[0] = "";
+					data[i][0] = String.valueOf(i+1);
+			col[0]="";
 			for(int i=1; i<=matrixSize; i++)
-				col[i] = i;
+				col[i]=String.valueOf(i);
 		}
 		
 		
-		DefaultTableModel model=new DefaultTableModel(data,col);
+		CustomTableModel model=new CustomTableModel();
+
+		model.setColumnNames(col);
+		model.setColumnClasses(col_class);
+		model.setData(data);
+		
 		dependency_table = new CustomJTable(model);
-		dependency_table.setRowSelectionAllowed(false);
-		dependency_table.setEnabled(false);
+		dependency_table.setRowSelectionAllowed(true);
+		dependency_table.setEnabled(true);
 		dependency_table.setBackground(SystemColor.white);
 		dependency_table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF); //자동 리사이즈 해제
 		
@@ -622,7 +652,7 @@ public class Main_view extends JFrame {
 		{
 			for(int i=0; i<matrixSize; i++)
 			{
-				data[i][0] = String.valueOf(i+1)+"  "+ printElement.get(i);
+				data[i][0]=String.valueOf(i+1)+"  "+ printElement.get(i);
 				if(max_length < (String.valueOf(i+1)+"  "+ printElement.get(i)).length());
 					max_length = (String.valueOf(i+1)+"  "+ printElement.get(i)).length();
 			}
@@ -658,7 +688,6 @@ public class Main_view extends JFrame {
 		mntmExit.setEnabled(set);
 		mntmRedraw.setEnabled(set);
 		mntmAbout.setEnabled(set);
-		mntmNewDsm.setEnabled(set);
 		mntmSaveDsm.setEnabled(set);
 		mntmSaveAsDsm.setEnabled(set);
 		btnRedraw.setEnabled(set);
@@ -742,6 +771,12 @@ public class Main_view extends JFrame {
 	public int getShowRowLabel()
 	{
 		return showRowLabel;
+	}
+	
+	
+
+	public CustomJTable getDependency_table() {
+		return dependency_table;
 	}
 
 	public JMenuItem getMntmOpenDsm() {

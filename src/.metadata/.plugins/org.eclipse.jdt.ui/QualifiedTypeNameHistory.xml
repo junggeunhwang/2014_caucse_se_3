@@ -12,9 +12,7 @@
 <fullyQualifiedTypeName name="javax.swing.tree.DefaultMutableTreeNode"/>
 <fullyQualifiedTypeName name="controller.ModelInfo"/>
 <fullyQualifiedTypeName name="javax.swing.JScrollPane"/>
-<fullyQualifiedTypeName name="controller.ModuleController"/>
 <fullyQualifiedTypeName name="javax.swing.JTree"/>
-<fullyQualifiedTypeName name="view.Main_view"/>
 <fullyQualifiedTypeName name="javax.swing.tree.DefaultTreeModel"/>
 <fullyQualifiedTypeName name="javax.swing.tree.TreePath"/>
 <fullyQualifiedTypeName name="model.ClusterModel"/>
@@ -30,4 +28,23 @@
 <fullyQualifiedTypeName name="view.CustomTableCellRenderer"/>
 <fullyQualifiedTypeName name="view.customtable.CustomJTable"/>
 <fullyQualifiedTypeName name="view.customtable.CustomTableCellRenderer"/>
+<fullyQualifiedTypeName name="javax.swing.JSpinner"/>
+<fullyQualifiedTypeName name="javax.swing.SpinnerNumberModel"/>
+<fullyQualifiedTypeName name="controller.ModuleController"/>
+<fullyQualifiedTypeName name="java.awt.Frame"/>
+<fullyQualifiedTypeName name="javax.swing.JDialog"/>
+<fullyQualifiedTypeName name="javax.swing.JTextPane"/>
+<fullyQualifiedTypeName name="java.lang.String"/>
+<fullyQualifiedTypeName name="java.awt.event.ActionListener"/>
+<fullyQualifiedTypeName name="java.awt.event.ActionEvent"/>
+<fullyQualifiedTypeName name="java.awt.event.MouseAdapter"/>
+<fullyQualifiedTypeName name="java.awt.event.MouseEvent"/>
+<fullyQualifiedTypeName name="view.customtable.CustomJTableCell"/>
+<fullyQualifiedTypeName name="javax.swing.JLabel"/>
+<fullyQualifiedTypeName name="view.customtable.CustomTableModel"/>
+<fullyQualifiedTypeName name="javax.swing.table.AbstractTableModel"/>
+<fullyQualifiedTypeName name="java.awt.event.FocusListener"/>
+<fullyQualifiedTypeName name="javax.swing.JTextField"/>
+<fullyQualifiedTypeName name="javax.swing.JEditorPane"/>
+<fullyQualifiedTypeName name="view.Main_view"/>
 </qualifiedTypeNameHistroy>

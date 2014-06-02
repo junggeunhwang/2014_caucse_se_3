@@ -1,7 +1,0 @@
-package view;
-
-import javax.swing.JTable;
-
-public class CustomJTable extends JTable {
-
-}

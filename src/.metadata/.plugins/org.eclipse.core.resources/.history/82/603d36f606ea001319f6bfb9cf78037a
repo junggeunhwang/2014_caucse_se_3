@@ -1,0 +1,63 @@
+package view.customtable;
+
+import javax.swing.JLabel;
+import javax.swing.table.AbstractTableModel;
+
+public class CustomTableModel extends AbstractTableModel {
+
+	JLabel data[][];
+	//테이블의 각 열에 대한 이름들
+	private static String[] columnNames = null;
+
+	//각 열의 값에 대한 클래스들
+	private static Class[] columnClasses = null;
+	
+	public CustomTableModel() {
+		
+	}
+	
+	
+	
+	public static void setColumnNames(String[] columnNames) {
+		CustomTableModel.columnNames = columnNames;
+	}
+
+	public static void setColumnClasses(Class[] columnClasses) {
+		CustomTableModel.columnClasses = columnClasses;
+	}
+	
+	public void setData(JLabel[][] data) {
+		this.data = data;		
+	}
+	
+	
+	
+	
+	public static String getColumnNames(int col) {
+		return columnNames[col];
+	}
+
+	public static Class[] getColumnClasses(int col) {
+		return columnClasses;
+	}
+
+	public JLabel[][] getData() {
+		return data;
+	}
+
+	@Override
+	public int getColumnCount() {
+		return data[0].length;
+	}
+
+	@Override
+	public int getRowCount() {
+		return data.length;
+	}
+
+	@Override
+	public JLabel getValueAt(int r, int c) {
+		return data[r][c];
+	}
+
+}

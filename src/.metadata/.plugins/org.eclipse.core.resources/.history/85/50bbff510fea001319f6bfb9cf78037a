@@ -1,0 +1,59 @@
+package view.customtable;
+
+import java.awt.Color;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
+import javax.swing.JTable;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableModel;
+
+public class CustomJTable extends JTable {
+
+	/**  
+	 *   
+	 */
+	private static final long serialVersionUID = 1L;
+	private boolean isEditable = false;
+	
+	CustomTableCellRenderer cellRenderer;
+
+	public CustomJTable() {
+	}
+
+	public CustomJTable(CustomTableModel model) {
+		super(model);
+		cellRenderer = new CustomTableCellRenderer(model.getRowCount(),
+				model.getColumnCount());
+
+		this.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				JTable target = (JTable)arg0.getSource();
+				CustomTableModel model = (CustomTableModel)target.getModel();
+				model.setValueAt("X", row, col);
+				int row = target.getSelectedRow();
+				int col = target.getSelectedColumn();
+				
+				target.setValueAt("X", row, col);
+				String test = (String) target.getValueAt(row, col);
+				System.out.println(test);
+				target.repaint();
+				System.out.println("("+row + "," + col+") Clicked");				
+			}
+		});
+	}
+
+	
+	
+	public void setAlignment(int row, int column, int align) {
+		cellRenderer.setAlignment(row, column, align);
+		super.setDefaultRenderer(Object.class, cellRenderer);
+	}
+
+	public void setColor(int row, int column, Color color) {
+		cellRenderer.setBkColor(row, column, color);
+		super.setDefaultRenderer(Object.class, cellRenderer);
+	}
+
+}
