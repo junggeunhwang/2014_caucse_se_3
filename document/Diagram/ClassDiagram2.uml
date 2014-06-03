@@ -58,9 +58,9 @@
 <XPD:ATTR name="LineColor" type="string">clMaroon</XPD:ATTR>
 <XPD:ATTR name="FillColor" type="string">$00B9FFFF</XPD:ATTR>
 <XPD:ATTR name="Left" type="integer">604</XPD:ATTR>
-<XPD:ATTR name="Top" type="integer">124</XPD:ATTR>
+<XPD:ATTR name="Top" type="integer">120</XPD:ATTR>
 <XPD:ATTR name="Width" type="integer">124</XPD:ATTR>
-<XPD:ATTR name="Height" type="integer">160</XPD:ATTR>
+<XPD:ATTR name="Height" type="integer">173</XPD:ATTR>
 <XPD:REF name="Model">xYftsQgMNEyg6ZsrKFmAewAA</XPD:REF>
 <XPD:OBJ name="NameCompartment" type="UMLNameCompartmentView" guid="AywDlnHPXUCKLdX6DudRSQAA">
 <XPD:OBJ name="NameLabel" type="LabelView" guid="Zi4AiPnzck6dm27ZCiUnTAAA">
@@ -482,7 +482,7 @@
 <XPD:OBJ name="OwnedViews[15]" type="UMLDependencyView" guid="jYOFbW+BakGu0dwp0/LcXgAA">
 <XPD:ATTR name="LineColor" type="string">clMaroon</XPD:ATTR>
 <XPD:ATTR name="FillColor" type="string">$00B9FFFF</XPD:ATTR>
-<XPD:ATTR name="Points" type="Points">442,76;556,96;604,143</XPD:ATTR>
+<XPD:ATTR name="Points" type="Points">442,76;556,96;604,144</XPD:ATTR>
 <XPD:REF name="Model">M6BFWSjDxkKu0l74jDn52gAA</XPD:REF>
 <XPD:REF name="Head">RPo/jHwYQkeHpEUOkcpGdQAA</XPD:REF>
 <XPD:REF name="Tail">APMHxg812EiwQX/LsFiaKAAA</XPD:REF>
@@ -520,7 +520,7 @@
 <XPD:REF name="SupplierDependencies[0]">DA5fspc1xUqcwPYFPJRYhQAA</XPD:REF>
 <XPD:REF name="SupplierDependencies[1]">mR4wCcaYVEG/X1K3EAaD+gAA</XPD:REF>
 <XPD:REF name="SupplierDependencies[2]">M6BFWSjDxkKu0l74jDn52gAA</XPD:REF>
-<XPD:ATTR name="#Operations" type="integer">8</XPD:ATTR>
+<XPD:ATTR name="#Operations" type="integer">9</XPD:ATTR>
 <XPD:OBJ name="Operations[0]" type="UMLOperation" guid="lytdYnI540eKMtSkp8ZTrQAA">
 <XPD:ATTR name="Name" type="string">makeTree</XPD:ATTR>
 <XPD:REF name="Owner">xYftsQgMNEyg6ZsrKFmAewAA</XPD:REF>
@@ -556,6 +556,10 @@
 </XPD:OBJ>
 <XPD:OBJ name="Operations[7]" type="UMLOperation" guid="VAbl4mMoUEimkZrpkDvlCQAA">
 <XPD:ATTR name="Name" type="string">getTreeState</XPD:ATTR>
+<XPD:REF name="Owner">xYftsQgMNEyg6ZsrKFmAewAA</XPD:REF>
+</XPD:OBJ>
+<XPD:OBJ name="Operations[8]" type="UMLOperation" guid="Q8q+0CasTUKHRkcUwwPkzQAA">
+<XPD:ATTR name="Name" type="string">reNameNode</XPD:ATTR>
 <XPD:REF name="Owner">xYftsQgMNEyg6ZsrKFmAewAA</XPD:REF>
 </XPD:OBJ>
 <XPD:ATTR name="#Associations" type="integer">1</XPD:ATTR>
