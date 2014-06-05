@@ -1,7 +1,0 @@
-package view;
-
-import JTable;
-
-public class CJTable extends JTable {
-
-}

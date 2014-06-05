@@ -142,7 +142,7 @@ public class Main_view extends JFrame {
 	private	JSplitPane splitPane_vertical;
 	private JSplitPane splitPane_top_main;
 	private CustomJTable dependency_table;
-
+	private JCheckBoxMenuItem chckbxmntmEditTable;
 
 	/**
 	 * Create the frame.
@@ -202,6 +202,7 @@ public class Main_view extends JFrame {
 		mnFile.add(separator);
 		
 		mntmNewMenuItem = new JMenuItem("New Clustering");
+		mntmNewMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, InputEvent.CTRL_MASK | InputEvent.SHIFT_MASK));
 		mntmNewMenuItem.setFont(new Font("¸¼Àº °íµñ", Font.PLAIN, 12));
 		mntmNewMenuItem.setMnemonic('N');
 		mnFile.add(mntmNewMenuItem);
@@ -222,6 +223,7 @@ public class Main_view extends JFrame {
 		mnFile.add(mntmSaveClustering);
 		
 		mntmSaveClusteringAs = new JMenuItem("Save Clustering as...");
+		mntmSaveClusteringAs.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, InputEvent.CTRL_MASK | InputEvent.SHIFT_MASK));
 		mntmSaveClusteringAs.setFont(new Font("¸¼Àº °íµñ", Font.PLAIN, 12));
 		mntmSaveClusteringAs.setMnemonic('a');
 		mnFile.add(mntmSaveClusteringAs);
@@ -229,9 +231,11 @@ public class Main_view extends JFrame {
 		separator_2 = new JSeparator();
 		mnFile.add(separator_2);
 		mntmSaveDsm = new JMenuItem("Save DSM");
+		mntmSaveDsm.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK));
 		mntmSaveDsm.setFont(new Font("Malgun Gothic", Font.PLAIN, 12));
 		mnFile.add(mntmSaveDsm);
 		mntmSaveAsDsm = new JMenuItem("Save DSM as..");
+		mntmSaveAsDsm.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, InputEvent.CTRL_MASK));
 		mntmSaveAsDsm.setFont(new Font("Malgun Gothic", Font.PLAIN, 12));
 		mnFile.add(mntmSaveAsDsm);
 		
@@ -239,6 +243,7 @@ public class Main_view extends JFrame {
 		mnFile.add(separator_3);
 		
 		mntmExit = new JMenuItem("Exit");
+		mntmExit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, InputEvent.CTRL_MASK));
 		mntmExit.setFont(new Font("¸¼Àº °íµñ", Font.PLAIN, 12));
 		mntmExit.setMnemonic('x');
 		mnFile.add(mntmExit);
@@ -258,11 +263,17 @@ public class Main_view extends JFrame {
 		mnView.add(separator_4);
 		
 		mntmShow_Row_Labels = new JCheckBoxMenuItem("Show Row Labels");
+		mntmShow_Row_Labels.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, InputEvent.CTRL_MASK));
 		
 		mntmShow_Row_Labels.setFont(new Font("¸¼Àº °íµñ", Font.PLAIN, 12));
 		mntmShow_Row_Labels.setMnemonic('L');
 		mntmShow_Row_Labels.setSelected(true);
 		mnView.add(mntmShow_Row_Labels);
+		
+		chckbxmntmEditTable = new JCheckBoxMenuItem("Edit Table");
+		chckbxmntmEditTable.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, InputEvent.CTRL_MASK));
+		chckbxmntmEditTable.setFont(new Font("Malgun Gothic", Font.PLAIN, 12));
+		mnView.add(chckbxmntmEditTable);
 		
 		JMenu mnHelp = new JMenu("Help");
 		mnHelp.setMnemonic('H');
@@ -270,6 +281,7 @@ public class Main_view extends JFrame {
 		menuBar.add(mnHelp);
 		
 		mntmAbout = new JMenuItem("About...");
+		mntmAbout.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0));
 		mntmAbout.setMnemonic('A');
 		mntmAbout.setFont(new Font("¸¼Àº °íµñ", Font.PLAIN, 12));
 		mntmAbout.addActionListener(new ActionListener() {
@@ -634,9 +646,7 @@ public class Main_view extends JFrame {
 		
 		for(int i=0; i<colored.size(); i++)
 			dependency_table.setColor(colored.get(i)[0], colored.get(i)[1], Color.green);
-		
-	
-		//dependency_table.setColor(2, 2, Color.red);
+		dependency_table.setEditable(this.chckbxmntmEditTable.getState());
 		
 		TableColumnModel col_model = dependency_table.getColumnModel();
 		
@@ -650,14 +660,23 @@ public class Main_view extends JFrame {
 			max_length=8;
 		else
 		{
-			for(int i=0; i<matrixSize; i++)
-			{
-				data[i][0]=String.valueOf(i+1)+"  "+ printElement.get(i);
-				if(max_length < (String.valueOf(i+1)+"  "+ printElement.get(i)).length());
-					max_length = (String.valueOf(i+1)+"  "+ printElement.get(i)).length();
+			if(mntmShow_Row_Labels.getState()==true){
+				for(int i=0; i<matrixSize; i++){
+					data[i][0]=String.valueOf(i+1)+"  "+ printElement.get(i);
+					if(max_length < (String.valueOf(i+1)+"  "+ printElement.get(i)).length())
+						max_length = (String.valueOf(i+1)+"  "+ printElement.get(i)).length();
+				}
 			}
+			else{
+				for(int i=0; i<matrixSize; i++){
+					data[i][0]=String.valueOf(i+1)+"  ";
+					if(max_length < (String.valueOf(i+1)+"  ").length())
+						max_length = (String.valueOf(i+1)+"  ").length();
+				}
+			}
+			
 		}	
-		col_model.getColumn(0).setPreferredWidth(max_length*7+3);		
+		col_model.getColumn(0).setPreferredWidth(max_length*6);		
 		col_model.setColumnSelectionAllowed(false);
 		
 		
@@ -725,6 +744,12 @@ public class Main_view extends JFrame {
 			String[] pathName = new String[2];
 			pathName[0] = fldg.getDirectory();
 			pathName[1] = fldg.getFile();
+			if(pathName[1].contains(".clsx")){
+				JOptionPane.showMessageDialog(this,"Please load DSM file.");
+				return null;
+			}
+				
+			
 			filePath = new String();
 			filePath = pathName[0]+pathName[1];
 			return pathName;
@@ -774,7 +799,9 @@ public class Main_view extends JFrame {
 	}
 	
 	
-
+	public JCheckBoxMenuItem getChckbxmntmEditTable() {
+		return chckbxmntmEditTable;
+	}
 	public CustomJTable getDependency_table() {
 		return dependency_table;
 	}
@@ -891,4 +918,5 @@ public class Main_view extends JFrame {
 	public JMenuItem getMntmNewDsm() {
 		return mntmNewDsm;
 	}
+	
 }

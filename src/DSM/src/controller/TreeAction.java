@@ -137,7 +137,15 @@ public class TreeAction {
 		}
 		return printElement;
 	}
-	
+	public void newDsmRow()
+	{
+		String newNodeName = new String();
+		newNodeName = Main_view.getInstance().setNewName();
+		TreeNode newTreeNode = new TreeNode();
+		newTreeNode.key = newNodeName;
+		newTreeNode.parent = ModelInfo.getInstance().getRoot();
+		ModelInfo.getInstance().getRoot().childs.add(newTreeNode);
+	}
 	public void reNameNode()
 	{
 		DefaultTreeModel model = (DefaultTreeModel)Main_view.getInstance().getClasstree().getModel();

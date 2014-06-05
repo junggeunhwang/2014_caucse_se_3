@@ -4,7 +4,6 @@
 <fullyQualifiedTypeName name="java.awt.FileDialog"/>
 <fullyQualifiedTypeName name="javax.swing.Icon"/>
 <fullyQualifiedTypeName name="javax.swing.ImageIcon"/>
-<fullyQualifiedTypeName name="java.util.ArrayList"/>
 <fullyQualifiedTypeName name="java.lang.Integer"/>
 <fullyQualifiedTypeName name="model.TreeNode"/>
 <fullyQualifiedTypeName name="model.DsmModel"/>
@@ -17,7 +16,6 @@
 <fullyQualifiedTypeName name="javax.swing.tree.TreePath"/>
 <fullyQualifiedTypeName name="model.ClusterModel"/>
 <fullyQualifiedTypeName name="javax.swing.JPanel"/>
-<fullyQualifiedTypeName name="model.ModelInfo"/>
 <fullyQualifiedTypeName name="java.util.Enumeration"/>
 <fullyQualifiedTypeName name="java.util.Vector"/>
 <fullyQualifiedTypeName name="javax.swing.table.DefaultTableModel"/>
@@ -46,5 +44,7 @@
 <fullyQualifiedTypeName name="java.awt.event.FocusListener"/>
 <fullyQualifiedTypeName name="javax.swing.JTextField"/>
 <fullyQualifiedTypeName name="javax.swing.JEditorPane"/>
+<fullyQualifiedTypeName name="model.ModelInfo"/>
+<fullyQualifiedTypeName name="java.util.ArrayList"/>
 <fullyQualifiedTypeName name="view.Main_view"/>
 </qualifiedTypeNameHistroy>

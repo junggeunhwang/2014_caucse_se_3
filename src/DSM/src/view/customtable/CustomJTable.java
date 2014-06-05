@@ -3,6 +3,7 @@ package view.customtable;
 import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 
 import javax.swing.JEditorPane;
 import javax.swing.JTable;
@@ -10,6 +11,7 @@ import javax.swing.JTextField;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
 
+import model.ModelInfo;
 import view.Main_view;
 
 public class CustomJTable extends JTable {
@@ -20,7 +22,7 @@ public class CustomJTable extends JTable {
 	private static final long serialVersionUID = 1L;
 	private CustomJTable instance;
 	
-	private boolean isEditable = true;
+	private boolean isEditable = false;
 	
 	CustomTableCellRenderer cellRenderer;
 
@@ -49,6 +51,13 @@ public class CustomJTable extends JTable {
 						else
 							target.setValueAt("x", row, col);
 
+						ArrayList<int[]> rows = ModelInfo.getInstance().getDependData();
+						int[] selected_row = rows.get(row);
+						selected_row[col-1]=1;
+						rows.set(row, selected_row);
+						
+						ModelInfo.getInstance().setDependData(rows);
+						
 						target.repaint();
 						System.out.println("("+row + "," + col+") Clicked");//for Debug
 					}

@@ -7,10 +7,10 @@
 		<item value="979" key="x"/>
 	</section>
 	<section name="org.eclipse.wb.internal.swing.model.property.editor.accelerator.KeyStrokePropertyEditor$KeyStrokeDialog">
-		<item value="479" key="height"/>
+		<item value="480" key="height"/>
 		<item value="382" key="width"/>
-		<item value="280" key="y"/>
-		<item value="769" key="x"/>
+		<item value="331" key="y"/>
+		<item value="605" key="x"/>
 	</section>
 	<section name="org.eclipse.wb.internal.swing.model.property.editor.font.FontDialog">
 		<item value="506" key="height"/>
