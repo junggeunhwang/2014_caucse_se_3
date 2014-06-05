@@ -58,24 +58,23 @@ public class ModuleController  implements ActionListener{
 		Main_view.getInstance().getBtnRename().addActionListener(this);//
 		Main_view.getInstance().getBtnNewDsmRow().addActionListener(this);
 		DsmfilePath = new String[2];
-		DsmfilePath = null;
 		//
 	}
 	
 	@Override
  	public void actionPerformed(ActionEvent e)
 	{	
+		if(e.getSource()==Main_view.getInstance().getBtnNewDsmRow())
+		{
+			Main_view.getInstance().setEnableButton(false);
+			Main_view.getInstance().setEnableSave(true);
+			TreeAction.getInstance().newDsmRow();
+		}
 		if(e.getSource()==Main_view.getInstance().getMntmNewDsm())
 		{
 			int rowcount = new NewDsmDialog(Main_view.getInstance(),true).getRow_count();//입력받은 줄 수
-			
-			Main_view.getInstance().getDependency_table().setEditable(true);
-			
-			/*작업*/
-			
-			// 수정된 데이터는 getModel 을 통해 CustomTableModel 로 받아 올 수 있음
-			
-			Main_view.getInstance().getDependency_table().setEditable(false);//작업 후  수정 잠금
+			Main_view.getInstance().setEnableSave(true);
+			TreeAction.getInstance().newDsm(rowcount);
 		}
 		if(e.getSource()==Main_view.getInstance().getMntmSaveDsm())  
 		{
@@ -96,6 +95,7 @@ public class ModuleController  implements ActionListener{
 		if(e.getSource()==Main_view.getInstance().getMntmSaveAsDsm()) 
 		{
 			String[] newDsmFileInfo = new String[2];
+			DsmfilePath = new String[2];
 			newDsmFileInfo = Main_view.getInstance().setFilepath_save();
 			if(newDsmFileInfo[0]!=null)
 			{
@@ -105,12 +105,12 @@ public class ModuleController  implements ActionListener{
 				DsmfilePath[0] = newDsmFileInfo[0];
 				DsmfilePath[1] = newDsmFileInfo[1];
 			}
-			
-		}
-		if(e.getSource()==Main_view.getInstance().getBtnNewDsmRow())
-		{
-			TreeAction.getInstance().newDsmRow();
-			Main_view.getInstance().setJTree(TreeAction.getInstance().makeTree());
+			if(Main_view.getInstance().getDependency_table().isEditable())
+			{
+				Main_view.getInstance().getDependency_table().setEditable(false);
+				Main_view.getInstance().setEnableButton(true);
+				TreeAction.getInstance().setNewDepend(Main_view.getInstance().getDependency_table());
+			}
 		}
 		if(e.getSource()==Main_view.getInstance().getBtnRename())
 		{
@@ -157,12 +157,20 @@ public class ModuleController  implements ActionListener{
 		{
 			String[] newFilePath = new String[2];
 			newFilePath = Main_view.getInstance().setFilepath_load();
+			
 			if(newFilePath[0]!=null)
 			{	
+				if(newFilePath[1].contains(".clsx")==false)
+				{
+					Main_view.getInstance().showMsg("Please load clsx file.");
+					return;
+				}
 				this.currentClusterInfo = newFilePath;
 				ClusterModel.getInstance().readCluster(newFilePath[0]+newFilePath[1], ModelInfo.getInstance().getModules().size());
 				Main_view.getInstance().setJTree(TreeAction.getInstance().makeTree());
 			}
+			else
+				return;
 		}
 		if(e.getSource()==Main_view.getInstance().getBtnMoveDown()) //horizontal split
 		{
@@ -185,8 +193,14 @@ public class ModuleController  implements ActionListener{
 			ModelInfo.getInstance().setInstance(null);
 			String[] newFilePath = new String[2];
 			newFilePath = Main_view.getInstance().setFilepath_load();
-			if(newFilePath!=null)
+			
+			if(newFilePath[0]!=null)
 			{
+				if(newFilePath[1].contains(".dsm")==false)
+				{
+					Main_view.getInstance().showMsg("Please load DSM file.");
+					return;
+				}
 				this.currentClusterInfo = new String[2];
 				this.currentClusterInfo = null;
 				this.DsmfilePath = new String[2];

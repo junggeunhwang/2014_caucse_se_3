@@ -22,12 +22,12 @@ public class CustomJTable extends JTable {
 	private static final long serialVersionUID = 1L;
 	private CustomJTable instance;
 	
-	private boolean isEditable = false;
+	private boolean isEditable;
 	
 	CustomTableCellRenderer cellRenderer;
 
 	public CustomJTable() {
-		
+		this.isEditable = true;
 	}
 
 	public CustomJTable(CustomTableModel model) {
@@ -59,7 +59,7 @@ public class CustomJTable extends JTable {
 						ModelInfo.getInstance().setDependData(rows);
 						
 						target.repaint();
-						System.out.println("("+row + "," + col+") Clicked");//for Debug
+						//System.out.println("("+row + "," + col+") Clicked");//for Debug
 					}
 					else{
 						target.setValueAt(row+1 +"  "+ Main_view.getInstance().setNewName(), row, col);

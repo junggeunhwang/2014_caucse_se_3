@@ -56,6 +56,7 @@ import view.customtable.CustomJTable;
 import view.customtable.CustomTableCellRenderer;
 import view.customtable.CustomTableModel;
 import model.ModelInfo;
+import model.TreeNode;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -472,12 +473,13 @@ public class Main_view extends JFrame {
 		Object data[][];
 		String col[];
 		Class col_class[];
+		Vector<int[]> coloredPoint;
+		Vector<String[]> coloredParent;
 		
-		Vector<int[]> colored;
 		if(matrixSize==0)
 		{
-			colored = new Vector<int[]>();
-			colored = null;
+			coloredPoint = new Vector<int[]>();
+			coloredParent = new Vector<String[]>();
 			data = new Object[1][2];
 			col = new String[2];
 			col_class = new Class[2];
@@ -500,7 +502,8 @@ public class Main_view extends JFrame {
 		}
 		else
 		{
-			colored = new Vector<int[]>();
+			coloredPoint = new Vector<int[]>();
+			coloredParent = new Vector<String[]>();
 			data = new Object[matrixSize][matrixSize+1];
 			
 			for(int i=0; i<matrixSize; i++)
@@ -508,14 +511,18 @@ public class Main_view extends JFrame {
 					for(int j=1; j<=matrixSize; j++)
 					{
 						int[] groupPoint = new int[2];
+						String[] groupParent = new String[2];
 						if(i==j-1)
 						{
 							if(ModelInfo.getInstance().getRoot().getNode(printElement.get(i)).childs.size()!=0)
 							{
-								data[i][j] = String.valueOf(1);
+								data[i][j] = "¡¤";
 								groupPoint[0] = i;
 								groupPoint[1] = j;
-								colored.add(groupPoint);
+								groupParent[0] = ModelInfo.getInstance().getRoot().getNode(printElement.get(i)).parent.key;
+								groupParent[1] = ModelInfo.getInstance().getRoot().getNode(printElement.get(i)).parent.key;
+								coloredPoint.add(groupPoint);
+								coloredParent.add(groupParent);
 							}
 							else data[i][j] = "¡¤";
 						}
@@ -597,12 +604,18 @@ public class Main_view extends JFrame {
 						String parentName = new String();
 						parentName = ModelInfo.getInstance().getRoot().getNode(printElement.get(i)).parent.key;
 						if(parentName.compareTo("$root")!=0
-								&& ModelInfo.getInstance().getRoot().getNode(printElement.get(j-1)).parent.key.compareTo(parentName)==0)
+								&& ModelInfo.getInstance().getRoot().getNode(printElement.get(j-1)).parent.key.compareTo("$root")!=0)
+						{
+							if(ModelInfo.getInstance().getRoot().isEqualrootChild(ModelInfo.getInstance().getRoot().getNode(printElement.get(i)),ModelInfo.getInstance().getRoot().getNode(printElement.get(j-1)))==true)
 							{
 								groupPoint[0] = i;
 								groupPoint[1] = j;
-								colored.add(groupPoint);
+								groupParent[0] = ModelInfo.getInstance().getRoot().getNode(printElement.get(i)).parent.key;
+								groupParent[1] = ModelInfo.getInstance().getRoot().getNode(printElement.get(j-1)).parent.key;
+								coloredPoint.add(groupPoint);
+								coloredParent.add(groupParent);
 							}
+						}
 					}
 			}
 		
@@ -644,8 +657,52 @@ public class Main_view extends JFrame {
 			}
 		}
 		
-		for(int i=0; i<colored.size(); i++)
-			dependency_table.setColor(colored.get(i)[0], colored.get(i)[1], Color.green);
+		int priority=0;
+		Vector<int[]> groupPriority = new Vector<int[]>();
+		Vector<String> groupPriorityName = new Vector<String>();
+		for(int i=0; i<coloredPoint.size(); i++)
+		{
+			if(coloredParent.get(i)[0].compareTo(coloredParent.get(i)[1])==0)
+			{
+				TreeNode groupElement = new TreeNode();
+				groupElement = ModelInfo.getInstance().getRoot().getNode(printElement.get(coloredPoint.get(i)[0]));
+				int[] pr = new int[1];
+				pr[0] = ModelInfo.getInstance().getRoot().getDepth(groupElement);
+				groupPriority.add(pr);
+				groupPriorityName.add(coloredParent.get(i)[0]);
+				priority = Math.max(pr[0],priority);
+			}
+		}
+		for(int i=priority; i>0; i--)
+		{
+			for(int j=0; j<groupPriority.size(); j++)
+			{
+				if(groupPriority.get(j)[0]==i)
+				{
+					String parentName = groupPriorityName.get(j);
+					for(int k=0; k<coloredPoint.size(); k++)
+					{	
+						if(coloredParent.get(k)[0].compareTo(parentName)==0 || coloredParent.get(k)[1].compareTo(parentName)==0)
+						{
+							Color c;
+							if(i==1)
+								c = Color.green;
+							else if(i==2)
+								c = Color.pink;
+							else if(i==3)
+								c = Color.yellow;
+							else if(i==4)
+								c = Color.cyan;
+							else if(i%2==0)
+								c = new Color((255-i*20)%255, (255+i*8)%255, (255-i*13)%255);
+							else
+								c = new Color((255-i*20)%255, (255-i*8)%255, (255-i*13)%255);
+							dependency_table.setColor(coloredPoint.get(k)[0], coloredPoint.get(k)[1], c);
+						}
+					}
+				}
+			}
+		}
 		dependency_table.setEditable(this.chckbxmntmEditTable.getState());
 		
 		TableColumnModel col_model = dependency_table.getColumnModel();
@@ -698,7 +755,12 @@ public class Main_view extends JFrame {
 		newMsg.showMessageDialog(this,msg);
 	}
 	
-	public void setEnableButton(boolean set)
+	public void setEnableSave(boolean set)
+	{
+		mntmSaveAsDsm.setEnabled(set);
+	}
+	
+ 	public void setEnableButton(boolean set)
 	{
 		mntmNewMenuItem.setEnabled(set);
 		mntmLoadClustering.setEnabled(set);
@@ -744,10 +806,7 @@ public class Main_view extends JFrame {
 			String[] pathName = new String[2];
 			pathName[0] = fldg.getDirectory();
 			pathName[1] = fldg.getFile();
-			if(pathName[1].contains(".clsx")){
-				JOptionPane.showMessageDialog(this,"Please load DSM file.");
-				return null;
-			}
+			
 				
 			
 			filePath = new String();
@@ -802,6 +861,7 @@ public class Main_view extends JFrame {
 	public JCheckBoxMenuItem getChckbxmntmEditTable() {
 		return chckbxmntmEditTable;
 	}
+	
 	public CustomJTable getDependency_table() {
 		return dependency_table;
 	}

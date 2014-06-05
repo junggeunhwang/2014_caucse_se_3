@@ -202,6 +202,39 @@ public class TreeNode{
 		//System.out.println(retSize);
 		return retSize;
 	}
+	public boolean isEqualrootChild(TreeNode a, TreeNode b)
+	{
+		TreeNode temp = new TreeNode();
+		temp = a;
+		while(temp.parent.key.compareTo("$root")!=0)
+		{
+			temp = temp.parent;
+		}
+		TreeNode temp2 = new TreeNode();
+		temp2 = b;
+		while(temp2.parent.key.compareTo("$root")!=0)
+		{
+			temp2 = temp2.parent;
+		}
+		
+		if(temp.key.compareTo(temp2.key)==0)
+			return true;
+		else
+			return false;
+	}
+	
+	public int getDepth(TreeNode a)
+	{
+		TreeNode temp = new TreeNode();
+		int ret=0;
+		temp = a;
+		while(temp.parent.key.compareTo("$root")!=0)
+		{
+			temp = temp.parent;
+			ret++;
+		}
+		return ret+1;
+	}
 	
 }
 

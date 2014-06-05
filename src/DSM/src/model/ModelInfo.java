@@ -55,6 +55,29 @@ public class ModelInfo {
 		this.root = root;
 	}
 	
+	public void setInit(int rowCount)
+	{
+		this.root.childs.removeAllElements();
+		this.modules = new Vector<TreeNode>();
+		this.dependData = new ArrayList<int[]>();
+		
+		for(int i=0; i<rowCount; i++)
+		{
+			String newModuleName = new String();
+			newModuleName = "N"+ String.valueOf(i+1);
+			TreeNode newModule = new TreeNode();
+			
+			newModule.key = newModuleName;
+			newModule.parent = this.root;
+			this.root.childs.add(newModule);
+			
+			this.modules.add(newModule);
+			
+			int[] newDepend = new int[rowCount];
+			this.dependData.add(newDepend);
+		}
+	}
+	
 	public void removeDependElement(int index)
 	{
 		dependData.remove(index);

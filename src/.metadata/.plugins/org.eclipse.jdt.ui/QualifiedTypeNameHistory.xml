@@ -5,7 +5,6 @@
 <fullyQualifiedTypeName name="javax.swing.Icon"/>
 <fullyQualifiedTypeName name="javax.swing.ImageIcon"/>
 <fullyQualifiedTypeName name="java.lang.Integer"/>
-<fullyQualifiedTypeName name="model.TreeNode"/>
 <fullyQualifiedTypeName name="model.DsmModel"/>
 <fullyQualifiedTypeName name="controller.TreeAction"/>
 <fullyQualifiedTypeName name="javax.swing.tree.DefaultMutableTreeNode"/>
@@ -24,7 +23,6 @@
 <fullyQualifiedTypeName name="java.util.Map"/>
 <fullyQualifiedTypeName name="javax.swing.SwingConstants"/>
 <fullyQualifiedTypeName name="view.CustomTableCellRenderer"/>
-<fullyQualifiedTypeName name="view.customtable.CustomJTable"/>
 <fullyQualifiedTypeName name="view.customtable.CustomTableCellRenderer"/>
 <fullyQualifiedTypeName name="javax.swing.JSpinner"/>
 <fullyQualifiedTypeName name="javax.swing.SpinnerNumberModel"/>
@@ -39,12 +37,15 @@
 <fullyQualifiedTypeName name="java.awt.event.MouseEvent"/>
 <fullyQualifiedTypeName name="view.customtable.CustomJTableCell"/>
 <fullyQualifiedTypeName name="javax.swing.JLabel"/>
-<fullyQualifiedTypeName name="view.customtable.CustomTableModel"/>
 <fullyQualifiedTypeName name="javax.swing.table.AbstractTableModel"/>
 <fullyQualifiedTypeName name="java.awt.event.FocusListener"/>
 <fullyQualifiedTypeName name="javax.swing.JTextField"/>
 <fullyQualifiedTypeName name="javax.swing.JEditorPane"/>
 <fullyQualifiedTypeName name="model.ModelInfo"/>
-<fullyQualifiedTypeName name="java.util.ArrayList"/>
 <fullyQualifiedTypeName name="view.Main_view"/>
+<fullyQualifiedTypeName name="model.TreeNode"/>
+<fullyQualifiedTypeName name="javax.swing.JOptionPane"/>
+<fullyQualifiedTypeName name="view.customtable.CustomTableModel"/>
+<fullyQualifiedTypeName name="view.customtable.CustomJTable"/>
+<fullyQualifiedTypeName name="java.util.ArrayList"/>
 </qualifiedTypeNameHistroy>

@@ -1,11 +1,13 @@
 package controller;
 
+import javax.swing.JOptionPane;
 import javax.swing.JTree;
 
 import model.ClusterModel;
 import model.ModelInfo;
 import model.TreeNode;
 
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Vector;
 
@@ -14,6 +16,8 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 
 import view.Main_view;
+import view.customtable.CustomJTable;
+import view.customtable.CustomTableModel;
 
 public class TreeAction {
 
@@ -141,10 +145,27 @@ public class TreeAction {
 	{
 		String newNodeName = new String();
 		newNodeName = Main_view.getInstance().setNewName();
-		TreeNode newTreeNode = new TreeNode();
-		newTreeNode.key = newNodeName;
-		newTreeNode.parent = ModelInfo.getInstance().getRoot();
-		ModelInfo.getInstance().getRoot().childs.add(newTreeNode);
+		for(int i=0; i<ModelInfo.getInstance().getModules().size(); i++)
+		{
+			if(ModelInfo.getInstance().getModules().get(i).key.compareTo(newNodeName)==0)
+			{
+				JOptionPane.showMessageDialog(Main_view.getInstance(),"Invalid module Name !");
+				return;
+			}
+		}
+		int[] newToExist = new int[ModelInfo.getInstance().getModules().size()+1];
+		int[] existToNew = new int[ModelInfo.getInstance().getModules().size()+1];
+		ClusterModel.getInstance().newModule(newNodeName, newToExist, existToNew);
+		
+		Vector<String> newModuleList = new Vector<String>();
+		for(int i=0; i<ModelInfo.getInstance().getModules().size(); i++)
+		{
+			newModuleList.add(ModelInfo.getInstance().getModules().get(i).key);
+		}
+		Main_view.getInstance().drawTable(newModuleList);
+		Main_view.getInstance().setJTree(TreeAction.getInstance().makeTree());
+		
+		Main_view.getInstance().getDependency_table().setEditable(true);
 	}
 	public void reNameNode()
 	{
@@ -158,6 +179,42 @@ public class TreeAction {
 		newNodeName = Main_view.getInstance().setNewName();
 		ModelInfo.getInstance().getRoot().getNode(nodeName).key = newNodeName;
 	}
+	
+	public void newDsm(int rowCount)
+	{
+		ModelInfo.getInstance().setInit(rowCount);
+		Vector<String> newModuleList = new Vector<String>();
+		for(int i=0; i<ModelInfo.getInstance().getModules().size(); i++)
+		{
+			newModuleList.add(ModelInfo.getInstance().getModules().get(i).key);
+		}
+		Main_view.getInstance().drawTable(newModuleList);
+		Main_view.getInstance().setJTree(TreeAction.getInstance().makeTree());
+		Main_view.getInstance().getDependency_table().setEditable(true);
+	}
+	
+	public void setNewDepend(CustomJTable table)
+	{
+		CustomTableModel model = (CustomTableModel) table.getModel();
+		ArrayList<int[]> newdp = new ArrayList<int[]>();
+		int size = model.getRowCount();
+		for(int i=0; i<size; i++)
+		{
+			int[] dp = new int[size];
+			for(int j=1; j<size+1; j++)
+			{
+				if(model.getData()[i][j].toString().compareTo("¡¤")==0)
+					dp[j-1] = 0;
+				else if(model.getData()[i][j].toString().compareTo(" ")==0)
+					dp[j-1] = 0;
+				else
+					dp[j-1] = 1;
+			}
+			newdp.add(dp);
+		}
+		ModelInfo.getInstance().setDependData(newdp);
+	}
+	
 	
 	
 }

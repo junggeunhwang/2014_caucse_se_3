@@ -24,64 +24,24 @@ public class ClusterModel {
 		TreeNode newNode = new TreeNode();
 		newNode.setKey(newModule);
 		newNode.parent = ModelInfo.getInstance().getRoot();
-		int insertPoint=ModelInfo.getInstance().getRoot().childs.size();
-		for(int i=0; i<ModelInfo.getInstance().getRoot().childs.size(); i++)
-		{
-			if(ModelInfo.getInstance().getRoot().childs.get(i).childs.size()!=0)
-			{
-				insertPoint = i;
-				break;
-			}
-		}
-		ModelInfo.getInstance().getRoot().childs.insertElementAt(newNode, insertPoint);
-		ArrayList<int[]> tempDepend = new ArrayList<int[]>();
-		int newSize = ModelInfo.getInstance().getDependData().size()+1;
+		ModelInfo.getInstance().getRoot().childs.add(newNode);
 		
-		for(int i=0; i<newSize; i++)
+		ArrayList<int[]> newdp = new ArrayList<int[]>(); 
+		int size = ModelInfo.getInstance().getModules().size();
+		for(int i=0; i<size; i++)
 		{
-			int[] tempRow = new int[newSize];
-			if(i<insertPoint)
+			int[] dp = new int[size+1];
+			for(int j=0; j<size; j++)
 			{
-				for(int j=0; j<newSize; j++)
-				{
-					if(j<insertPoint)
-						tempRow[j] =  ModelInfo.getInstance().getDependData().get(i)[j];
-					else if(j==insertPoint)
-						tempRow[j] = existToNew[i];
-					else
-						tempRow[j] =  ModelInfo.getInstance().getDependData().get(i)[j-1];
-				}
-				tempDepend.add(tempRow);
+				dp[j] = ModelInfo.getInstance().getDependData().get(i)[j];
 			}
-			else if(i==insertPoint)
-			{
-				for(int j=0; j<newSize; j++)
-				{
-					if(j<insertPoint)
-						tempRow[j] = newToExist[j];
-					else if(j==insertPoint)
-						tempRow[j] = 0;
-					else
-						tempRow[j] = newToExist[j-1];
-				}
-				tempDepend.add(tempRow);
-			}
-			else
-			{
-				for(int j=0; j<newSize; j++)
-				{
-					if(j<insertPoint)
-						tempRow[j] =  ModelInfo.getInstance().getDependData().get(i-1)[j];
-					else if(j==insertPoint)
-						tempRow[j] = existToNew[i-1];
-					else
-						tempRow[j] =  ModelInfo.getInstance().getDependData().get(i-1)[j-1];
-				}
-				tempDepend.add(tempRow);
-			}
+			dp[size] = 0;
+			newdp.add(dp);
 		}
-		ModelInfo.getInstance().setDependData(tempDepend);
-		
+		int[] dp = new int[size+1];
+		newdp.add(dp);
+		ModelInfo.getInstance().setDependData(newdp);
+		ModelInfo.getInstance().getModules().add(newNode);
 	}
 
 	public void grouping(String groupName, String[] members)
