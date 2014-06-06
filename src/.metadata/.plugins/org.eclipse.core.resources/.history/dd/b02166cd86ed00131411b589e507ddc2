@@ -189,11 +189,11 @@ public class ClusterModel {
 			int check=0;
 			for(int j=0; j<ModelInfo.getInstance().getModules().size(); j++)
 				for(int i=0; i<tempModules.size(); i++)
-					if(tempModules.get(i).key.compareTo(ModelInfo.getInstance().getModules().get(j).key)==0)
+					if(tempModules.get(i).key.compareTo(ModelInfo.getInstance().getModules().get(j).key)!=0)
 						check++;
 			System.out.println("check : "+check);
 			System.out.println("tempModuleSize : "+tempModules.size());
-			if(check!=ModelInfo.getInstance().getModules().size())
+			if(check!=tempModules.size())
 			{
 				Main_view.getInstance().showMsg("Invalid file form");
 				return;

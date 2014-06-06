@@ -73,6 +73,8 @@ public class ModuleController  implements ActionListener{
 		if(e.getSource()==Main_view.getInstance().getMntmNewDsm())
 		{
 			int rowcount = new NewDsmDialog(Main_view.getInstance(),true).getRow_count();//입력받은 줄 수
+			if(rowcount==0)
+				return;
 			Main_view.getInstance().setEnableButton(false);
 			Main_view.getInstance().setEnableSave(true);
 			TreeAction.getInstance().newDsm(rowcount);
@@ -172,9 +174,9 @@ public class ModuleController  implements ActionListener{
 					Main_view.getInstance().showMsg("Please load clsx file.");
 					return;
 				}
-				this.currentClusterInfo = newFilePath;
 				ClusterModel.getInstance().readCluster(newFilePath[0]+newFilePath[1], ModelInfo.getInstance().getModules().size());
 				Main_view.getInstance().setJTree(TreeAction.getInstance().makeTree());
+				this.currentClusterInfo = newFilePath;
 			}
 			else
 				return;

@@ -86,17 +86,36 @@ public class TreeAction {
 	
 	public void removeAction()
 	{
+		//DefaultTreeModel model = (DefaultTreeModel)Main_view.getInstance().getClasstree().getModel();
+		//DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode)Main_view.getInstance().getClasstree().getLastSelectedPathComponent();
+		//if(selectedNode==null)
+		//	return;
+		//String nodeName = new String();
+		//nodeName = (String) selectedNode.getUserObject();
+		//ClusterModel.getInstance().removeModule(nodeName,true);
 		DefaultTreeModel model = (DefaultTreeModel)Main_view.getInstance().getClasstree().getModel();
-		DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode)Main_view.getInstance().getClasstree().getLastSelectedPathComponent();
-		if(selectedNode==null)
+		TreePath[] treepath = new TreePath[ModelInfo.getInstance().getModules().size()];
+		treepath = Main_view.getInstance().getClasstree().getSelectionPaths();
+		if(treepath==null)
 			return;
-		String nodeName = new String();
-		nodeName = (String) selectedNode.getUserObject();
-		ClusterModel.getInstance().removeModule(nodeName,true);
+		String[] members = new String[treepath.length];
+		for(int i=0; i<treepath.length; i++)
+		{
+			String nodeName = treepath[i].getPathComponent(treepath[i].getPathCount()-1).toString();
+			members[i] = nodeName;
+		}
+		for(int i=0; i<members.length; i++)
+		{
+			ClusterModel.getInstance().removeModule(members[i],true);
+		}
 	}
 	
 	public void groupAction()
 	{
+		String groupName = new String();
+		groupName = Main_view.getInstance().setGroupName();
+		if(groupName==null)
+			return;
 		DefaultTreeModel model = (DefaultTreeModel)Main_view.getInstance().getClasstree().getModel();
 		TreePath[] treepath = new TreePath[ModelInfo.getInstance().getModules().size()];
 		treepath = Main_view.getInstance().getClasstree().getSelectionPaths();
@@ -106,8 +125,6 @@ public class TreeAction {
 			String nodeName = treepath[i].getPathComponent(treepath[i].getPathCount()-1).toString();
 			members[i] = nodeName;
 		}
-		String groupName = new String();
-		groupName = Main_view.getInstance().setGroupName();
 		ClusterModel.getInstance().grouping(groupName, members);
 	}
 	
@@ -145,6 +162,11 @@ public class TreeAction {
 	{
 		String newNodeName = new String();
 		newNodeName = Main_view.getInstance().setNewName();
+		if(newNodeName==null)
+		{
+			Main_view.getInstance().setEnableButton(true);
+			return;
+		}	
 		for(int i=0; i<ModelInfo.getInstance().getModules().size(); i++)
 		{
 			if(ModelInfo.getInstance().getModules().get(i).key.compareTo(newNodeName)==0)

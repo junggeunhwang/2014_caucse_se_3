@@ -5,6 +5,8 @@ import java.io.*;
 import java.util.Stack;
 import java.util.ArrayList;
 
+import view.Main_view;
+
 public class ClusterModel {
 	
 	static private ClusterModel instance;
@@ -24,64 +26,24 @@ public class ClusterModel {
 		TreeNode newNode = new TreeNode();
 		newNode.setKey(newModule);
 		newNode.parent = ModelInfo.getInstance().getRoot();
-		int insertPoint=ModelInfo.getInstance().getRoot().childs.size();
-		for(int i=0; i<ModelInfo.getInstance().getRoot().childs.size(); i++)
-		{
-			if(ModelInfo.getInstance().getRoot().childs.get(i).childs.size()!=0)
-			{
-				insertPoint = i;
-				break;
-			}
-		}
-		ModelInfo.getInstance().getRoot().childs.insertElementAt(newNode, insertPoint);
-		ArrayList<int[]> tempDepend = new ArrayList<int[]>();
-		int newSize = ModelInfo.getInstance().getDependData().size()+1;
+		ModelInfo.getInstance().getRoot().childs.add(newNode);
 		
-		for(int i=0; i<newSize; i++)
+		ArrayList<int[]> newdp = new ArrayList<int[]>(); 
+		int size = ModelInfo.getInstance().getModules().size();
+		for(int i=0; i<size; i++)
 		{
-			int[] tempRow = new int[newSize];
-			if(i<insertPoint)
+			int[] dp = new int[size+1];
+			for(int j=0; j<size; j++)
 			{
-				for(int j=0; j<newSize; j++)
-				{
-					if(j<insertPoint)
-						tempRow[j] =  ModelInfo.getInstance().getDependData().get(i)[j];
-					else if(j==insertPoint)
-						tempRow[j] = existToNew[i];
-					else
-						tempRow[j] =  ModelInfo.getInstance().getDependData().get(i)[j-1];
-				}
-				tempDepend.add(tempRow);
+				dp[j] = ModelInfo.getInstance().getDependData().get(i)[j];
 			}
-			else if(i==insertPoint)
-			{
-				for(int j=0; j<newSize; j++)
-				{
-					if(j<insertPoint)
-						tempRow[j] = newToExist[j];
-					else if(j==insertPoint)
-						tempRow[j] = 0;
-					else
-						tempRow[j] = newToExist[j-1];
-				}
-				tempDepend.add(tempRow);
-			}
-			else
-			{
-				for(int j=0; j<newSize; j++)
-				{
-					if(j<insertPoint)
-						tempRow[j] =  ModelInfo.getInstance().getDependData().get(i-1)[j];
-					else if(j==insertPoint)
-						tempRow[j] = existToNew[i-1];
-					else
-						tempRow[j] =  ModelInfo.getInstance().getDependData().get(i-1)[j-1];
-				}
-				tempDepend.add(tempRow);
-			}
+			dp[size] = 0;
+			newdp.add(dp);
 		}
-		ModelInfo.getInstance().setDependData(tempDepend);
-		
+		int[] dp = new int[size+1];
+		newdp.add(dp);
+		ModelInfo.getInstance().setDependData(newdp);
+		ModelInfo.getInstance().getModules().add(newNode);
 	}
 
 	public void grouping(String groupName, String[] members)
@@ -94,6 +56,7 @@ public class ClusterModel {
 		{
 			membersNode[i] = ModelInfo.getInstance().getRoot().getNode(members[i]);
 		}
+		
 		ModelInfo.getInstance().getRoot().insertNode(groupNode, membersNode);
 		Vector<TreeNode> tempModules = new Vector<TreeNode>();
 		Vector<TreeNode> tempModules2 = new Vector<TreeNode>();
@@ -118,7 +81,7 @@ public class ClusterModel {
 	{
 		int parameter = 0;
 		int dependSize = ModelInfo.getInstance().getRoot().getLeafNodeSize();
-		//System.out.println(ModelInfo.getInstance().getRoot().getLeafNodeSize(parameter));
+		System.out.println(dependSize);
 		//dependSize = 
 		ArrayList<int[]> tempDepend = new ArrayList<int[]>(); //최신화 된 getDependData를 임시로 저장할 공간
 		int[] afterOrderNo = new int[ModelInfo.getInstance().getModules().size()];
@@ -143,12 +106,12 @@ public class ClusterModel {
 		
 	}
 	
-	public void removeModule(String nodeName)
+	public void removeModule(String nodeName, boolean isDelete)
 	{
 		int isGroup=0;
 		if(ModelInfo.getInstance().getRoot().getNode(nodeName).childs.size()==0)
 			isGroup=1;
-		ModelInfo.getInstance().getRoot().removeNode(nodeName);
+		ModelInfo.getInstance().getRoot().removeNode(nodeName,isDelete);
 		
 		Vector<TreeNode> tempModules = new Vector<TreeNode>();
 		Vector<TreeNode> tempModules2 = new Vector<TreeNode>();
@@ -218,9 +181,23 @@ public class ClusterModel {
 					s.pop();
 				}
 			}
+			
+			
 			Vector<TreeNode> tempModules = new Vector<TreeNode>();
 			Vector<TreeNode> tempModules2 = new Vector<TreeNode>();
 			tempModules = newRoot.getLeafNode(tempModules2);
+			int check=0;
+			for(int j=0; j<ModelInfo.getInstance().getModules().size(); j++)
+				for(int i=0; i<tempModules.size(); i++)
+					if(tempModules.get(i).key.compareTo(ModelInfo.getInstance().getModules().get(j).key)==0)
+						check++;
+			System.out.println("check : "+check);
+			System.out.println("tempModuleSize : "+tempModules.size());
+			if(check!=tempModules.size())
+			{
+				Main_view.getInstance().showMsg("Invalid file form");
+				return;
+			}
 			updateDepend(tempModules);
 			ModelInfo.getInstance().setModules(tempModules);
 			ModelInfo.getInstance().setRoot(newRoot);

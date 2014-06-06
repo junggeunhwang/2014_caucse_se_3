@@ -6,7 +6,6 @@
 <fullyQualifiedTypeName name="javax.swing.ImageIcon"/>
 <fullyQualifiedTypeName name="java.lang.Integer"/>
 <fullyQualifiedTypeName name="model.DsmModel"/>
-<fullyQualifiedTypeName name="controller.TreeAction"/>
 <fullyQualifiedTypeName name="javax.swing.tree.DefaultMutableTreeNode"/>
 <fullyQualifiedTypeName name="controller.ModelInfo"/>
 <fullyQualifiedTypeName name="javax.swing.JScrollPane"/>
@@ -42,10 +41,11 @@
 <fullyQualifiedTypeName name="javax.swing.JTextField"/>
 <fullyQualifiedTypeName name="javax.swing.JEditorPane"/>
 <fullyQualifiedTypeName name="model.ModelInfo"/>
-<fullyQualifiedTypeName name="view.Main_view"/>
 <fullyQualifiedTypeName name="model.TreeNode"/>
 <fullyQualifiedTypeName name="javax.swing.JOptionPane"/>
 <fullyQualifiedTypeName name="view.customtable.CustomTableModel"/>
 <fullyQualifiedTypeName name="view.customtable.CustomJTable"/>
 <fullyQualifiedTypeName name="java.util.ArrayList"/>
+<fullyQualifiedTypeName name="controller.TreeAction"/>
+<fullyQualifiedTypeName name="view.Main_view"/>
 </qualifiedTypeNameHistroy>

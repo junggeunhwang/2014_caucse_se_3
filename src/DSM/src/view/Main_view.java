@@ -739,53 +739,6 @@ public class Main_view extends JFrame {
 			}
 		}
 		
-		
-		/*int priority=0;
-		Vector<int[]> groupPriority = new Vector<int[]>();
-		Vector<String> groupPriorityName = new Vector<String>();
-		for(int i=0; i<coloredPoint.size(); i++)
-		{
-			if(coloredParent.get(i)[0].compareTo(coloredParent.get(i)[1])==0)
-			{
-				TreeNode groupElement = new TreeNode();
-				groupElement = ModelInfo.getInstance().getRoot().getNode(printElement.get(coloredPoint.get(i)[0]));
-				int[] pr = new int[1];
-				pr[0] = ModelInfo.getInstance().getRoot().getDepth(groupElement);
-				groupPriority.add(pr);
-				groupPriorityName.add(coloredParent.get(i)[0]);
-				priority = Math.max(pr[0],priority);
-			}
-		}
-		for(int i=priority; i>0; i--)
-		{
-			for(int j=0; j<groupPriority.size(); j++)
-			{
-				if(groupPriority.get(j)[0]==i)
-				{
-					String parentName = groupPriorityName.get(j);
-					for(int k=0; k<coloredPoint.size(); k++)
-					{	
-						if(coloredParent.get(k)[0].compareTo(parentName)==0 || coloredParent.get(k)[1].compareTo(parentName)==0)
-						{
-							Color c;
-							if(i==1)
-								c = Color.green;
-							else if(i==2)
-								c = Color.pink;
-							else if(i==3)
-								c = Color.yellow;
-							else if(i==4)
-								c = Color.cyan;
-							else if(i%2==0)
-								c = new Color((255-i*20)%255, (255+i*8)%255, (255-i*13)%255);
-							else
-								c = new Color((255-i*20)%255, (255-i*8)%255, (255-i*13)%255);
-							dependency_table.setColor(coloredPoint.get(k)[0], coloredPoint.get(k)[1], c);
-						}
-					}
-				}
-			}
-		}*/
 		dependency_table.setEditable(this.chckbxmntmEditTable.getState());
 		
 		TableColumnModel col_model = dependency_table.getColumnModel();
@@ -816,7 +769,7 @@ public class Main_view extends JFrame {
 			}
 			
 		}	
-		col_model.getColumn(0).setPreferredWidth(max_length*6);		
+		col_model.getColumn(0).setPreferredWidth(max_length*6+10);		
 		col_model.setColumnSelectionAllowed(false);
 		
 		

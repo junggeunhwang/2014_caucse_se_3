@@ -5,8 +5,6 @@ import java.io.*;
 import java.util.Stack;
 import java.util.ArrayList;
 
-import view.Main_view;
-
 public class ClusterModel {
 	
 	static private ClusterModel instance;
@@ -52,15 +50,27 @@ public class ClusterModel {
 		TreeNode groupNode = new TreeNode();
 		groupNode.setKey(groupName);
 		TreeNode[] membersNode = new TreeNode[memberSize];
+		//System.out.println("memberSize : "+memberSize);
+		
+		//System.out.print("membersModule  ");
 		for(int i=0; i<members.length; i++)
 		{
 			membersNode[i] = ModelInfo.getInstance().getRoot().getNode(members[i]);
+		//	System.out.print(membersNode[i].key+" ");
 		}
+		//System.out.print("\n");
 		
 		ModelInfo.getInstance().getRoot().insertNode(groupNode, membersNode);
 		Vector<TreeNode> tempModules = new Vector<TreeNode>();
 		Vector<TreeNode> tempModules2 = new Vector<TreeNode>();
 		tempModules = ModelInfo.getInstance().getRoot().getLeafNode(tempModules2);
+		
+		//System.out.print("tempModule  ");
+		//for(int i=0; i<tempModules.size(); i++)
+		//{
+		//	System.out.print(tempModules.get(i).key+" ");
+		//}
+		//System.out.print("\n");
 		this.updateDepend(tempModules);
 		ModelInfo.getInstance().setModules(tempModules);
 	}
@@ -181,23 +191,9 @@ public class ClusterModel {
 					s.pop();
 				}
 			}
-			
-			
 			Vector<TreeNode> tempModules = new Vector<TreeNode>();
 			Vector<TreeNode> tempModules2 = new Vector<TreeNode>();
 			tempModules = newRoot.getLeafNode(tempModules2);
-			int check=0;
-			for(int j=0; j<ModelInfo.getInstance().getModules().size(); j++)
-				for(int i=0; i<tempModules.size(); i++)
-					if(tempModules.get(i).key.compareTo(ModelInfo.getInstance().getModules().get(j).key)==0)
-						check++;
-			System.out.println("check : "+check);
-			System.out.println("tempModuleSize : "+tempModules.size());
-			if(check!=ModelInfo.getInstance().getModules().size())
-			{
-				Main_view.getInstance().showMsg("Invalid file form");
-				return;
-			}
 			updateDepend(tempModules);
 			ModelInfo.getInstance().setModules(tempModules);
 			ModelInfo.getInstance().setRoot(newRoot);

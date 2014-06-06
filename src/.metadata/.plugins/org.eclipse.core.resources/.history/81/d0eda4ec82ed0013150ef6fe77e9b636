@@ -10,6 +10,8 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
 
 import controller.TreeAction;
 import model.ModelInfo;
@@ -44,7 +46,7 @@ public class CustomJTable extends JTable {
 					JTable target = (JTable)arg0.getSource();
 					int row = target.getSelectedRow();
 					int col = target.getSelectedColumn();
-					if(col!=0 && ((col-1)!=row)){
+					if(col!=0){
 						String value = (String)target.getValueAt(row, col);
 						if(value.compareTo("x")==0){
 							target.setValueAt("", row, col);
@@ -63,7 +65,20 @@ public class CustomJTable extends JTable {
 						//System.out.println("("+row + "," + col+") Clicked");//for Debug
 					}
 					else{
-						return;
+						DefaultTreeModel model = (DefaultTreeModel)Main_view.getInstance().getClasstree().getModel();
+						DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode)Main_view.getInstance().getClasstree().getLastSelectedPathComponent();
+						if(selectedNode==null)
+							return;
+						String nodeName = new String();
+						nodeName = (String) selectedNode.getUserObject();
+						String newNodeName = new String();
+						newNodeName = Main_view.getInstance().setNewName();
+						if(newNodeName==null)
+							return;
+						ModelInfo.getInstance().getRoot().getNode(nodeName).key = newNodeName;
+						target.setValueAt(row+1 +"  "+ newNodeName, row, col);
+						target.repaint();
+						Main_view.getInstance().setJTree(TreeAction.getInstance().makeTree());
 					}
 				}	
 			}
