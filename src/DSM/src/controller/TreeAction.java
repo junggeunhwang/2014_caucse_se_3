@@ -177,6 +177,8 @@ public class TreeAction {
 		nodeName = (String) selectedNode.getUserObject();
 		String newNodeName = new String();
 		newNodeName = Main_view.getInstance().setNewName();
+		if(newNodeName==null)
+			return;
 		ModelInfo.getInstance().getRoot().getNode(nodeName).key = newNodeName;
 	}
 	

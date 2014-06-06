@@ -50,14 +50,27 @@ public class ClusterModel {
 		TreeNode groupNode = new TreeNode();
 		groupNode.setKey(groupName);
 		TreeNode[] membersNode = new TreeNode[memberSize];
+		//System.out.println("memberSize : "+memberSize);
+		
+		//System.out.print("membersModule  ");
 		for(int i=0; i<members.length; i++)
 		{
 			membersNode[i] = ModelInfo.getInstance().getRoot().getNode(members[i]);
+		//	System.out.print(membersNode[i].key+" ");
 		}
+		//System.out.print("\n");
+		
 		ModelInfo.getInstance().getRoot().insertNode(groupNode, membersNode);
 		Vector<TreeNode> tempModules = new Vector<TreeNode>();
 		Vector<TreeNode> tempModules2 = new Vector<TreeNode>();
 		tempModules = ModelInfo.getInstance().getRoot().getLeafNode(tempModules2);
+		
+		//System.out.print("tempModule  ");
+		//for(int i=0; i<tempModules.size(); i++)
+		//{
+		//	System.out.print(tempModules.get(i).key+" ");
+		//}
+		//System.out.print("\n");
 		this.updateDepend(tempModules);
 		ModelInfo.getInstance().setModules(tempModules);
 	}
@@ -78,7 +91,7 @@ public class ClusterModel {
 	{
 		int parameter = 0;
 		int dependSize = ModelInfo.getInstance().getRoot().getLeafNodeSize();
-		//System.out.println(ModelInfo.getInstance().getRoot().getLeafNodeSize());
+		System.out.println(dependSize);
 		//dependSize = 
 		ArrayList<int[]> tempDepend = new ArrayList<int[]>(); //최신화 된 getDependData를 임시로 저장할 공간
 		int[] afterOrderNo = new int[ModelInfo.getInstance().getModules().size()];

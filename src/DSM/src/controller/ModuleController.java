@@ -73,6 +73,7 @@ public class ModuleController  implements ActionListener{
 		if(e.getSource()==Main_view.getInstance().getMntmNewDsm())
 		{
 			int rowcount = new NewDsmDialog(Main_view.getInstance(),true).getRow_count();//입력받은 줄 수
+			Main_view.getInstance().setEnableButton(false);
 			Main_view.getInstance().setEnableSave(true);
 			TreeAction.getInstance().newDsm(rowcount);
 		}
@@ -86,10 +87,14 @@ public class ModuleController  implements ActionListener{
 				newDsmFileInfo = Main_view.getInstance().setFilepath_save();
 				if(newDsmFileInfo[0]!=null)
 				{
+					if(newDsmFileInfo[1].contains(".dsm")==false)
+						newDsmFileInfo[1] = newDsmFileInfo[1] + ".dsm";
 					String newDsmfilePath = new String();
 					newDsmfilePath = newDsmFileInfo[0]+newDsmFileInfo[1];
 					DsmModel.getInstance().saveDsm(newDsmFileInfo[0], newDsmFileInfo[1]);
 				}
+				else
+					return;
 			}
 		}
 		if(e.getSource()==Main_view.getInstance().getMntmSaveAsDsm()) 
@@ -99,6 +104,8 @@ public class ModuleController  implements ActionListener{
 			newDsmFileInfo = Main_view.getInstance().setFilepath_save();
 			if(newDsmFileInfo[0]!=null)
 			{
+				if(newDsmFileInfo[1].contains(".dsm")==false)
+					newDsmFileInfo[1] = newDsmFileInfo[1] + ".dsm";
 				String newDsmfilePath = new String();
 				newDsmfilePath = newDsmFileInfo[0]+newDsmFileInfo[1];
 				DsmModel.getInstance().saveDsm(newDsmFileInfo[0], newDsmFileInfo[1]);
@@ -228,12 +235,17 @@ public class ModuleController  implements ActionListener{
 				newFileInfo = Main_view.getInstance().setFilepath_save();
 				if(newFileInfo[0]!=null)
 				{	
+					if(newFileInfo[1].contains(".clsx")==false)
+						newFileInfo[1] = newFileInfo[1] + ".clsx";
 					this.currentClusterInfo = newFileInfo;
 					ClusterModel.getInstance().writeCluster(newFileInfo[0], newFileInfo[1]);
 				}
+				else return;
 			}
 			else
+			{
 				ClusterModel.getInstance().writeCluster(this.currentClusterInfo[0], this.currentClusterInfo[1]);
+			}
 		}
 		if(e.getSource()==Main_view.getInstance().getBtnSaveClusteringAs() || e.getSource()==Main_view.getInstance().getMntmSaveClusteringAs())
 		{
@@ -241,9 +253,13 @@ public class ModuleController  implements ActionListener{
 			newFileInfo = Main_view.getInstance().setFilepath_save();
 			if(newFileInfo[0]!=null)
 			{
+				if(newFileInfo[1].contains(".clsx")==false)
+					newFileInfo[1] = newFileInfo[1] + ".clsx";
 				this.currentClusterInfo = newFileInfo;
 				ClusterModel.getInstance().writeCluster(newFileInfo[0], newFileInfo[1]);
 			}
+			else
+				return;
 		}
 	}
 	

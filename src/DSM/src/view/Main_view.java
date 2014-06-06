@@ -511,7 +511,7 @@ public class Main_view extends JFrame {
 					for(int j=1; j<=matrixSize; j++)
 					{
 						int[] groupPoint = new int[2];
-						String[] groupParent = new String[2];
+						String[] groupParent = new String[3];
 						if(i==j-1)
 						{
 							if(ModelInfo.getInstance().getRoot().getNode(printElement.get(i)).childs.size()!=0)
@@ -521,6 +521,7 @@ public class Main_view extends JFrame {
 								groupPoint[1] = j;
 								groupParent[0] = ModelInfo.getInstance().getRoot().getNode(printElement.get(i)).parent.key;
 								groupParent[1] = ModelInfo.getInstance().getRoot().getNode(printElement.get(i)).parent.key;
+								groupParent[2] = ModelInfo.getInstance().getRoot().getNode(printElement.get(i)).key;
 								coloredPoint.add(groupPoint);
 								coloredParent.add(groupParent);
 							}
@@ -537,16 +538,20 @@ public class Main_view extends JFrame {
 								int indexFrom=0;
 								int indexTo=0;
 								for(int k=0; k< ModelInfo.getInstance().getModules().size(); k++)
-									if(ModelInfo.getInstance().getRoot().getNode(printElement.get(j-1)).key.compareTo(ModelInfo.getInstance().getModules().get(k).key)==0)
+									if(ModelInfo.getInstance().getRoot().getNode(printElement.get(j-1)).key.compareTo(ModelInfo.getInstance().getModules().get(k).key)==0)	
 										indexTo = k;
-								for(int l=0; l<ModelInfo.getInstance().getRoot().getNode(printElement.get(i)).childs.size(); l++)
+								Vector<TreeNode> mem = new Vector<TreeNode>();
+								mem = ModelInfo.getInstance().getRoot().getNode(printElement.get(i)).getLeafNode(mem);
+								for(int k=0; k<mem.size(); k++)
 								{
-									for(int k=0; k< ModelInfo.getInstance().getModules().size(); k++)
-										if(ModelInfo.getInstance().getRoot().getNode(printElement.get(i)).childs.get(l).key.compareTo(ModelInfo.getInstance().getModules().get(k).key)==0)
-											indexFrom = k;
+									for(int m=0; m<ModelInfo.getInstance().getModules().size(); m++)
+										if(mem.get(k).key.compareTo(ModelInfo.getInstance().getModules().get(m).key)==0)
+											indexFrom = m;
 									if(ModelInfo.getInstance().getDependData().get(indexFrom)[indexTo]==1)
+									{
 										dp = 1;
-								}	
+									}
+								}
 							}
 							else if(from==false && to==true)  //element To group
 							{
@@ -555,30 +560,44 @@ public class Main_view extends JFrame {
 								for(int k=0; k< ModelInfo.getInstance().getModules().size(); k++)
 									if(ModelInfo.getInstance().getRoot().getNode(printElement.get(i)).key.compareTo(ModelInfo.getInstance().getModules().get(k).key)==0)
 										indexFrom = k;
-								for(int l=0; l<ModelInfo.getInstance().getRoot().getNode(printElement.get(j-1)).childs.size(); l++)
+								Vector<TreeNode> mem = new Vector<TreeNode>();
+								mem = ModelInfo.getInstance().getRoot().getNode(printElement.get(j-1)).getLeafNode(mem);
+								for(int k=0; k<mem.size(); k++)
 								{
-									for(int k=0; k< ModelInfo.getInstance().getModules().size(); k++)
-										if(ModelInfo.getInstance().getRoot().getNode(printElement.get(j-1)).childs.get(l).key.compareTo(ModelInfo.getInstance().getModules().get(k).key)==0)
-											indexTo = k; //index = childÀÇ ¿ø·¡ ÁÂÇ¥
+									for(int m=0; m<ModelInfo.getInstance().getModules().size(); m++)
+										if(mem.get(k).key.compareTo(ModelInfo.getInstance().getModules().get(m).key)==0)
+											indexTo = m;
 									if(ModelInfo.getInstance().getDependData().get(indexFrom)[indexTo]==1)
+									{
 										dp = 1;
+									}
 								}
 							}
 							else if(from==true && to==true)
 							{
 								int indexFrom=0;
 								int indexTo=0;
-								for(int l=0; l<ModelInfo.getInstance().getRoot().getNode(printElement.get(i)).childs.size(); l++)
+								
+								Vector<TreeNode> mem = new Vector<TreeNode>();
+								mem = ModelInfo.getInstance().getRoot().getNode(printElement.get(i)).getLeafNode(mem);
+								for(int k=0; k<mem.size(); k++)
 								{
-									for(int k=0; k< ModelInfo.getInstance().getModules().size(); k++)
-										if(ModelInfo.getInstance().getRoot().getNode(printElement.get(i)).childs.get(l).key.compareTo(ModelInfo.getInstance().getModules().get(k).key)==0)
-											indexFrom = k;
-									for(int m=0; m<ModelInfo.getInstance().getRoot().getNode(printElement.get(j-1)).childs.size(); m++)
-										for(int k=0; k< ModelInfo.getInstance().getModules().size(); k++)
-											if(ModelInfo.getInstance().getRoot().getNode(printElement.get(j-1)).childs.get(m).key.compareTo(ModelInfo.getInstance().getModules().get(k).key)==0)
-												indexTo = k; //index = childÀÇ ¿ø·¡ ÁÂÇ¥
+									for(int m=0; m<ModelInfo.getInstance().getModules().size(); m++)
+										if(mem.get(k).key.compareTo(ModelInfo.getInstance().getModules().get(m).key)==0)
+											indexFrom = m;
+								
+								Vector<TreeNode> mem2 = new Vector<TreeNode>();
+								mem2 = ModelInfo.getInstance().getRoot().getNode(printElement.get(j-1)).getLeafNode(mem2);
+								for(int x=0; x<mem2.size(); x++)
+								{
+									for(int m=0; m<ModelInfo.getInstance().getModules().size(); m++)
+										if(mem2.get(x).key.compareTo(ModelInfo.getInstance().getModules().get(m).key)==0)
+											indexTo = m;
 									if(ModelInfo.getInstance().getDependData().get(indexFrom)[indexTo]==1)
+									{
 										dp = 1;
+									}
+								}
 								}
 							}
 							else
@@ -657,7 +676,71 @@ public class Main_view extends JFrame {
 			}
 		}
 		
-		int priority=0;
+		int maxPriority =0;
+		Vector<int[]> groupP = new Vector<int[]>();
+		for(int i=0; i<coloredPoint.size(); i++)
+		{
+			int[] elementP = new int[3];
+			elementP[0] = coloredPoint.get(i)[0];
+			elementP[1] = coloredPoint.get(i)[1];
+			
+			int priority=0;
+			
+			int fromP = ModelInfo.getInstance().getRoot().getDepth(coloredParent.get(i)[0]);
+			int toP = ModelInfo.getInstance().getRoot().getDepth(coloredParent.get(i)[1]);
+			if(fromP==toP)
+			{
+				if(coloredParent.get(i)[0].compareTo(coloredParent.get(i)[1])==0)
+				{
+					if(coloredParent.get(i)[2]!=null)
+					{
+						if(ModelInfo.getInstance().getRoot().getNode(coloredParent.get(i)[2]).isGroup()==true
+								&& coloredParent.get(i)[0].compareTo("$root")!=0)
+						{	
+							priority = fromP+1;
+						}
+						else
+							priority = fromP;
+					}
+					else
+						priority = fromP;
+				}
+				else
+					priority = Math.min(fromP, toP)-1 ;
+			}
+			else
+				priority = Math.min(fromP, toP) ;
+			elementP[2] = priority;
+			groupP.add(elementP);
+			maxPriority = Math.max(maxPriority, priority);
+		}
+		
+		for(int i=maxPriority; i>=0; i--)
+		{
+			for(int j=0; j<groupP.size(); j++)
+			{
+				if(groupP.get(j)[2]==i)
+				{
+					Color c;
+					if(i==1)
+						c = Color.cyan;
+					else if(i==2)
+						c = Color.green;
+					else if(i==3)
+						c = Color.yellow;
+					else if(i==4)
+						c = Color.pink;
+					else if(i%2==0)
+						c = new Color((255-i*20)%255, (255-i*10)%255, (255-i*13)%255);
+					else
+						c = new Color((255-i*20)%255, (255-i*8)%255, (255-i*13)%255);
+					dependency_table.setColor(groupP.get(j)[0],groupP.get(j)[1], c);
+				}
+			}
+		}
+		
+		
+		/*int priority=0;
 		Vector<int[]> groupPriority = new Vector<int[]>();
 		Vector<String> groupPriorityName = new Vector<String>();
 		for(int i=0; i<coloredPoint.size(); i++)
@@ -702,7 +785,7 @@ public class Main_view extends JFrame {
 					}
 				}
 			}
-		}
+		}*/
 		dependency_table.setEditable(this.chckbxmntmEditTable.getState());
 		
 		TableColumnModel col_model = dependency_table.getColumnModel();

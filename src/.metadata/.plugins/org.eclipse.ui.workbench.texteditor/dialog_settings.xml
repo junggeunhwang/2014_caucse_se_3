@@ -2,8 +2,8 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">
 		<item value="261" key="DIALOG_WIDTH"/>
-		<item value="419" key="DIALOG_Y_ORIGIN"/>
-		<item value="945" key="DIALOG_X_ORIGIN"/>
+		<item value="561" key="DIALOG_Y_ORIGIN"/>
+		<item value="885" key="DIALOG_X_ORIGIN"/>
 		<item value="431" key="DIALOG_HEIGHT"/>
 		<item value="1|맑은 고딕|9.0|0|WINDOWS|1|-12|0|0|0|400|0|0|0|1|0|0|0|0|맑은 고딕" key="DIALOG_FONT_NAME"/>
 	</section>
@@ -13,16 +13,16 @@
 		<item value="false" key="isRegEx"/>
 		<item value="false" key="incremental"/>
 		<item value="false" key="wholeword"/>
-		<item value="setEditable" key="selection"/>
+		<item value="" key="selection"/>
 		<list key="findhistory">
+			<item value="system.out"/>
+			<item value="save"/>
+			<item value="rename"/>
+			<item value="System.out"/>
+			<item value="color"/>
 			<item value="seteditable"/>
 			<item value="get"/>
 			<item value="gett"/>
-			<item value="getmodel"/>
-			<item value="please"/>
-			<item value="newDSMrow"/>
-			<item value="newRow"/>
-			<item value="readDsm"/>
 		</list>
 		<list key="replacehistory">
 			<item value="Object"/>

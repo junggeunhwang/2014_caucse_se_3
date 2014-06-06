@@ -65,40 +65,25 @@ public class TreeNode{
 		int insertPosition=0;
 		TreeNode parentNode = new TreeNode();
 		parentNode = members[0].parent;
-		//System.out.println("==="+parentNode.key);
-		for(int i=0; i<parentNode.childs.size(); i++)
+		
+		
+		for(int i=0; i<members.length; i++)
 		{
-			if(parentNode.childs.get(i)==members[0])
-				insertPosition = i;
-			for(int j=0; j<members.length; j++)   // parent노드의 자식에서 member에 속하는 노드 제거
+			for(int j=0; j<parentNode.childs.size(); j++)   // parent노드의 자식에서 member에 속하는 노드 제거
 			{
-				//System.out.println("i : "+i+"  j : "+j);
-				if(parentNode.childs.get(i).key.compareTo(members[j].key)==0)
+				if(parentNode.childs.get(j).key.compareTo(members[i].key)==0)
 				{
-					//System.out.println("==>"+parentNode.childs.get(i).key+"  : "+members[j].key);
-					parentNode.childs.remove(i);
-					i=0;
+					parentNode.childs.remove(j);
 				}
 			}
 		}
-		parentNode.childs.insertElementAt(groupNode, parentNode.childs.size());// member들의 parent에 group노드 추가
+		parentNode.childs.add(groupNode);
 		groupNode.parent = parentNode;
-		
-		for(int i=0; i<members.length; i++)  // member에서 그룹이 아닌것 부터 group에 추가한다.
+		for(int i=0; i<members.length; i++)
 		{
-			if(members[i].childs.size()==0)
-			{
-				groupNode.setChild(members[i]);
-			}
+			groupNode.childs.add(members[i]);
+			members[i].parent = groupNode;
 		}
-		for(int i=0; i<members.length; i++)  // member에서 그룹인 것들을 순서대로 group에 추가한다.
-		{
-			if(members[i].childs.isEmpty()==false)
-			{
-				groupNode.setChild(members[i]);
-			}
-		}
-		
 	}
 	
 	public void removeNode(String deleteName, boolean isDelete)
@@ -192,7 +177,7 @@ public class TreeNode{
 		int retSize=0;
 		if(size==0)// leaf노드면 추가
 		{
-			return retSize+1;
+			return 1;
 		}
 		else
 		{
@@ -223,11 +208,15 @@ public class TreeNode{
 			return false;
 	}
 	
-	public int getDepth(TreeNode a)
+	public int getDepth(String a)
 	{
 		TreeNode temp = new TreeNode();
+		temp = this.getNode(a);
 		int ret=0;
-		temp = a;
+		
+		if(temp.key.compareTo("$root")==0)
+			return 1;
+		
 		while(temp.parent.key.compareTo("$root")!=0)
 		{
 			temp = temp.parent;
