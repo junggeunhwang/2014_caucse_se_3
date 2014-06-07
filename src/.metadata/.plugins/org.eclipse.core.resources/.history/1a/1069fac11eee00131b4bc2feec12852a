@@ -30,6 +30,7 @@ public class ClusterModel {
 		
 		ArrayList<int[]> newdp = new ArrayList<int[]>(); 
 		int size = ModelInfo.getInstance().getDependData().size();
+		System.out.println("==>"+ModelInfo.getInstance().getModules().get(0).key+"  "+size);
 		if(size==0)
 		{
 			int[] dp = new int[1];

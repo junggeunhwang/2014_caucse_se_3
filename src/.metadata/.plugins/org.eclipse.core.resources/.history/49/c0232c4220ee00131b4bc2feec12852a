@@ -30,6 +30,7 @@ public class ClusterModel {
 		
 		ArrayList<int[]> newdp = new ArrayList<int[]>(); 
 		int size = ModelInfo.getInstance().getDependData().size();
+		//System.out.println("==>"+ModelInfo.getInstance().getModules().get(0).key+"  "+size);
 		if(size==0)
 		{
 			int[] dp = new int[1];
@@ -52,6 +53,9 @@ public class ClusterModel {
 		}
 		ModelInfo.getInstance().setDependData(newdp);
 		ModelInfo.getInstance().getModules().add(newNode);
+		//System.out.println(ModelInfo.getInstance().getModules().get(0).key);
+		//System.out.println(ModelInfo.getInstance().getModules().get(1).key);
+		//System.out.println(ModelInfo.getInstance().getModules().get(0));
 	}
 
 	public void grouping(String groupName, String[] members)

@@ -30,10 +30,13 @@ public class ClusterModel {
 		
 		ArrayList<int[]> newdp = new ArrayList<int[]>(); 
 		int size = ModelInfo.getInstance().getDependData().size();
+		System.out.println("==>"+ModelInfo.getInstance().getModules().get(0).key+"  "+size);
 		if(size==0)
 		{
 			int[] dp = new int[1];
 			newdp.add(dp);
+			ModelInfo.getInstance().setDependData(newdp);
+			ModelInfo.getInstance().getModules().add(newNode);
 		}
 		else
 		{
@@ -47,9 +50,9 @@ public class ClusterModel {
 				dp[size] = 0;
 				newdp.add(dp);
 			}
-			int[] dp = new int[size+1];
-			newdp.add(dp);
 		}
+		int[] dp = new int[size+1];
+		newdp.add(dp);
 		ModelInfo.getInstance().setDependData(newdp);
 		ModelInfo.getInstance().getModules().add(newNode);
 	}

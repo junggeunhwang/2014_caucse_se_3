@@ -29,27 +29,19 @@ public class ClusterModel {
 		ModelInfo.getInstance().getRoot().childs.add(newNode);
 		
 		ArrayList<int[]> newdp = new ArrayList<int[]>(); 
-		int size = ModelInfo.getInstance().getDependData().size();
-		if(size==0)
+		int size = ModelInfo.getInstance().getModules().size();
+		for(int i=0; i<size; i++)
 		{
-			int[] dp = new int[1];
-			newdp.add(dp);
-		}
-		else
-		{
-			for(int i=0; i<size; i++)
-			{
-				int[] dp = new int[size+1];
-				for(int j=0; j<size; j++)
-				{
-					dp[j] = ModelInfo.getInstance().getDependData().get(i)[j];
-				}
-				dp[size] = 0;
-				newdp.add(dp);
-			}
 			int[] dp = new int[size+1];
+			for(int j=0; j<size; j++)
+			{
+				dp[j] = ModelInfo.getInstance().getDependData().get(i)[j];
+			}
+			dp[size] = 0;
 			newdp.add(dp);
 		}
+		int[] dp = new int[size+1];
+		newdp.add(dp);
 		ModelInfo.getInstance().setDependData(newdp);
 		ModelInfo.getInstance().getModules().add(newNode);
 	}

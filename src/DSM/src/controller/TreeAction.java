@@ -182,7 +182,8 @@ public class TreeAction {
 		Vector<String> newModuleList = new Vector<String>();
 		for(int i=0; i<ModelInfo.getInstance().getModules().size(); i++)
 		{
-			newModuleList.add(ModelInfo.getInstance().getModules().get(i).key);
+			if(ModelInfo.getInstance().getModules().get(i).key.compareTo("$root")!=0)
+				newModuleList.add(ModelInfo.getInstance().getModules().get(i).key);
 		}
 		Main_view.getInstance().drawTable(newModuleList);
 		Main_view.getInstance().setJTree(TreeAction.getInstance().makeTree());
