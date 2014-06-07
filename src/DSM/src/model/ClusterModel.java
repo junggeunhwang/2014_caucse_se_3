@@ -79,7 +79,6 @@ public class ClusterModel {
 	
 	public void updateDepend(Vector<TreeNode> afterModules)
 	{
-		int parameter = 0;
 		int dependSize = ModelInfo.getInstance().getRoot().getLeafNodeSize();
 		System.out.println(dependSize);
 		//dependSize = 
@@ -139,7 +138,6 @@ public class ClusterModel {
 	
 	public void readCluster(String filePath, int pivot)
 	{
-		String cluster[][] = new String [2][pivot];
 		try
 		 {
 			File file = new File(filePath);
@@ -196,15 +194,19 @@ public class ClusterModel {
 			if(check!=ModelInfo.getInstance().getModules().size())
 			{
 				Main_view.getInstance().showMsg("Invalid file form");
+				br.close();
 				return;
 			}
 			updateDepend(tempModules);
 			ModelInfo.getInstance().setModules(tempModules);
 			ModelInfo.getInstance().setRoot(newRoot);
+			br.close();
 		 }
 		 catch(FileNotFoundException fnfe){
 			 System.out.println("파일을 찾을 수 없습니다.");
-			 }catch(IOException ioe){}
+			 }
+		catch(IOException ioe){
+		}
 	}
 
 	public Vector<String> makeStr(Vector<String> printList, TreeNode T)

@@ -3,26 +3,26 @@
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">
 		<item value="261" key="DIALOG_WIDTH"/>
 		<item value="561" key="DIALOG_Y_ORIGIN"/>
-		<item value="431" key="DIALOG_HEIGHT"/>
 		<item value="885" key="DIALOG_X_ORIGIN"/>
+		<item value="431" key="DIALOG_HEIGHT"/>
 		<item value="1|맑은 고딕|9.0|0|WINDOWS|1|-12|0|0|0|400|0|0|0|1|0|0|0|0|맑은 고딕" key="DIALOG_FONT_NAME"/>
 	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="true" key="wrap"/>
-		<item value="false" key="isRegEx"/>
 		<item value="false" key="casesensitive"/>
+		<item value="false" key="isRegEx"/>
 		<item value="false" key="incremental"/>
 		<item value="false" key="wholeword"/>
-		<item value="setNew" key="selection"/>
+		<item value="buildToolbar" key="selection"/>
 		<list key="findhistory">
-			<item value="setnew"/>
-			<item value="system.out"/>
-			<item value="save"/>
-			<item value="rename"/>
-			<item value="System.out"/>
-			<item value="color"/>
-			<item value="seteditable"/>
-			<item value="get"/>
+			<item value="buildToolbar"/>
+			<item value="tool"/>
+			<item value="prefe"/>
+			<item value="drawTA"/>
+			<item value="setDivi"/>
+			<item value="splitPane_horizontal"/>
+			<item value="draw"/>
+			<item value="drawTable"/>
 		</list>
 		<list key="replacehistory">
 			<item value="Object"/>
