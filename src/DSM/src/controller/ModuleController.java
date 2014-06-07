@@ -57,6 +57,7 @@ public class ModuleController  implements ActionListener{
 		Main_view.getInstance().getMntmNewDsm().addActionListener(this);
 		Main_view.getInstance().getBtnRename().addActionListener(this);//
 		Main_view.getInstance().getBtnNewDsmRow().addActionListener(this);
+		Main_view.getInstance().getChckbxmntmEditTable().addActionListener(this);
 		DsmfilePath = new String[2];
 		//
 	}
@@ -64,6 +65,10 @@ public class ModuleController  implements ActionListener{
 	@Override
  	public void actionPerformed(ActionEvent e)
 	{	
+		if(e.getSource()==Main_view.getInstance().getChckbxmntmEditTable())
+		{
+			Main_view.getInstance().getDependency_table().setEditable(Main_view.getInstance().getChckbxmntmEditTable().getState());
+		}
 		if(e.getSource()==Main_view.getInstance().getBtnNewDsmRow())
 		{
 			Main_view.getInstance().setEnableButton(false);

@@ -893,6 +893,7 @@ public class Main_view extends JFrame {
 		btnDelete.setEnabled(set);
 		btnNewDsmRow.setEnabled(set);
 		btnRename.setEnabled(set);
+		mntmShow_Row_Labels.setEnabled(set);
 	}
 	
 	public void setJTree(JTree tree)
