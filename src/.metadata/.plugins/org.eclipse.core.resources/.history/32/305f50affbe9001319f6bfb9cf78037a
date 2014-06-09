@@ -1,7 +1,0 @@
-package view.customtable;
-
-import javax.swing.JLabel;
-
-public class CustomJTableCell extends JLabel {
-
-}

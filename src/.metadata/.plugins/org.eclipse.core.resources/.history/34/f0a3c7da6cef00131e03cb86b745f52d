@@ -764,23 +764,32 @@ public class Main_view extends JFrame {
 			int fromP = ModelInfo.getInstance().getRoot().getDepth(coloredParent.get(i)[0]);
 			int toP = ModelInfo.getInstance().getRoot().getDepth(coloredParent.get(i)[1]);
 			
+			if(coloredPoint.get(i)[0] == 10&& coloredPoint.get(i)[1] == 5)
+			{
+				System.out.println("==>"+ coloredPoint.get(i)[0]+","+coloredPoint.get(i)[1]+" : " +fromP+" "+toP);
+			}
 			
 			if(fromP==toP)
 			{
-				
 				if(coloredParent.get(i)[0].compareTo(coloredParent.get(i)[1])==0)
 				{
-					if(coloredParent.get(i)[0].compareTo("$root")==0)
-						priority = 0;
-					else if(coloredParent.get(i)[2].compareTo(coloredParent.get(i)[3])==0 && ModelInfo.getInstance().getRoot().getNode(coloredParent.get(i)[2]).isGroup()==true)
-						priority = fromP;
-					else 
+					if(coloredParent.get(i)[2]!=null)
 					{
-						priority = fromP-1;
+						if(ModelInfo.getInstance().getRoot().getNode(coloredParent.get(i)[2]).isGroup()==true
+								&& coloredParent.get(i)[0].compareTo("$root")!=0)
+						{	
+							priority = fromP+1;
+						}
+						else if(ModelInfo.getInstance().getRoot().getDepth(coloredParent.get(i)[0])==1)
+							priority = 0;
+						else
+							priority = fromP;
 					}
+					else
+						priority = fromP;
 				}
 				else
-					priority = fromP-2 ;
+					priority = Math.min(fromP, toP) ;
 			}
 			else
 			{
@@ -788,53 +797,65 @@ public class Main_view extends JFrame {
 				{
 					int depth=0;
 					TreeNode c = new TreeNode();
-					c= ModelInfo.getInstance().getRoot().getNode(coloredParent.get(i)[0]);
+					c= ModelInfo.getInstance().getRoot().getNode(coloredParent.get(i)[2]);
 					TreeNode a = new TreeNode();
-					for(int k=0; k<(fromP-toP); k++)
+					while(true)
 					{
 						a = c.parent;
-						c = a;
+						depth = ModelInfo.getInstance().getRoot().getDepth(a.key);
+						if(depth==toP)
+							break;
+						else
+						{
+							c = a;
+						}
 					}
-					
-					if(a.key.compareTo(coloredParent.get(i)[1])==0)
+					if(a.key.compareTo(coloredParent.get(i)[3])==0)
 					{
-						priority = toP-1;
+						priority = Math.min(fromP, toP);
 					}
 					else
-					{
-						
-						priority = toP-2;
-					}
+						priority = Math.min(fromP,toP)-1;
 				}
 				else
 				{
 					int depth=0;
 					TreeNode c = new TreeNode();
-					c= ModelInfo.getInstance().getRoot().getNode(coloredParent.get(i)[1]);
+					c= ModelInfo.getInstance().getRoot().getNode(coloredParent.get(i)[3]);
 					TreeNode a = new TreeNode();
-					for(int k=0; k<(toP-fromP); k++)
+					while(true)
 					{
 						a = c.parent;
-						c = a;
-						
+						depth = ModelInfo.getInstance().getRoot().getDepth(a.key);
+						if(depth==fromP+1)
+							break;
+						else
+						{
+							c = a;
+						}
 					}
-					
-					if(a.key.compareTo(coloredParent.get(i)[0])==0)
+					if(a.key.compareTo(coloredParent.get(i)[2])==0)
 					{
-						priority = fromP-1;
+						priority =depth;// Math.min(fromP, toP);
 					}
 					else
 					{
-						
-						priority = fromP-2;
+						System.out.println("같은 depth이름이 다른경우 : from 같은레벨 : " + coloredParent.get(i)[3] +"  to 같은레벨 : "+ a.key + "  원래 from : "+coloredParent.get(i)[2]+"원래 to"+coloredParent.get(i)[3] );
+						priority = depth-1;//Math.min(fromP,toP)-1;
 					}
-				}
 			}
+		}
+			
+			//		priority = Math.min(fromP, toP);
+		//	}
+			//else
+			//	priority = Math.min(fromP, toP)-1 ;
 			elementP[2] = priority;
 			groupP.add(elementP);
 			maxPriority = Math.max(maxPriority, priority);
 		}
-		for(int i=0; i<=maxPriority ;i++)
+		
+		for(int i=maxPriority; i>=0; i--)
 		{
 			for(int j=0; j<groupP.size(); j++)
 			{
